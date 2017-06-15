@@ -83,8 +83,8 @@ In the figures below, we plotted the real solution \eqref{real_sol} of the probl
     \addlegendentry{Size of $y^M$};
     \addplot[energie] table[x=dx,y=Inf_eps(F_eps)] \resultats;
     \addlegendentry{Optimal energy};
-    \draw [pente]  (axis cs: 0.0025,60e-4) -- ++ (axis cs: 1, 5^0.5) -- ++ (axis cs: 5, 1) -- cycle;
-    \node at (axis cs:0.0025,20e-3) [right,pente] {\small slope $0.5$};
+    \draw [pente]  (axis cs: 0.003,84e-4) -- ++ (axis cs: 1, 10^0.5) -- ++ (axis cs: 10, 1) -- cycle;
+    \node at (axis cs:0.003,20e-3) [right,pente] {\small slope $0.5$};
     
   \end{loglogaxis}
   
@@ -95,7 +95,7 @@ In the figures below, we plotted the real solution \eqref{real_sol} of the probl
  \begin{figure}
  \centering
  \begin{tikzpicture}
-  \begin{loglogaxis}[erreurs, ymin=5e-2,ymax=0.4e1,title={$s=0.4$}]
+  \begin{loglogaxis}[erreurs, ymin=4e-2,ymax=40.4e1,title={$s=0.4$}]
  
     \pgfplotstableread[ignore chars={|},skip first n=2]{data_paper/heat_frac_s=04.org}\resultats
     %% Original file  resultats_09-06-2017_11h47.org
@@ -106,12 +106,12 @@ In the figures below, we plotted the real solution \eqref{real_sol} of the probl
     %\addlegendentry{Size of $y^M$};
     \addplot[energie] table[x=dx,y=Inf_eps(F_eps)] \resultats;
     %\addlegendentry{Optimal energy};
-    \draw [pente]  (axis cs: 0.003,1.2e-1) -- ++ (axis cs: 1, 5^0.35) -- ++ (axis cs: 5, 1) -- cycle;
-    \node at (axis cs:0.003,18e-2) [right,pente] {\small slope $0.35$};
+    \draw [pente]  (axis cs: 0.003,1.2e-1) -- ++ (axis cs: 1, 10^0.35) -- ++ (axis cs: 10, 1) -- cycle;
+    \node at (axis cs:0.003,20e-2) [right,pente] {\small slope $0.35$};
     
-    \draw [pente]  (axis cs: 0.003,1.4e0) -- ++ (axis cs: 1, {5^(-0.4)}) -- ++ (axis cs: 5, 1) -- cycle;
-    \draw [pente]  (axis cs: 0.003,1.1e0) -- ++ (axis cs: 1, {5^(-0.25)}) -- ++ (axis cs: 5, 1) -- cycle;
-    \node at (axis cs:0.003,60e-2) [right,pente] {\small sl. $-0.25/-0.4$};
+    \draw [pente]  (axis cs: 0.003,80.4e0) -- ++ (axis cs: 1, {10^(-0.4)}) -- ++ (axis cs: 10, 1) -- cycle;
+    \draw [pente]  (axis cs: 0.003,56.7e0) -- ++ (axis cs: 1, {10^(-0.25)}) -- ++ (axis cs: 10, 1) -- cycle;
+    \node at (axis cs:0.003,23e0) [right,pente] {\small sl. $-0.25/-0.4$};
     
   \end{loglogaxis}
   
@@ -122,7 +122,7 @@ In the figures below, we plotted the real solution \eqref{real_sol} of the probl
  \begin{figure}
  \centering
  \begin{tikzpicture}
-  \begin{loglogaxis}[erreurs, ymin=3e-2,ymax=0.4e1,title={$s=0.5$}]
+  \begin{loglogaxis}[erreurs, ymin=3e-2,ymax=10e1,title={$s=0.5$}]
  
     \pgfplotstableread[ignore chars={|},skip first n=2]{data_paper/heat_frac_s=05.org}\resultats
     %% Original file  resultats_09-06-2017_11h07.org
@@ -133,12 +133,12 @@ In the figures below, we plotted the real solution \eqref{real_sol} of the probl
     %\addlegendentry{Size of $y^M$};
     \addplot[energie] table[x=dx,y=Inf_eps(F_eps)] \resultats;
     %\addlegendentry{Optimal energy};
-    \draw [pente]  (axis cs: 0.002,10e-2) -- ++ (axis cs: 1, 5^0.4) -- ++ (axis cs: 5, 1) -- cycle;
-    \node at (axis cs:0.002,16e-2) [right,pente] {\small slope $0.4$};
+    \draw [pente]  (axis cs: 0.003,10e-2) -- ++ (axis cs: 1, 10^0.4) -- ++ (axis cs: 10, 1) -- cycle;
+    \node at (axis cs:0.003,18e-2) [right,pente] {\small slope $0.4$};
     
-    \draw [pente]  (axis cs: 0.002,0.74e0) -- ++ (axis cs: 1, {5^(-0.18)}) -- ++ (axis cs: 5, 1) -- cycle;
-    \draw [pente]  (axis cs: 0.002,0.9e0) -- ++ (axis cs: 1, {5^(-0.3)}) -- ++ (axis cs: 5, 1) -- cycle;
-    \node at (axis cs:0.002,45e-2) [right,pente] {\small sl. $-0.25/-0.45$};
+    \draw [pente]  (axis cs: 0.003,2.65e1) -- ++ (axis cs: 1, {10^(-0.18)}) -- ++ (axis cs: 10, 1) -- cycle;
+    \draw [pente]  (axis cs: 0.003,3.5e1) -- ++ (axis cs: 1, {10^(-0.3)}) -- ++ (axis cs: 10, 1) -- cycle;
+    \node at (axis cs:0.003,1.35e1) [right,pente] {\small sl. $-0.18/-0.3$};
     
   \end{loglogaxis}
   
