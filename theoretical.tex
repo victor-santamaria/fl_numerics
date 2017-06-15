@@ -116,9 +116,9 @@ For any $\delta\geq 0$, we define the (possibly empty) closed convex set
 	\textrm{Adm}(y_0,\delta):=\left\{v\in L^2(0,T;U)\,:\, \norm{\mathcal{L}_T(\cdot|\cdot)}\leq\delta\right\}.
 \end{align*}
 \begin{itemize}
-	\item We say that \eqref{abstract_pb} is \textit{approximately null-controllable} at time $T$ from the initial data $y_0$ if $\textrm{Adm}(y_0,\delta)\neq\emptyset$ for all $\delta>0$. If this holds for all $y_0\in E$, we say that \eqref{abstract_pb} is approximately null-controllable at time $T$. 
+	\item We say that \eqref{abstract_pb} is \textit{approximately null-controllable} at time $T$ from the initial datum $y_0$ if $\textrm{Adm}(y_0,\delta)\neq\emptyset$ for all $\delta>0$. If this holds for all $y_0\in E$, we say that \eqref{abstract_pb} is approximately null-controllable at time $T$. 
 	
-	\item We say that \eqref{abstract_pb} is \textit{null-controllable} at time $T$ from the initial data $y_0$ if $\textrm{Adm}(y_0,0)\neq\emptyset$. If this holds for all $y_0\in E$, we say that \eqref{abstract_pb} is null-controllable at time $T$.
+	\item We say that \eqref{abstract_pb} is \textit{null-controllable} at time $T$ from the initial datum $y_0$ if $\textrm{Adm}(y_0,0)\neq\emptyset$. If this holds for all $y_0\in E$, we say that \eqref{abstract_pb} is null-controllable at time $T$.
 \end{itemize} 
 \end{definition}
 
@@ -144,17 +144,43 @@ In the penalized version of the HUM, we look for a control that is solution to a
 \end{align}
 where
 \begin{align*}
-	F_\varepsilon(v)=\frac{1}{2}\int_0^T\inter{v(t)}^2\,dt+\frac{1}{2\varepsilon}\norm{\mathcal L(v|y_0)}{}^2, \quad \forall v\in L^2(0,T;U).
+	F_\varepsilon(v):=\frac{1}{2}\int_0^T\inter{v(t)}^2\,dt+\frac{1}{2\varepsilon}\norm{\mathcal L(v|y_0)}{}^2, \quad \forall v\in L^2(0,T;U).
 \end{align*}
 
-First of all, we have that, for any $\varepsilon > 0$, the functional $F_\varepsilon$ has a unique minimiser on $L^2(0,T;U)$  that we denote by $v_\varepsilon$. This is
-due to the fact that $F_\varepsilon$ is strictly convex, continuous and coercive.
+Notice that, for any $\varepsilon > 0$, the functional $F_\varepsilon$ has a unique minimiser on $L^2(0,T;U)$  that we denote by $v_\varepsilon$. This is due to the fact that $F_\varepsilon$ is strictly convex, continuous and coercive. 
 
-The behavior of the solution to problem \eqref{min_ve} as a function of $\varepsilon$ allows to recover theoretical results in the controllability theory for evolution equations [\rouge{poner cita}]
+However, the space $L^2(0,T;U)$ in which one has to minimise $F_\varepsilon$ is a quite big one and it depends on the time $T$. This makes the minimization problem computationally expensive. On the other hand, this issue can be bypassed by considering a different optimisation problem, defined on the smaller space $E$. Namely we have to find  
 
-Applying results from convex optimization, we can build an associated dual problem. For any $\varepsilon>0$, we define
-
+\begin{align}\label{min_je}
+	q^T_\varepsilon=\min_{q\in E} J_\varepsilon (q^T)
+\end{align}
+where
 \begin{align*}
-	J_\varepsilon(\varphi^T)=\frac{1}{2}\iint_{\omega\times(0,T)}|\varphi|^2dxdt+\frac{\varepsilon}{2}\|\varphi^T\|^2_{L^2(0,1)}+\int_{0}^{1}\varphi(x,0)y_0\,dx, \quad \forall \varphi^T\in L^2(\Omega)
+	J_\varepsilon(q^T):=\frac{1}{2}\int_0^T\inter{B^*e^{-(T-t)A^*}q^T(t)}^2\,dt+\frac{\varepsilon}{2}\norm{q^T}{}^2 + \left\langle y_0,e^{-TA^*}q^T\right\rangle, \quad \forall q^T\in E.
 \end{align*}
 
+Notice that \eqref{min_ve} and \eqref{min_je} are equivalent since, according to \cite[Proosition 1.5]{boyer2013penalised}, for any $\varepsilon > 0$, the minimisers $v_\varepsilon$ and $q_\varepsilon^T$ of the functionals $F_\varepsilon$ and $J_\varepsilon$, respectively, are related through the formula
+\begin{align*}
+	v_\varepsilon = B^*e^{-(T-t)A^*}q_\varepsilon^T, \textrm{ for a.e. } t\in(0,T).
+\end{align*} 
+
+Finally, we mention that we can express the approximate and null controllability properties of the system, for a given initial datum $y_0$, in terms of the behaviour of the penalised HUM approach described above. In particular we have 
+
+\begin{theorem}[Theorem 1.7 of \cite{boyer2013penalised}]
+Problem \eqref{abstract_pb} is approximately controllable from the initial datum $y_0$ if and only if we have
+\begin{align}\label{approx_control_cond}
+	\mathcal{L}_T(v_\varepsilon|y_0) = y_{v_\varepsilon,y_0}(T)\rightarrow 0,\;\;\;\textrm{ as }\;\varepsilon\to 0.
+\end{align}
+Problem \eqref{abstract_pb} is null-controllable from the initial datum $y_0$ if and only if we have
+\begin{align}\label{null_control_cond}
+	M_{y_0}^2:=2\sup_{\varepsilon>0}\left( \inf_{L^2(0,T;U)}F_\varepsilon\right)<+\infty.
+\end{align}
+In this case, we have 
+\begin{align}\label{null_control_est}
+	\inter{v_\varepsilon}_{L^2(0,T;U)}\leq M_{y_0},\nonumber
+	\\
+	\norm{\mathcal L_T(v_\varepsilon|y_0)}{}\leq M_{y_0}\sqrt{\varepsilon}.
+\end{align} 
+\end{theorem} 
+
+Therefore, by observing in our simulations the behaviour of the norm of the control and of the solution of at time $T$, we can obtain a numerical evidence of the properties of null and approximate controllability for equation \eqref{heat_frac}. 
