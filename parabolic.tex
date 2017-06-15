@@ -1,0 +1,49 @@
+\section{Fractional heat equation}
+
+We already mentioned that the FE discretization of the fractional Laplacian that we presented before can be employed in the numerical implementation of the control problem for the fractional heat equation. In more details, given the following non-local parabolic problem 
+\begin{align}\label{frac_heat}
+	\begin{cases}
+		y_t+\fl{s}{y} =\mathbf{1}_\omega v, & (x,t)\in (-1,1)\times (0,T), 
+		\\
+		y=0, & (x,t)\in [\,\mathbb{R} \setminus (-1,1)\,]\times (0,T), 
+		\\
+		y(x,0)=y_0(x), & x\in (-1,1),
+	\end{cases}
+\end{align}
+where $\omega=(l_1,l_2)\subset (-1,1)$ is the support of the control and $y_0$ is a given initial data in $L^2(-1,1)$, we want to compute numerically the control function $v$ that drives the solution $y$ to zero in time $T$. 
+
+We racall that the approach that we will employ for solving this control problem is based on the penalised Hilbert Uniqueness Method, which has been well presented in \cite{boyer2013penalised}. However, before describing this method, we shall firstly remind the existing theoretical results on the controllability of the fractional heat equation \eqref{frac_heat}. This will tell us which results we should expect from our simulations, and will provide a validation of the accuracy of our numerical method.
+
+First of all, we have to mention that, to the best of our knowledge, there are few results in the literature on the null-controllability of the fractional heat equation, and none of them is for a problem involving the fractional Laplacian in its integral form \eqref{fl}. The existing results, instead, deal with the \textit{spectral} definition of the fractional Laplace operator, which is given as follows.
+
+Let $\{\psi_k,\lambda_k\}_{k\in\NN}\subset H_0^1(-1,1)\times\RR^+$ be the set of normalised eigenfunctions and eigenvalues of the Laplace operator in $(-1,1)$ with homogeneous Dirichlet boundary conditions, so that $\{\psi_k\}_{k\in\NN}$ is an orthonormal basis of $L^2(-1,1)$ and         
+\begin{align*}
+	\begin{cases}
+		-d_x^2\psi_k =\lambda_k\psi_k, & x\in (-1,1), 
+		\\
+		\psi_k(-1)=\psi_k(1)=0.
+	\end{cases}
+\end{align*}
+
+Then, the \textit{spectral fractional Laplacian} $(-d_x^2)^s_S$ is defined by
+\begin{align}\label{fl_spec}
+	(-d_x^2)^s_S u(x) = \sum_{k\geq 1}\langle u,\psi_k\rangle \lambda_k^s\psi_k(x),
+\end{align}
+firstly for $u\in C_0^{\infty}(-1,1)$ and then for $u\in H^s(-1,1)$ employing a density argument.
+
+It is important to notice that the spectral fractional Laplacian and the fractional Laplacian defined as in \eqref{fl} are two different operator. Indeed, definition \eqref{fl_spec} depends on the choice of the domain (in this case, $(-1,1)$), while the integral definition does not. For a complete discussion on the differences of these two operators, we refer to \cite{servadei2014spectrum}.
+
+Concerning now control results, in \cite{micu2006controllability} it has been considered a fractional heat equation involving the operator $(-d_x^2)^s_S$, and it has been proved that this equation is null-controllable if and only if $s>1/2$. For $s\leq 1/2$, instead, null controllability does not hold, not even for $T$ large. This negative result is based on the equivalence (consequence of M\"untz Theorem) between the controllability property (more specifically, the possibility of proving an observability inequality), and the following condition for the eigenvalues of the operator considered
+\begin{align}\label{eigen_cond}
+	\sum_{k\geq 1} \frac{1}{\lambda_k}<\infty,
+\end{align} 
+which is clearly not satisfied in the case of the spectral fractional Laplacian when $s\leq 1/2$. Finally, in \cite{miller2006controllability}, the same controllability result as in \cite{micu2006controllability} is obtained in a multi-dimensional setting, by means of a  \textit{spectral observability condition} for a negative self-adjoint operator, which allows to prove the null-controllability of the semi-group that it generates.
+
+Concerning now equation \eqref{frac_heat}, as we mentioned we are not aware of any null controllability result in the literature, neither positive nor negative. Nevertheless, at least in the one space dimension, it is possible to show that, once again, null-controllability fails as soon as $s\leq 1/2$. This is a consequence of the following approximation for the eigenvalues of the fractional Laplacian \eqref{fl} on $(-1,1)$ with homogeneous Dirichlet boundary conditions (see \cite{kulczycki2010spectral,kwasnicki2012eigenvalues}) 
+\begin{align}\label{eigen_approx}
+	\lambda_k = \left(\frac{k\pi}{2}-\frac{(1-s)\pi}{4}\right)^{2s}+O\left(\frac{1}{k}\right).
+\end{align} 
+
+Indeed, employing \eqref{eigen_approx}, we can easily show that, also in this case, \eqref{eigen_cond} fails as soon as $s\leq 1/2$, thus implying that the equation is not null-controllable. 
+
+Finally, we mention that, even if for $s\leq 1/2$ the null-controllability of \eqref{frac_heat} fails, the equation is approximately controllable. This is a simple adaptation of \cite[Proposition 2.4 and Theorem 2.5]{keyantuo2016interior}, and it is due to the fact that the fractional Laplacian enjoys the unique continuation property (see \cite{fall2014unique}). 

@@ -1,0 +1,51 @@
+\section{Introduction and main results}\label{intro_sec}
+
+In this work, we present a finite element (FE) scheme for the numerical approximation of the solution to the following non-local Poisson equation
+\begin{align}\label{PE}
+	\left\{\begin{array}{ll}
+		\fl{s}{u} = f, & x\in(-L,L)
+		\\
+		u\equiv 0, & x\in\RR\setminus(-L,L).
+	\end{array}\right.
+\end{align}
+
+In \eqref{PE}, $f$ is a given function and, for all $s\in(0,1)$, $\fl{s}{}$ denotes the one-dimensional fractional Laplace operator, which is defined as the following singular integral
+\begin{align*}
+	\fl{s}{u}(x) = \ccs\,P.V.\,\int_{\RR}\frac{u(x)-u(y)}{|x-y|^{1+2s}}\,dy. 
+\end{align*}
+Here, $\ccs$ is a normalisation constant given by
+\begin{align*}
+	\ccs = \frac{s2^{2s}\Gamma\left(\frac{1+2s}{2}\right)}{\sqrt{\pi}\Gamma(1-s)},
+\end{align*}
+where $\Gamma$ is the usual Gamma function. Moreover, we have to mention that, for having a completely rigorous definition of the fractional Laplace operator, it is necessary to introduce also the class of functions $u$ for which computing $\fl{s}{u}$ makes sense. We postpone this discussion to the next section.
+
+The analysis of non-local operators and non-local PDEs is a topic in continuous development.
+A motivation for this growing interest relies in the large number of possible applications in the modelling of several complex phenomena for which a local approach turns up to be inappropriate or limiting.
+Indeed, there is an ample spectrum of situations in which a non-local equation gives a
+significantly better description than a PDE of the problem one wants to analyse.
+Among others, we mention applications in turbulence (\cite{bakunin2008turbulence}), anomalous transport and diffusion (\cite{bologna2000anomalous,meerschaert2012fractional}), elasticity (\cite{dipierro2015dislocation}), image processing (\cite{gilboa2008nonlocal}), porous media flow (\cite{vazquez2012nonlinear}), wave propagation in heterogeneous high contrast media (\cite{zhu2014modeling}). Also, it is well known that the fractional Laplacian is the generator of s-stable processes, and it is often used in stochastic models with applications, for instance, in mathematical finance (\cite{levendorskii2004pricing,pham1997optimal}).
+
+One of the main differences between these non-local models and classical Partial Differential Equations is that the fulfilment of a non-local equation at a point involves the values of the function far away from that point.
+
+Concerning numerical approximations, we refer to the work \cite{acosta2017fractional} of Acosta and Borthagaray (see also \cite{acosta2017short}), where the authors present a FE scheme for implementing the solution of \eqref{PE} in a bounded domain $\Omega\subset\RR^2$. We also mention \cite{nochetto2015pde}, where the solution of \eqref{PE} is implemented applying the well known extension of Caffarelli and Silvestre (\cite{caffarelli2007extension}).   
+
+Our method deals with a FE approximation in one space dimension for the fractional Poisson equation. 
+
+We already mentioned that the same approach has been developed in \cite{acosta2017short,acosta2017fractional}. There, the authors provide appropriate quadrature rules in order to evaluate numerically the left hand side term in \eqref{WF}. The main novelty of our work relies on the fact that, since we are dealing with the one-dimensional case, the above integral can be computed explicitly, and this has the great advantage of significantly reducing the computational cost of the algorithm. 
+
+Once the algorithm for the elliptic problem is efficiently developed, an immediate application is the numerical resolution of the following control problem: given any $T>0$, find a control function $g\in L^2((-L,L)\times(0,T))$ such that the corresponding solution to the parabolic problem 
+\begin{align}\label{heat_frac}
+	\left\{\begin{array}{ll}
+	z_t + \fl{s}{z} = g\mathbf{1}_{\omega}, & (x,t)\in (-L,L)\times(0,T)
+	\\
+	z=0, & (x,t)\in[\,\RR\setminus (-L,L)\,]\times(0,T)
+	\\
+	z(x,0)=z_0(x), & x\in (-L,L)
+	\end{array}\right.
+\end{align} 
+satisfies $z(x,T)=0$. 
+
+The approach that we will employ for solving this control problem is based on the penalised Hilbert Uniqueness Method (\cite{boyer2013penalised}), which relies on some classical works of Glowinski and Lions (\cite{glowinski1995exact,glowinski2008exact}).   
+
+\rouge{Our paper is organised as follows...}
+

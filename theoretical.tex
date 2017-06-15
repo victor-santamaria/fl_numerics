@@ -1,0 +1,160 @@
+\section{Preliminary results}\label{theor_sec}
+
+In this Section, we introduce some preliminary result that will be useful in the remaining of the paper.
+
+We start by giving a more rigorous definition of the fractional Laplace operator, as we have anticipated in Section \ref{intro_sec}. Let
+\begin{align*}
+	\mathcal L^1_s(\RR) :=\left\{ u:\RR\longrightarrow\RR\,:\; u\textrm{ measurable },\;\int_{\RR}\frac{|u(x)|}{(1+|x|)^{1+2s}}\,dx<\infty\right\}.
+\end{align*}
+For any $u\in\mathcal L_s^1$ and $\varepsilon>0$ we set 
+\begin{align*}
+	(-d_x^2)^s_{\varepsilon} u(x) = \ccs\,\int_{|x,y|\varepsilon}\frac{u(x)-u(y)}{|x-y|^{1+2s}}\,dy,\;\;\; x\in\RR.
+\end{align*}
+The fractional Laplacian is then defined by the following singular integral
+\begin{align}\label{fl}
+	\fl{s}{u}(x) = \ccs\,P.V.\,\int_{\RR}\frac{u(x)-u(y)}{|x-y|^{1+2s}}\,dy = \lim_{\varepsilon\to 0^+} (-d_x^2)^s_{\varepsilon} u(x), \;\;\; x\in\RR,
+\end{align}
+provided that the limit exists. 
+
+We notice that if $0<s<1/2$ and $u$ is smooth, for example bounded and Lipschitz continuous on $\RR$, then the integral in \eqref{fl} is in fact not really singular near $x$ (see e.g. \cite[Remark 3.1]{dihitchhiker}). Moreover, $\mathcal L_s^1(\RR)$ is the right space for which $v:= (-d_x^2)^s_{\varepsilon} u$ exists for every $\varepsilon > 0$, $v$ being also continuous at the continuity points of $u$.
+
+Let us now introduce the variational formulation associated to equation \eqref{PE}, which will be the starting point for the development of the FE approximation of the problem we are considering. Find $u\in H^s_0(-L,L)$ such that
+\begin{align}\label{WF}
+	\frac{\ccs}{2} \int_{\RR}\int_{\RR}\frac{(u(x)-u(y))(v(x)-v(y))}{|x-y|^{1+2s}}\,dxdy = \int_{-L}^L fv\,dx,	
+\end{align}
+for all $v\in H_0^s(-L,L)$. Here, $H^s_0(-L,L)$ denotes the space 
+\begin{align*}
+	H^s_0(-L,L) :=\Big\{\, u\in H^s(\RR)\,:\,u=0 \textrm{ in } \RR\setminus(-L,L)\,\Big\}, 
+\end{align*}
+while with $H^s(\RR)$ we indicate the classical fractional Sobolev space of order $s$. We refer to \cite{dihitchhiker} for a complete description of these spaces.  
+
+In this way, Lax-Milgram Theorem immediately implies existence and uniqueness of solutions to the Dirichlet problem \eqref{PE}. In more detail, if $f\in H^{-s}(-L,L)$, then \eqref{PE} admits a unique weak solution $u\in H_0^s(-L,L)$ (see, e.g., \cite[Proposition 2.1]{biccari2017local}). Here $H^{-s}(-L,L)$ stands for the dual space of $H^s_0(-L,L)$. Furthermore, in the literature it is possible to find improved regularity results for the solution to \eqref{PE}, both in H\"older and Sobolev spaces. The interested reader may refer, for instance, to \cite{acosta2017fractional,biccari2017local,leonori2015basic,ros2014dirichlet,ros2014extremal}.
+
+As we mentioned in Section \ref{intro_sec}, the main goal of the present paper is to obtain a FE discretization of the fractional Laplacian. A natural application of this approximation will then be the numerical resolution of the fractional heat equation \ref{heat_frac} and the associated control problem. In more details, given the following non-local parabolic problem 
+\begin{align*}
+	\begin{cases}
+		z_t+\fl{s}{z} =\mathbf{1}_\omega g, & (x,t)\in (-1,1)\times (0,T), 
+		\\
+		z=0, & (x,t)\in [\,\mathbb{R} \setminus (-1,1)\,]\times (0,T), 
+		\\
+		z(x,0)=z_0(x), & x\in (-1,1),
+	\end{cases}
+\end{align*}
+where $\omega=(l_1,l_2)\subset (-1,1)$ is the support of the control and $z_0$ is a given initial data in $L^2(-1,1)$, we want to compute numerically the control function $g$ that drives the solution $z$ to zero in time $T$. First of all, it is worth to mention that existence, uniqueness and regularity of the solutions to \eqref{heat_frac} has been studied by several authors. Among others, we mention the works \cite{biccari2017local,fernandez2016boundary,leonori2015basic}.
+
+Concerning instead the control problem, we recall that the approach that we will employ is based on the penalised Hilbert Uniqueness Method, which has been well presented in \cite{boyer2013penalised}. However, before describing this method, we shall firstly remind the existing theoretical results on the controllability of the fractional heat equation \eqref{heat_frac}. This will tell us which results we should expect from our simulations, and will provide a validation of the accuracy of our numerical method.
+
+First of all, we have to mention that, to the best of our knowledge, there are few results in the literature on the null-controllability of the fractional heat equation, and none of them is for a problem involving the fractional Laplacian in its integral form \eqref{fl}. The existing results, instead, deal with the \textit{spectral} definition of the fractional Laplace operator, which is given as follows.
+
+Let $\{\psi_k,\lambda_k\}_{k\in\NN}\subset H_0^1(-1,1)\times\RR^+$ be the set of normalised eigenfunctions and eigenvalues of the Laplace operator in $(-1,1)$ with homogeneous Dirichlet boundary conditions, so that $\{\psi_k\}_{k\in\NN}$ is an orthonormal basis of $L^2(-1,1)$ and         
+\begin{align*}
+	\begin{cases}
+		-d_x^2\psi_k =\lambda_k\psi_k, & x\in (-1,1), 
+		\\
+		\psi_k(-1)=\psi_k(1)=0.
+	\end{cases}
+\end{align*}
+
+Then, the \textit{spectral fractional Laplacian} $(-d_x^2)^s_S$ is defined by
+\begin{align}\label{fl_spec}
+	(-d_x^2)^s_S u(x) = \sum_{k\geq 1}\langle u,\psi_k\rangle \lambda_k^s\psi_k(x),
+\end{align}
+firstly for $u\in C_0^{\infty}(-1,1)$ and then for $u\in H_0^s(-1,1)$ employing a density argument.
+
+It is important to notice that the spectral fractional Laplacian and the fractional Laplacian defined as in \eqref{fl} are two different operator. Indeed, definition \eqref{fl_spec} depends on the choice of the domain (in this case, $(-1,1)$), while the integral definition does not. For a complete discussion on the differences of these two operators, we refer to \cite{servadei2014spectrum}.
+
+Concerning now control results, in \cite{micu2006controllability} it has been considered a fractional heat equation involving the operator $(-d_x^2)^s_S$, and it has been proved that this equation is null-controllable if and only if $s>1/2$. For $s\leq 1/2$, instead, null controllability does not hold, not even for $T$ large. This negative result is based on the equivalence (consequence of M\"untz Theorem) between the controllability property (more specifically, the possibility of proving an observability inequality), and the following condition for the eigenvalues of the operator considered
+\begin{align}\label{eigen_cond}
+	\sum_{k\geq 1} \frac{1}{\lambda_k}<\infty,
+\end{align} 
+which is clearly not satisfied in the case of the spectral fractional Laplacian when $s\leq 1/2$. Finally, in \cite{miller2006controllability}, the same controllability result as in \cite{micu2006controllability} is obtained in a multi-dimensional setting, by means of a  \textit{spectral observability condition} for a negative self-adjoint operator, which allows to prove the null-controllability of the semi-group that it generates.
+
+Regarding equation \eqref{heat_frac}, as we mentioned we are not aware of any null controllability result in the literature, neither positive nor negative. Nevertheless, at least in the one space dimension, it is possible to show that, once again, null-controllability fails as soon as $s\leq 1/2$. This is a consequence of the following approximation for the eigenvalues of the fractional Laplacian \eqref{fl} on $(-1,1)$ with homogeneous Dirichlet boundary conditions (see \cite{kulczycki2010spectral,kwasnicki2012eigenvalues}) 
+\begin{align}\label{eigen_approx}
+	\lambda_k = \left(\frac{k\pi}{2}-\frac{(1-s)\pi}{4}\right)^{2s}+O\left(\frac{1}{k}\right).
+\end{align} 
+
+Indeed, employing \eqref{eigen_approx}, we can easily show that, also in this case, \eqref{eigen_cond} fails as soon as $s\leq 1/2$, thus implying that the equation is not null-controllable. 
+
+Finally, we mention that, even if for $s\leq 1/2$ the null-controllability of \eqref{heat_frac} fails, the equation is approximately controllable. This is a simple adaptation of \cite[Proposition 2.4 and Theorem 2.5]{keyantuo2016interior}, and it is due to the fact that the fractional Laplacian enjoys the unique continuation property (see \cite{fall2014unique}).      
+
+Let us now give a brief description of the so called penalised Hilbert Uniqueness Method (HUM in what follows) that we shall employ for computing the controls for equation \eqref{heat_frac}. Here, we will mostly refer to the work of Boyer \cite{boyer2013penalised}.
+
+We start recalling the classical HUM, as it has been introduced in the pioneering works \cite{glowinski1995exact,glowinski2008exact}. Let $(E,\langle\cdot,\cdot\rangle)$ be a Hilbert space whose norm is denoted by $\norm{\cdot}{}$. Let $(A,\mathcal D(A))$ be an unbounded operator in $E$ such that $-A$ generates an analytic semi-group in $E$ that we indicate with by $t\mapsto e^{-tA}$. Also, we denote $(A^*,\mathcal D(A^*))$ the adjoint of this operator and by $t\mapsto e^{-tA^*}$ the corresponding semi-group. 
+
+Let $(U,[\cdot,\cdot])$ be another Hilbert space whose norm is denoted by $\inter{\cdot}$. Let  $B$ be an unbounded operator from $U$ to $\mathcal D(A^*)'$ and let $B^*:\mathcal D(A^*)\to U$ be its adjoint. Let $T>0$ be given. We assume that $B$ satisfies the following regularity property
+\begin{align*}
+	\Big(t\mapsto B^*e^{-tA^*}\psi\Big)\in L^2(0,T;U),\;\;\;\forall\psi\in E 
+\end{align*}
+and, for some $C>0$
+\begin{align*}
+	\inter{B^*e^{-\cdot A^*}\psi}_{L^2(0,T;U)}\leq C\norm{\psi},\;\;\;\forall\psi\in E. 
+\end{align*}
+
+For any $y_0\in E$ and $v\in L^2(0,T;U)$ we consider the non-homogeneous evolution problem  
+\begin{align}\label{abstract_pb}
+	\begin{cases}
+		y_t+Ay=Bv, & t\in[0,T]
+		\\
+		y(0)=y_0.
+	\end{cases}
+\end{align}
+
+The well posedness of \eqref{abstract_pb} is guaranteed by \cite[Theorem 2.37]{coron2007control}. From now on, we will refer to the solution as $t\mapsto y_{v,y_0}(t)$.
+
+Notice that we have $y_{0,y_0}(t)= e^{-tA}y_0$. Moreover, for simplicity, the solution at time $T$, which is of particular interest in what follows, will be denoted by 
+\begin{align*}
+	y_{v,y_0}(T)=\mathcal{L}_T(v|y_0).
+\end{align*} 
+The linear operator $\mathcal{L}_T(\cdot|\cdot)$ is then continuous from $L^2(0,T;U)\times E$ into $E$.
+
+We have the following definition of controllability.
+
+\begin{definition}
+For any $\delta\geq 0$, we define the (possibly empty) closed convex set 
+\begin{align*}
+	\textrm{Adm}(y_0,\delta):=\left\{v\in L^2(0,T;U)\,:\, \norm{\mathcal{L}_T(\cdot|\cdot)}\leq\delta\right\}.
+\end{align*}
+\begin{itemize}
+	\item We say that \eqref{abstract_pb} is \textit{approximately null-controllable} at time $T$ from the initial data $y_0$ if $\textrm{Adm}(y_0,\delta)\neq\emptyset$ for all $\delta>0$. If this holds for all $y_0\in E$, we say that \eqref{abstract_pb} is approximately null-controllable at time $T$. 
+	
+	\item We say that \eqref{abstract_pb} is \textit{null-controllable} at time $T$ from the initial data $y_0$ if $\textrm{Adm}(y_0,0)\neq\emptyset$. If this holds for all $y_0\in E$, we say that \eqref{abstract_pb} is null-controllable at time $T$.
+\end{itemize} 
+\end{definition}
+
+In the framework of both controllability notions, if one control exists it is certainly not unique. This is the reason why for proving controllability results (but also for the actual computation of such controls), it is useful to specify one such control. For instance, the HUM approach consists in finding the control with the minimal $L^2(0,T;U)$-norm. More precisely, for any $\delta\geq 0$ such that $\textrm{Adm}(y_0,\delta)$ is not empty we shall define
+$v^{\delta}\in \textrm{Adm}(y_0,\delta)$ to be the unique control satisfying
+\begin{align}\label{HUM_min}
+	F(v^{\delta}) = \inf_{v\in\textrm{Adm}(y_0,\delta)} F(v),
+\end{align}
+where 
+\begin{align*}
+	F(v):= \frac{1}{2}\int_0^T \inter{v(t)}^2\,dt = \frac{1}{2}\inter{v}^2_{L^2(0,T;U)}, \;\;\;\forall\, v\in L^2(0,T;U). 
+\end{align*}
+
+Nevertheless, even though \eqref{HUM_min} has a unique solution, it can be a difficult task to solve it directly because of the nature of the constraints that are involved. As usual, the duality theory can help in dealing with the constraints but will lead to functionals that are either non coercive on the usual dual state space $E$ (for $\delta = 0$; in this
+case considering a much larger space is required) or that are non smooth (for $\delta > 0$). Both issues can lead to important difficulties when using this approach for numerical purposes.
+
+Because of the issues described above, it is convenient to deal with a penalised version of the above mentioned optimisation problems.
+
+In the penalized version of the HUM, we look for a control that is solution to a different optimization problem. In particular, we for any $\varepsilon>0$, we shall find
+
+\begin{align}\label{min_ve}
+	v_\varepsilon=\min_{v\in L^2(0,T;U)} F_\varepsilon (v)
+\end{align}
+where
+\begin{align*}
+	F_\varepsilon(v)=\frac{1}{2}\int_0^T\inter{v(t)}^2\,dt+\frac{1}{2\varepsilon}\norm{\mathcal L(v|y_0)}{}^2, \quad \forall v\in L^2(0,T;U).
+\end{align*}
+
+First of all, we have that, for any $\varepsilon > 0$, the functional $F_\varepsilon$ has a unique minimiser on $L^2(0,T;U)$  that we denote by $v_\varepsilon$. This is
+due to the fact that $F_\varepsilon$ is strictly convex, continuous and coercive.
+
+The behavior of the solution to problem \eqref{min_ve} as a function of $\varepsilon$ allows to recover theoretical results in the controllability theory for evolution equations [\rouge{poner cita}]
+
+Applying results from convex optimization, we can build an associated dual problem. For any $\varepsilon>0$, we define
+
+\begin{align*}
+	J_\varepsilon(\varphi^T)=\frac{1}{2}\iint_{\omega\times(0,T)}|\varphi|^2dxdt+\frac{\varepsilon}{2}\|\varphi^T\|^2_{L^2(0,1)}+\int_{0}^{1}\varphi(x,0)y_0\,dx, \quad \forall \varphi^T\in L^2(\Omega)
+\end{align*}
+

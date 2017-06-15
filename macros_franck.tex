@@ -1,0 +1,98 @@
+
+% The mesh
+\def\mesh{\mathfrak{M}}
+\def\petitmesh{{\scriptscriptstyle \mathfrak{M}}}
+% \def\petitmesh{{\tiny \mathfrak{M}}}
+% \def\petitmesh{{\scriptscriptstyle  M}}
+
+% Mesh size
+\def\hM{h^\petitmesh}
+
+% The space of discrete functions
+\def\fM{{\R^\petitmesh}}  % On the primal mesh 
+\def\fdM{{\R^{\overline{\petitmesh}}}} % On the dual mesh
+\def\fMdM{{\R^{\petitmesh\cup\partial \petitmesh}}}  % On the primal mesh + boundary
+% The  discrete Laplace
+\def\AM{{\mathcal{A}^\petitmesh}}
+% The parabolic operators
+\def\PM{{\mathcal{P}^\petitmesh_\pm}}
+\def\PMp{{\mathcal{P}^\petitmesh_+}}
+\def\PMm{{\mathcal{P}^\petitmesh_-}}
+
+\def\ah{a^\petitmesh}
+\def\bh{b^\petitmesh}
+
+\def\yh{y^\petitmesh}
+\def\qh{q^\petitmesh}
+\def\zh{z^\petitmesh}
+\def\ph{p^\petitmesh}
+
+\def\phz{p^{\petitmesh}_0}
+\def\yhz{y^{\petitmesh}_0}
+\def\whz{w^{\petitmesh}_0}
+
+\def\LtwoDT{{L^2_{\DT}(0,T;\fM)}}
+
+\def\vh{v^\petitmesh}
+\def\xih{\xi^\petitmesh}
+
+\def\yhdM{y^{\partial \petitmesh}}
+\def\qhdM{q^{\partial \petitmesh}}
+\def\phdM{p^{\partial \petitmesh}}
+\def\zhdM{z^{\partial \petitmesh}}
+
+\def\DT{{\delta t}}
+\def\eps{\varepsilon}
+
+\newcommand\dsp{\displaystyle}
+
+\newcommand\inter[1]{\llbracket #1\rrbracket}
+
+\newcommand\rouge[1]{{\color{red} #1}}
+
+ \usepackage{tikz}
+ \usepackage{pgfplots}
+ \usepackage{subfig}
+ \pgfplotsset{surface/.style={ %
+               xmax=1.1,%
+               axis z line=center,%
+               axis x line=center,%
+               axis y line=center,%
+               %axis on top,%
+               zmin=0,%
+               clip=false,%
+               extra x ticks={1},%
+               extra x tick label={$T=1$},%
+               xtick={0},%
+               ytick=\empty}}
+
+
+\newcommand{\controldomain}[2]{ \addplot3 [surf,fill=violet,mesh/rows=2] coordinates {(0,#1,0) (1,#1,0) (0,#2,0) (1,#2,0)}; }
+\newcommand{\controldomainT}[3]{ \addplot3 [surf,fill=violet,mesh/rows=2] coordinates {(0,#1,0) (#3,#1,0) (0,#2,0) (#3,#2,0)}; }
+
+\newcommand{\couplingdomain}[2]{ \addplot3 [surf,fill=green,mesh/rows=2] coordinates {(0,#1,0) (1,#1,0) (0,#2,0) (1,#2,0)}; }
+\newcommand{\couplingdomainT}[3]{ \addplot3 [surf,fill=green,mesh/rows=2] coordinates {(0,#1,0) (#3,#1,0) (0,#2,0) (#3,#2,0)}; }
+
+ \pgfplotsset{erreurs/.style={scale=1,
+     legend cell align=left,
+     legend pos=outer north east,
+     legend plot pos=right,
+     legend style={cells={anchor=east},draw=none},
+     xlabel=$h$,
+    xmin=0.001,xmax=0.03}}
+
+\tikzset{pente/.style={opacity=0.6}}
+
+\pgfplotsset{cout/.style={black,mark=diamond*,mark size=2.5,mark options={fill=gray}}}
+\pgfplotsset{cible/.style={black,mark=square*,mark size=2.5,mark options={fill=gray}}}
+\pgfplotsset{cibleyT/.style={black,mark=*,mark size=2.5,mark options={fill=gray}}}
+\pgfplotsset{CG/.style={black,mark=otimes*,mark size=2.5,mark options={fill=gray}}}
+%\pgfplotsset{solex/.style={black,mark=diamond*,mark size=2.5,mark options={fill=gray}}}
+\pgfplotsset{solex/.style={black,mark=*,mark size=2.5,mark options={fill=gray}}}
+\pgfplotsset{energie/.style={black,mark=triangle*,mark size=2.5,mark options={fill=gray}}}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "insensitizing_semi"
+%%% End:

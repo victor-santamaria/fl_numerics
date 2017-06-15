@@ -1,0 +1,147 @@
+\section{Numerical results} 
+
+As a test of the efficiency of our method, we will apply it for finding the solution of
+\begin{align*}
+	\left\{\begin{array}{ll}
+		\fl{s}{u} = 1, & x\in(-L,L)
+		\\
+		u\equiv 0, & x\in\RR\setminus(-L,L)
+	\end{array}\right.
+\end{align*}
+which can also be computed analytically and it is given by (\cite{getoor1961first})
+\begin{align}\label{real_sol}
+	u(x)=\frac{2^{-2s}\sqrt{\pi}}{\Gamma\left(\frac{1+2s}{2}\right)\Gamma(1+s)}\Big(L^2-x^2\Big)^s.
+\end{align}
+
+In the figures below, we plotted the real solution \eqref{real_sol} of the problem considered (in red), and the numerical solution computed through the algorithm that we described (in blue). We considered $L=1$, $N=50$ and different values of $s\in(0,1)$.
+
+\begin{figure}[!h]
+	\pgfplotstableread{fl_01_50_sym.txt}{\datpu}
+	\pgfplotstableread{fl_04_50_sym.txt}{\ddatpu}
+		\subfloat[$s=0.1$]{
+		\begin{tikzpicture}[scale=0.9]
+		\begin{axis}[xmin=-1.1, xmax=1.1,legend style={at={(0.77,0.25)}}]
+			\addplot [color=blue, mark=none] table[x=0,y=1]{\datpu};	
+			\addplot [color=red, mark=x, only marks] table[x=2,y=3]{\datpu};		
+			\addlegendentry{Numerical solution}
+			\addlegendentry{Real solution}
+		\end{axis}
+	\end{tikzpicture}
+	}
+		\hspace{1cm}\subfloat[$s=0.4$]{
+		\begin{tikzpicture}[scale=0.9]
+		\begin{axis}[xmin=-1.1, xmax=1.1,legend style={at={(0.77,0.25)}}]
+			\addplot [color=blue, mark=none] table[x=0,y=1]{\ddatpu};	
+			\addplot [color=red, mark=x, only marks] table[x=2,y=3]{\ddatpu};		
+			\addlegendentry{Numerical solution}
+			\addlegendentry{Real solution}
+		\end{axis}
+	\end{tikzpicture}
+	}
+	\caption{Plot for different values of $s<1/2$}
+\end{figure}
+
+\begin{figure}[!h]
+	\pgfplotstableread{fl_05_50_sym.txt}{\datpu}
+	\pgfplotstableread{fl_08_50_sym.txt}{\ddatpu}
+		\subfloat[$s=0.5$]{
+		\begin{tikzpicture}[scale=0.9]
+		\begin{axis}[xmin=-1.1, xmax=1.1,legend style={at={(0.77,0.25)}}]
+			\addplot [color=blue, mark=none] table[x=0,y=1]{\datpu};	
+			\addplot [color=red, mark=x, only marks] table[x=2,y=3]{\datpu};		
+			\addlegendentry{Numerical solution}
+			\addlegendentry{Real solution}
+		\end{axis}
+	\end{tikzpicture}
+	}
+		\hspace{1cm}\subfloat[$s=0.8$]{
+		\begin{tikzpicture}[scale=0.9]
+		\begin{axis}[xmin=-1.1, xmax=1.1,legend style={at={(0.77,0.25)}}]
+			\addplot [color=blue, mark=none] table[x=0,y=1]{\ddatpu};	
+			\addplot [color=red, mark=x, only marks] table[x=2,y=3]{\ddatpu};		
+			\addlegendentry{Numerical solution}
+			\addlegendentry{Real solution}
+		\end{axis}
+	\end{tikzpicture}
+	}
+	\caption{Plot for different values of $s\geq 1/2$}
+\end{figure}
+
+\subsection{Numerical experiments}
+
+\begin{figure}
+  \centering
+\begin{tikzpicture}
+  \begin{loglogaxis}[erreurs, ymin=5e-4,ymax=0.2e1,title={$s=0.8$}]
+ 
+    \pgfplotstableread[ignore chars={|},skip first n=2]{data_paper/heat_frac_s=08.org}\resultats
+    %% Original file  resultats_09-06-2017_11h18.org
+
+    \addplot[cout] table[x=dx,y=Nv] \resultats;
+    \addlegendentry{Cost of the control};
+    \addplot[cible] table[x=dx,y=NyT] \resultats;
+    \addlegendentry{Size of $y^M$};
+    \addplot[energie] table[x=dx,y=Inf_eps(F_eps)] \resultats;
+    \addlegendentry{Optimal energy};
+    \draw [pente]  (axis cs: 0.0025,60e-4) -- ++ (axis cs: 1, 5^0.5) -- ++ (axis cs: 5, 1) -- cycle;
+    \node at (axis cs:0.0025,20e-3) [right,pente] {\small slope $0.5$};
+    
+  \end{loglogaxis}
+  
+\end{tikzpicture}
+\caption{Convergence properties of the method for controllability of the fractional heat equation. }\label{figure_case1}
+\end{figure}
+
+ \begin{figure}
+ \centering
+ \begin{tikzpicture}
+  \begin{loglogaxis}[erreurs, ymin=5e-2,ymax=0.4e1,title={$s=0.4$}]
+ 
+    \pgfplotstableread[ignore chars={|},skip first n=2]{data_paper/heat_frac_s=04.org}\resultats
+    %% Original file  resultats_09-06-2017_11h47.org
+
+    \addplot[cout] table[x=dx,y=Nv] \resultats;
+    %\addlegendentry{Cost of the control};
+    \addplot[cible] table[x=dx,y=NyT] \resultats;
+    %\addlegendentry{Size of $y^M$};
+    \addplot[energie] table[x=dx,y=Inf_eps(F_eps)] \resultats;
+    %\addlegendentry{Optimal energy};
+    \draw [pente]  (axis cs: 0.003,1.2e-1) -- ++ (axis cs: 1, 5^0.35) -- ++ (axis cs: 5, 1) -- cycle;
+    \node at (axis cs:0.003,18e-2) [right,pente] {\small slope $0.35$};
+    
+    \draw [pente]  (axis cs: 0.003,1.4e0) -- ++ (axis cs: 1, {5^(-0.4)}) -- ++ (axis cs: 5, 1) -- cycle;
+    \draw [pente]  (axis cs: 0.003,1.1e0) -- ++ (axis cs: 1, {5^(-0.25)}) -- ++ (axis cs: 5, 1) -- cycle;
+    \node at (axis cs:0.003,60e-2) [right,pente] {\small sl. $-0.25/-0.4$};
+    
+  \end{loglogaxis}
+  
+\end{tikzpicture}
+\caption{Convergence properties of the method for controllability of the fractional heat equation. }\label{figure_case1}
+\end{figure}
+
+ \begin{figure}
+ \centering
+ \begin{tikzpicture}
+  \begin{loglogaxis}[erreurs, ymin=3e-2,ymax=0.4e1,title={$s=0.5$}]
+ 
+    \pgfplotstableread[ignore chars={|},skip first n=2]{data_paper/heat_frac_s=05.org}\resultats
+    %% Original file  resultats_09-06-2017_11h07.org
+
+    \addplot[cout] table[x=dx,y=Nv] \resultats;
+    %\addlegendentry{Cost of the control};
+    \addplot[cible] table[x=dx,y=NyT] \resultats;
+    %\addlegendentry{Size of $y^M$};
+    \addplot[energie] table[x=dx,y=Inf_eps(F_eps)] \resultats;
+    %\addlegendentry{Optimal energy};
+    \draw [pente]  (axis cs: 0.002,10e-2) -- ++ (axis cs: 1, 5^0.4) -- ++ (axis cs: 5, 1) -- cycle;
+    \node at (axis cs:0.002,16e-2) [right,pente] {\small slope $0.4$};
+    
+    \draw [pente]  (axis cs: 0.002,0.74e0) -- ++ (axis cs: 1, {5^(-0.18)}) -- ++ (axis cs: 5, 1) -- cycle;
+    \draw [pente]  (axis cs: 0.002,0.9e0) -- ++ (axis cs: 1, {5^(-0.3)}) -- ++ (axis cs: 5, 1) -- cycle;
+    \node at (axis cs:0.002,45e-2) [right,pente] {\small sl. $-0.25/-0.45$};
+    
+  \end{loglogaxis}
+  
+\end{tikzpicture}
+\caption{Convergence properties of the method for controllability of the fractional heat equation. }\label{figure_case1}
+\end{figure}
