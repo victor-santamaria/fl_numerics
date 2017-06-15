@@ -16,8 +16,8 @@ which can also be computed analytically and it is given by (\cite{getoor1961firs
 In the figures below, we plotted the real solution \eqref{real_sol} of the problem considered (in red), and the numerical solution computed through the algorithm that we described (in blue). We considered $L=1$, $N=50$ and different values of $s\in(0,1)$.
 
 \begin{figure}[!h]
-	\pgfplotstableread{fl_01_50_sym.txt}{\datpu}
-	\pgfplotstableread{fl_04_50_sym.txt}{\ddatpu}
+	\pgfplotstableread{./figures/fl_01_50_sym.txt}{\datpu}
+	\pgfplotstableread{./figures/fl_04_50_sym.txt}{\ddatpu}
 		\subfloat[$s=0.1$]{
 		\begin{tikzpicture}[scale=0.9]
 		\begin{axis}[xmin=-1.1, xmax=1.1,legend style={at={(0.77,0.25)}}]
@@ -42,8 +42,8 @@ In the figures below, we plotted the real solution \eqref{real_sol} of the probl
 \end{figure}
 
 \begin{figure}[!h]
-	\pgfplotstableread{fl_05_50_sym.txt}{\datpu}
-	\pgfplotstableread{fl_08_50_sym.txt}{\ddatpu}
+	\pgfplotstableread{./figures/fl_05_50_sym.txt}{\datpu}
+	\pgfplotstableread{./figures/fl_08_50_sym.txt}{\ddatpu}
 		\subfloat[$s=0.5$]{
 		\begin{tikzpicture}[scale=0.9]
 		\begin{axis}[xmin=-1.1, xmax=1.1,legend style={at={(0.77,0.25)}}]
