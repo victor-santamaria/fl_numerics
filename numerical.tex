@@ -1,44 +1,48 @@
-\section{Numerical results} 
-
-As a test of the efficiency of our method, we will apply it for finding the solution of
+\section{Numerical results} \label{res_numerical}
+%
+In order to test numerically the accuracy of our method, we use the following problem 
+%
 \begin{align*}
 	\left\{\begin{array}{ll}
 		\fl{s}{u} = 1, & x\in(-L,L)
 		\\
-		u\equiv 0, & x\in\RR\setminus(-L,L)
+		u\equiv 0, & x\in\RR\setminus(-L,L).
 	\end{array}\right.
 \end{align*}
-which can also be computed analytically and it is given by (\cite{getoor1961first})
+%
+In this particular case, the solution can be computed exactly and it is given in \cite{getoor1961first}. It reads as follows, 
 \begin{align}\label{real_sol}
 	u(x)=\frac{2^{-2s}\sqrt{\pi}}{\Gamma\left(\frac{1+2s}{2}\right)\Gamma(1+s)}\Big(L^2-x^2\Big)^s.
 \end{align}
 
-In the figures below, we plotted the real solution \eqref{real_sol} of the problem considered (in red), and the numerical solution computed through the algorithm that we described (in blue). We considered $L=1$, $N=50$ and different values of $s\in(0,1)$.
-
+In figures \ref{smenos12} and \ref{smas12}, we show a comparison for different values of $s$ between the exact solution \eqref{real_sol} and the computed numerical approximation. Here we consider $L=1$ and $N=50$. One can notice that when $s=0.1$ (and also for other small values of s), the computed solution is to a certain extent different from the exact solution. However, one should be careful with such result and a more precise analysis of the error should be carried. 
+%
 \begin{figure}[!h]
 	\pgfplotstableread{./figures/fl_01_50_sym.txt}{\datpu}
 	\pgfplotstableread{./figures/fl_04_50_sym.txt}{\ddatpu}
 		\subfloat[$s=0.1$]{
 		\begin{tikzpicture}[scale=0.9]
 		\begin{axis}[xmin=-1.1, xmax=1.1,legend style={at={(0.77,0.25)}}]
-			\addplot [color=blue, mark=none] table[x=0,y=1]{\datpu};	
-			\addplot [color=red, mark=x, only marks] table[x=2,y=3]{\datpu};		
+			\addplot [color=blue, mark=none,  thick] table[x=0,y=1]{\datpu};	
+			\addplot [color=red, mark=x, only marks, thick] table[x=2,y=3]{\datpu};		
 			\addlegendentry{Numerical solution}
 			\addlegendentry{Real solution}
 		\end{axis}
 	\end{tikzpicture}
+	\label{s01a}
 	}
 		\hspace{1cm}\subfloat[$s=0.4$]{
 		\begin{tikzpicture}[scale=0.9]
 		\begin{axis}[xmin=-1.1, xmax=1.1,legend style={at={(0.77,0.25)}}]
-			\addplot [color=blue, mark=none] table[x=0,y=1]{\ddatpu};	
-			\addplot [color=red, mark=x, only marks] table[x=2,y=3]{\ddatpu};		
+			\addplot [color=blue, mark=none, thick] table[x=0,y=1]{\ddatpu};	
+			\addplot [color=red, mark=x, only marks, thick] table[x=2,y=3]{\ddatpu};		
 			\addlegendentry{Numerical solution}
 			\addlegendentry{Real solution}
 		\end{axis}
 	\end{tikzpicture}
 	}
 	\caption{Plot for different values of $s<1/2$}
+	\label{smenos12}
 \end{figure}
 
 \begin{figure}[!h]
@@ -47,8 +51,8 @@ In the figures below, we plotted the real solution \eqref{real_sol} of the probl
 		\subfloat[$s=0.5$]{
 		\begin{tikzpicture}[scale=0.9]
 		\begin{axis}[xmin=-1.1, xmax=1.1,legend style={at={(0.77,0.25)}}]
-			\addplot [color=blue, mark=none] table[x=0,y=1]{\datpu};	
-			\addplot [color=red, mark=x, only marks] table[x=2,y=3]{\datpu};		
+			\addplot [color=blue, mark=none, thick] table[x=0,y=1]{\datpu};	
+			\addplot [color=red, mark=x, only marks, thick] table[x=2,y=3]{\datpu};		
 			\addlegendentry{Numerical solution}
 			\addlegendentry{Real solution}
 		\end{axis}
@@ -57,17 +61,133 @@ In the figures below, we plotted the real solution \eqref{real_sol} of the probl
 		\hspace{1cm}\subfloat[$s=0.8$]{
 		\begin{tikzpicture}[scale=0.9]
 		\begin{axis}[xmin=-1.1, xmax=1.1,legend style={at={(0.77,0.25)}}]
-			\addplot [color=blue, mark=none] table[x=0,y=1]{\ddatpu};	
-			\addplot [color=red, mark=x, only marks] table[x=2,y=3]{\ddatpu};		
+			\addplot [color=blue, mark=none, thick] table[x=0,y=1]{\ddatpu};	
+			\addplot [color=red, mark=x, only marks, thick] table[x=2,y=3]{\ddatpu};		
 			\addlegendentry{Numerical solution}
 			\addlegendentry{Real solution}
 		\end{axis}
 	\end{tikzpicture}
 	}
 	\caption{Plot for different values of $s\geq 1/2$}
+	\label{smas12}
 \end{figure}
 
+In the same spirit as in \cite{acosta2017short}, the computation of the error in the space $H_0^s(-L,L)$ can be readily done by using the definition of the bilinear form, namely
+%
+\begin{align*}
+\|u-u_h\|^2_{H_0^s(-L,L)}&=a(u-u_h,u-u_h) \\
+&=a(u,u-u_h) \\
+&=\int_{-L}^{L}f(x)\left(u(x)-u_h(x)\right)dx,
+\end{align*}
+%
+where have used the orthogonality condition $a(v_h,u-u_h)=0$ $\forall v_h \in V_h$.
+
+For this particular test, since $f\equiv 1$ in $(-L,L)$, the problem is therefore reduced to
+%
+\begin{align*}
+\|u-u_h\|_{H^s_0(-L,L)}=\left(\int_{-L}^{L}\left( u(x)-u_h(x) \right)\,dx\right)^{1/2}
+\end{align*}
+%
+where the right-hand side can be easily computed, since we have the closed formula 
+%
+\begin{align}
+\int_{-L}^{L}u\,dx= \frac{\pi L^{2s+1}}{2^{2s}\Gamma(s+\frac{1}{2})\Gamma(s+\frac{3}{2})}
+\end{align}
+% 
+and the term corresponding to $\int_{-L}^{L}u_h$ can be carried out numerically. 
+
+In Figure \ref{error}, we present the computational errors evaluated for different values of $s$. These results are in accordance with the following result: 
+%
+\begin{theorem}[Theorem 4.6 of \cite{acosta2017short}]
+%
+For the solution $u$ of \eqref{WF} and its FE approximation $u_h$ given by \eqref{WFD}, if $h$ is sufficiently small, the following estimates hold
+%
+\begin{align*}
+&\|u-u_h\|_{H^s_0(-L,L)}\leq C h^{1/2}|\!\ln h|\,\|f\|_{C^{1/2-s}(-L,L)}, \quad \textnormal{if}\quad s<1/2, \\
+&\|u-u_h\|_{H^s_0(-L,L)}\leq C h^{1/2} |\!\ln h|\, \|f\|_{L^\infty(-L,L)}, \quad \textnormal{if}\quad  s=1/2 \\
+&\|u-u_h\|_{H^s_0(-L,L)}\leq \tfrac{C}{2s-1} h^{1/2} \sqrt{|\!\ln h|}\, \|f\|_{C^\beta}(-L,L), \quad \textnormal{if} \quad s>1/2,
+\end{align*}
+%
+where $C$ is a positive constant not depending on $h$. 
+%
+\end{theorem}
+
+As expected, the rates of convergence shown in Figure \ref{error} are of order (in $h$) of 1/2. Indeed, since the notion of trace is not defined for the spaces $H^s_0(-L,L)$ with $s\leq 1/2$ (see \rouge{poner cita}), a behavior as in Fig. \ref{s01a} is somehow natural, so we cannot expect a point-wise convergence. 
+%
+\begin{figure}
+ \centering
+  \pgfplotstableread{data_paper/result_convergence_01.org}{\datpu}
+  \pgfplotstableread{data_paper/result_convergence_03.org}{\datpt}
+   \pgfplotstableread{data_paper/result_convergence_05.org}{\datpcnum}
+  \pgfplotstableread{data_paper/result_convergence_07.org}{\datps}
+  \pgfplotstableread{data_paper/result_convergence_09.org}{\datpn}
+   \pgfplotsset{
+     legend cell align=left,
+     legend pos=outer north east,
+     legend plot pos=right,
+     legend style={cells={anchor=east},draw=none},
+     }
+%
+  %\subfloat[Convergence of the error]{\label{fig_case_O_subset_omega}
+  \begin{tikzpicture}%[scale=1] 
+  \label{conv}
+  \begin{loglogaxis}[xlabel=$h$, ymax=2e-1]
+  	%\addplot [color=blue, very thick] table [x=0, y=2] {\datpt};
+	\addplot [color=black, mark=o, thick] table [x=0, y=1] {\datpu};
+	\addlegendentry{$s=0.1$};
+	\addplot [color=black, mark=diamond, mark size=3 pt, thick] table [x=0, y=1] {\datpt};
+	\addlegendentry{${s}=0.3$};
+	\addplot [color=black, mark=pentagon, thick] table [x=0, y=1] {\datpcnum};
+	\addlegendentry{${s}=0.5$};
+	\addplot [color=black, mark=square, thick] table [x=0, y=1] {\datps};
+	\addlegendentry{$ s=0.7$};
+	\addplot [color=black, mark=triangle, mark size=3 pt, thick] table [x=0, y=1] {\datpn};
+	\addlegendentry{$ s=0.9$};
+%
+ \draw [pente]  (axis cs: 0.0008,4e-2) -- ++ (axis cs: 1, {10^(0.5)}) -- ++ (axis cs: 10, 1) -- cycle;
+ \node at (axis cs:0.0008,10e-2) [right,pente] {\small slope $0.5$};
+%
+  \end{loglogaxis}
+\end{tikzpicture}%
+\caption{Convergence of the error.}
+\label{error}
+\end{figure}
+
+
 \subsection{Numerical experiments}
+
+\begin{figure}[ht]
+%%  Datos del experimento 
+%%  T=0.3, epsilon=0.01*h, s=0.8
+ \centering
+% 
+\subfloat[The adjoint][Uncontrolled solution]{
+\begin{tikzpicture}
+\begin{axis}[surface,zmax=1.0]
+  
+\addplot3 [mesh/ordering=y varies, surf, shader=flat,draw=black,opacity=0.6] file {./data_paper/soly_s08_sc.dat};
+\node at (axis cs:0.34,0,0) [below] {$T=0.3$};
+
+\end{axis}
+\end{tikzpicture}}
+%
+\hspace{1 cm}
+  \subfloat[The state][Controlled solution ({\tikz \fill [green] (0,0) rectangle (0.2,0.2);}=control domain)]{
+\begin{tikzpicture}
+\begin{axis}[surface, zmax=1.0]
+
+  %\controldomainT{-0.3}{0.8}{0.3};
+  \couplingdomainT{-0.3}{0.8}{0.3};
+  
+\addplot3 [mesh/ordering=y varies, surf, shader=flat,draw=black,opacity=0.6] file {./data_paper/soly_s08_cc.dat};
+\node at (axis cs:0.34,0,0) [below] {$T=0.3$};
+
+\end{axis}
+\end{tikzpicture}}%
+\caption{Time evolution of system \eqref{}.}\label{fig_heat_frac}
+\end{figure}
+
+
 
 \begin{figure}
   \centering
