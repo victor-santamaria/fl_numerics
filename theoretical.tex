@@ -2,6 +2,8 @@
 
 In this Section, we introduce some preliminary result that will be useful in the remaining of the paper.
 
+\subsection{Elliptic problem}
+
 We start by giving a more rigorous definition of the fractional Laplace operator, as we have anticipated in Section \ref{intro_sec}. Let
 \begin{align*}
 	\mathcal L^1_s(\RR) :=\left\{ u:\RR\longrightarrow\RR\,:\; u\textrm{ measurable },\;\int_{\RR}\frac{|u(x)|}{(1+|x|)^{1+2s}}\,dx<\infty\right\}.
@@ -20,15 +22,19 @@ We notice that if $0<s<1/2$ and $u$ is smooth, for example bounded and Lipschitz
 
 Let us now introduce the variational formulation associated to equation \eqref{PE}, which will be the starting point for the development of the FE approximation of the problem we are considering. Find $u\in H^s_0(-L,L)$ such that
 \begin{align}\label{WF}
-	\frac{\ccs}{2} \int_{\RR}\int_{\RR}\frac{(u(x)-u(y))(v(x)-v(y))}{|x-y|^{1+2s}}\,dxdy = \int_{-L}^L fv\,dx,	
+	a(u,v) = \int_{-L}^L fv\,dx,	
 \end{align}
-for all $v\in H_0^s(-L,L)$. Here, $H^s_0(-L,L)$ denotes the space 
+for all $v\in H_0^s(-L,L)$, where the bilinear form $a(\cdot,\cdot):H^s_0(-L,L)\times H^s_0(-L,L)\to \RR$ is given by
+\begin{align}\label{WF_bilinear}
+	a(u,v)=\frac{\ccs}{2} \int_{\RR}\int_{\RR}\frac{(u(x)-u(y))(v(x)-v(y))}{|x-y|^{1+2s}}\,dxdy.	
+\end{align}
+Here, $H^s_0(-L,L)$ denotes the space 
 \begin{align*}
 	H^s_0(-L,L) :=\Big\{\, u\in H^s(\RR)\,:\,u=0 \textrm{ in } \RR\setminus(-L,L)\,\Big\}, 
 \end{align*}
 while with $H^s(\RR)$ we indicate the classical fractional Sobolev space of order $s$. We refer to \cite{dihitchhiker} for a complete description of these spaces.  
 
-In this way, Lax-Milgram Theorem immediately implies existence and uniqueness of solutions to the Dirichlet problem \eqref{PE}. In more detail, if $f\in H^{-s}(-L,L)$, then \eqref{PE} admits a unique weak solution $u\in H_0^s(-L,L)$ (see, e.g., \cite[Proposition 2.1]{biccari2017local}). Here $H^{-s}(-L,L)$ stands for the dual space of $H^s_0(-L,L)$. Furthermore, in the literature it is possible to find improved regularity results for the solution to \eqref{PE}, both in H\"older and Sobolev spaces. The interested reader may refer, for instance, to \cite{acosta2017fractional,biccari2017local,leonori2015basic,ros2014dirichlet,ros2014extremal}.
+Since the bilinear form $a$ is continuous and coercive, Lax-Milgram Theorem immediately implies existence and uniqueness of solutions to the Dirichlet problem \eqref{PE}. In more detail, if $f\in H^{-s}(-L,L)$, then \eqref{PE} admits a unique weak solution $u\in H_0^s(-L,L)$ (see, e.g., \cite[Proposition 2.1]{biccari2017local}). Here $H^{-s}(-L,L)$ stands for the dual space of $H^s_0(-L,L)$. Furthermore, in the literature it is possible to find improved regularity results for the solution to \eqref{PE}, both in H\"older and Sobolev spaces. The interested reader may refer, for instance, to \cite{acosta2017fractional,biccari2017local,leonori2015basic,ros2014dirichlet,ros2014extremal}.
 
 As we mentioned in Section \ref{intro_sec}, the main goal of the present paper is to obtain a FE discretization of the fractional Laplacian. A natural application of this approximation will then be the numerical resolution of the fractional heat equation \ref{heat_frac} and the associated control problem. In more details, given the following non-local parabolic problem 
 \begin{align*}
@@ -41,6 +47,8 @@ As we mentioned in Section \ref{intro_sec}, the main goal of the present paper i
 	\end{cases}
 \end{align*}
 where $\omega=(l_1,l_2)\subset (-1,1)$ is the support of the control and $z_0$ is a given initial data in $L^2(-1,1)$, we want to compute numerically the control function $g$ that drives the solution $z$ to zero in time $T$. First of all, it is worth to mention that existence, uniqueness and regularity of the solutions to \eqref{heat_frac} has been studied by several authors. Among others, we mention the works \cite{biccari2017local,fernandez2016boundary,leonori2015basic}.
+
+\subsection{Parabolic problem}
 
 Concerning instead the control problem, we recall that the approach that we will employ is based on the penalised Hilbert Uniqueness Method, which has been well presented in \cite{boyer2013penalised}. However, before describing this method, we shall firstly remind the existing theoretical results on the controllability of the fractional heat equation \eqref{heat_frac}. This will tell us which results we should expect from our simulations, and will provide a validation of the accuracy of our numerical method.
 
@@ -77,6 +85,8 @@ Regarding equation \eqref{heat_frac}, as we mentioned we are not aware of any nu
 Indeed, employing \eqref{eigen_approx}, we can easily show that, also in this case, \eqref{eigen_cond} fails as soon as $s\leq 1/2$, thus implying that the equation is not null-controllable. 
 
 Finally, we mention that, even if for $s\leq 1/2$ the null-controllability of \eqref{heat_frac} fails, the equation is approximately controllable. This is a simple adaptation of \cite[Proposition 2.4 and Theorem 2.5]{keyantuo2016interior}, and it is due to the fact that the fractional Laplacian enjoys the unique continuation property (see \cite{fall2014unique}).      
+
+\subsubsection{Control problem for the fractional heat equation}
 
 Let us now give a brief description of the so called penalised Hilbert Uniqueness Method (HUM in what follows) that we shall employ for computing the controls for equation \eqref{heat_frac}. Here, we will mostly refer to the work of Boyer \cite{boyer2013penalised}.
 
@@ -116,9 +126,17 @@ For any $\delta\geq 0$, we define the (possibly empty) closed convex set
 	\textrm{Adm}(y_0,\delta):=\left\{v\in L^2(0,T;U)\,:\, \norm{\mathcal{L}_T(\cdot|\cdot)}\leq\delta\right\}.
 \end{align*}
 \begin{itemize}
-	\item We say that \eqref{abstract_pb} is \textit{approximately null-controllable} at time $T$ from the initial datum $y_0$ if $\textrm{Adm}(y_0,\delta)\neq\emptyset$ for all $\delta>0$. If this holds for all $y_0\in E$, we say that \eqref{abstract_pb} is approximately null-controllable at time $T$. 
+	\item We say that \eqref{abstract_pb} is \textit{approximately null-controllable} at time $T$ from the initial datum $y_0$ if 
+	\begin{align*}
+		\textrm{Adm}(y_0,\delta)\neq\emptyset,\;\;\textrm{ for all } \delta>0.
+	\end{align*}  
+	If this holds for all $y_0\in E$, we say that \eqref{abstract_pb} is approximately null-controllable at time $T$. 
 	
-	\item We say that \eqref{abstract_pb} is \textit{null-controllable} at time $T$ from the initial datum $y_0$ if $\textrm{Adm}(y_0,0)\neq\emptyset$. If this holds for all $y_0\in E$, we say that \eqref{abstract_pb} is null-controllable at time $T$.
+	\item We say that \eqref{abstract_pb} is \textit{null-controllable} at time $T$ from the initial datum $y_0$ if 
+	\begin{align*}
+		\textrm{Adm}(y_0,0)\neq\emptyset.
+	\end{align*}	
+	If this holds for all $y_0\in E$, we say that \eqref{abstract_pb} is null-controllable at time $T$.
 \end{itemize} 
 \end{definition}
 
@@ -156,7 +174,7 @@ However, the space $L^2(0,T;U)$ in which one has to minimise $F_\varepsilon$ is 
 \end{align}
 where
 \begin{align*}
-	J_\varepsilon(q^T):=\frac{1}{2}\int_0^T\inter{B^*e^{-(T-t)A^*}q^T(t)}^2\,dt+\frac{\varepsilon}{2}\norm{q^T}{}^2 + \left\langle y_0,e^{-TA^*}q^T\right\rangle, \quad \forall q^T\in E.
+	J_\varepsilon(q^T):=\frac{1}{2}\int_0^T\inter{B^*e^{-(T-t)A^*}q^T}^2\,dt+\frac{\varepsilon}{2}\norm{q^T}{}^2 + \left\langle y_0,e^{-TA^*}q^T\right\rangle, \quad \forall q^T\in E.
 \end{align*}
 
 Notice that \eqref{min_ve} and \eqref{min_je} are equivalent since, according to \cite[Proosition 1.5]{boyer2013penalised}, for any $\varepsilon > 0$, the minimisers $v_\varepsilon$ and $q_\varepsilon^T$ of the functionals $F_\varepsilon$ and $J_\varepsilon$, respectively, are related through the formula
@@ -164,7 +182,7 @@ Notice that \eqref{min_ve} and \eqref{min_je} are equivalent since, according to
 	v_\varepsilon = B^*e^{-(T-t)A^*}q_\varepsilon^T, \textrm{ for a.e. } t\in(0,T).
 \end{align*} 
 
-Finally, we mention that we can express the approximate and null controllability properties of the system, for a given initial datum $y_0$, in terms of the behaviour of the penalised HUM approach described above. In particular we have 
+Notice also that we can express the approximate and null controllability properties of the system, for a given initial datum $y_0$, in terms of the behaviour of the penalised HUM approach described above. In particular we have 
 
 \begin{theorem}[Theorem 1.7 of \cite{boyer2013penalised}]
 Problem \eqref{abstract_pb} is approximately controllable from the initial datum $y_0$ if and only if we have
@@ -184,3 +202,22 @@ In this case, we have
 \end{theorem} 
 
 Therefore, by observing in our simulations the behaviour of the norm of the control and of the solution of at time $T$, we can obtain a numerical evidence of the properties of null and approximate controllability for equation \eqref{heat_frac}. 
+
+Finally, since the fractional Laplacian $\fl{s}{}$ has the properties required for the operator $A$, the penalised HUM that we just described can be applied to the control problem \eqref{heat_frac} in the following way: find
+\begin{align*}
+	\phi^T_\varepsilon=\min_{\phi\in L^2(-L,L)} J_\varepsilon (\phi^T)
+\end{align*}
+where 
+\begin{align*}
+	J_\varepsilon(\phi^T):=\frac{1}{2}\int_0^T\int_{\omega}|\phi|^2\,dxdt+\frac{\varepsilon}{2}\norm{\phi^T}{L^2(-L,L)}^2 + \langle z_0,\phi\rangle, \quad \forall \phi^T\in L^2(-L,L) 
+\end{align*}
+and $\phi$ is the solution of the adjoint problem
+\begin{align*}
+	\begin{cases}
+		-\phi_t + \fl{s}{\phi} = 0, & (x,t)\in (-L,L)\times(0,T)
+		\\
+		\phi = 0, & (x,t)\in [\,\RR\setminus(-L,L)\,]\times(0,T)
+		\\
+		\phi(x,T) = \phi^T(x), & x\in (-L,L).
+	\end{cases}
+\end{align*}

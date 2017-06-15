@@ -1002,41 +1002,34 @@ We point out the following facts:
 
 \subsection{Parabolic problem}
 
-
-We now present the numerical implementation of the control problem for the fractional heat equation. Firs of all, since we have obtained a FE approximation $\mathcal A_h$ of the operator $\fl{s}{}$, we can compute the fully-discrete version of \eqref{heat_frac} as
-
+We now present the numerical implementation of the control problem for the fractional heat equation. Since we have obtained a FE approximation $\mathcal A_h$ of the operator $\fl{s}{}$, we can compute the fully-discrete approximation of \eqref{heat_frac}. For this purpose, for any $h>0$, let us introduce the Euclidean spaces $E_h$, with inner product $\langle\cdot,\cdot\rangle_h$ and norm $\norm{\cdot}{h}$, and $U_h$, with inner product $[\cdot,\cdot]_h$ and norm $\inter{\cdot}_h$. In this setting, \eqref{heat_frac} can be discretized through the implicit Euler method on $M-1$ time steps as
 \begin{align}\label{frac_heat_num}
 	\begin{cases}
-		\mathcal M_h \frac{z^{n+1}-z^n}{\delta t}+\mathcal A_h z^{n+1}=\mathbf{1}_\omega v^{n+1}, \quad \forall n\in \inter{1,M-1}
+		\displaystyle\mathcal M_h \frac{z^{n+1}-z^n}{\delta t}+\mathcal A_h z^{n+1}=\mathbf{1}_\omega v_h^{n+1}, \quad \forall n\in \left\{1,\ldots,M-1\right\}
 		\\
-		z(0)=z_0 
+		z^0=z_0, 
 	\end{cases}
 \end{align}
-
-where $\mathcal M_h$ is the classical mass matrix with entries $m_{i,j}=\langle \phi_i,\phi_j\rangle$. 
-
-We are interested in computing numerical controls for the solution to \eqref{frac_heat_num}. We use the penalized HUM to build control functions for the fully-discrete approximation of \eqref{frac_heat} and then  study its convergence with respect to the discretization parameters $h$ and $\delta_t$.
-
-We solve the minimization problem
+where $z_0\in E_h$, $\mathcal M_h$ is the classical mass matrix with entries $m_{i,j}=\langle \phi_i,\phi_j\rangle$ and $\delta t=T/M$. Hence, we are reduced to solve the minimization problem
 
 \begin{align}\label{min_adj}
 	\varphi_\varepsilon^T=\min_{\varphi^T\in L^2_{h,\delta t}(0,1)}J_\varepsilon(\varphi^T)
 \end{align}
-
 where
-
 \begin{align*}
 	J_\varepsilon(\varphi^T)=\frac{1}{2}\iint_{\omega\times(0,T)}|\varphi|^2dxdt+\frac{\varepsilon}{2}\|\varphi^T\|^2_{L^2_{h,\delta t}(0,1)}+\int_{0}^{1}\varphi^1y_0\,dx, \quad \forall \varphi^T\in L_{h,\delta t}^2(0,1)
 \end{align*}
 and $\varphi=(\varphi^n)_{1\leq n\leq M+1}$ is solution to the adjoint system
 \begin{align}\label{frac_adj_num}
 	\begin{cases}
-		\varphi^{M+1}=\varphi^T \\
-		\mathcal M_h \frac{q^{n}-q^{n+1}}{\delta t}+\mathcal A_h q^{n}=0, \quad \forall n\in 		\inter{1,M}
+		\displaystyle\mathcal M_h \frac{\varphi^n-\varphi^{n+1}}{\delta t}+\mathcal A_h \varphi^n=0, & \forall n\in\inter{1,M}
+		\\
+		\varphi^{M+1}=\varphi^T. 
 	\end{cases}
 \end{align}
+
 By solving problem \eqref{min_adj}, and from duality theory, we obtain a control function
-$v_\varepsilon=\mathbf{1}_\omega\varphi_\varepsilon$ where $\varphi_\epsilon$ is the solution to \eqref{frac_adj_num} evaluated in the optimal datum $\varphi_\varepsilon^T$. Studying the behavior of the solution to the optimization problem with respecto to $\varepsilon$, we can recover usual theoretical results for controllability of evolution equations. 
+$v_\varepsilon=\mathbf{1}_\omega\varphi_\varepsilon$ where $\varphi_\epsilon$ is the solution to \eqref{frac_adj_num} evaluated in the optimal datum $\varphi_\varepsilon^T$. Studying the behaviour of the solution to the optimization problem with respect to $\varepsilon$, we can recover usual theoretical results for controllability of evolution equations. This will be supported by  the numerical experiments that we are going to resent in Section \ref{res_numerical}.
 
 
 
