@@ -22,15 +22,19 @@ We notice that if $0<s<1/2$ and $u$ is smooth, for example bounded and Lipschitz
 
 Let us now introduce the variational formulation associated to equation \eqref{PE}, which will be the starting point for the development of the FE approximation of the problem we are considering. Find $u\in H^s_0(-L,L)$ such that
 \begin{align}\label{WF}
-	\frac{\ccs}{2} \int_{\RR}\int_{\RR}\frac{(u(x)-u(y))(v(x)-v(y))}{|x-y|^{1+2s}}\,dxdy = \int_{-L}^L fv\,dx,	
+	a(u,v) = \int_{-L}^L fv\,dx,	
 \end{align}
-for all $v\in H_0^s(-L,L)$. Here, $H^s_0(-L,L)$ denotes the space 
+for all $v\in H_0^s(-L,L)$, where the bilinear form $a(\cdot,\cdot):H^s_0(-L,L)\times H^s_0(-L,L)\to \RR$ is given by
+\begin{align}\label{WF_bilinear}
+	a(u,v)=\frac{\ccs}{2} \int_{\RR}\int_{\RR}\frac{(u(x)-u(y))(v(x)-v(y))}{|x-y|^{1+2s}}\,dxdy.	
+\end{align}
+Here, $H^s_0(-L,L)$ denotes the space 
 \begin{align*}
 	H^s_0(-L,L) :=\Big\{\, u\in H^s(\RR)\,:\,u=0 \textrm{ in } \RR\setminus(-L,L)\,\Big\}, 
 \end{align*}
 while with $H^s(\RR)$ we indicate the classical fractional Sobolev space of order $s$. We refer to \cite{dihitchhiker} for a complete description of these spaces.  
 
-In this way, Lax-Milgram Theorem immediately implies existence and uniqueness of solutions to the Dirichlet problem \eqref{PE}. In more detail, if $f\in H^{-s}(-L,L)$, then \eqref{PE} admits a unique weak solution $u\in H_0^s(-L,L)$ (see, e.g., \cite[Proposition 2.1]{biccari2017local}). Here $H^{-s}(-L,L)$ stands for the dual space of $H^s_0(-L,L)$. Furthermore, in the literature it is possible to find improved regularity results for the solution to \eqref{PE}, both in H\"older and Sobolev spaces. The interested reader may refer, for instance, to \cite{acosta2017fractional,biccari2017local,leonori2015basic,ros2014dirichlet,ros2014extremal}.
+Since the bilinear form $a$ is continuous and coercive, Lax-Milgram Theorem immediately implies existence and uniqueness of solutions to the Dirichlet problem \eqref{PE}. In more detail, if $f\in H^{-s}(-L,L)$, then \eqref{PE} admits a unique weak solution $u\in H_0^s(-L,L)$ (see, e.g., \cite[Proposition 2.1]{biccari2017local}). Here $H^{-s}(-L,L)$ stands for the dual space of $H^s_0(-L,L)$. Furthermore, in the literature it is possible to find improved regularity results for the solution to \eqref{PE}, both in H\"older and Sobolev spaces. The interested reader may refer, for instance, to \cite{acosta2017fractional,biccari2017local,leonori2015basic,ros2014dirichlet,ros2014extremal}.
 
 As we mentioned in Section \ref{intro_sec}, the main goal of the present paper is to obtain a FE discretization of the fractional Laplacian. A natural application of this approximation will then be the numerical resolution of the fractional heat equation \ref{heat_frac} and the associated control problem. In more details, given the following non-local parabolic problem 
 \begin{align*}
