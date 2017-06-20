@@ -90,9 +90,9 @@ For this particular test, since $f\equiv 1$ in $(-L,L)$, the problem is therefor
 %
 where the right-hand side can be easily computed, since we have the closed formula 
 %
-\begin{align*}
+\begin{align}
 \int_{-L}^{L}u\,dx= \frac{\pi L^{2s+1}}{2^{2s}\Gamma(s+\frac{1}{2})\Gamma(s+\frac{3}{2})}
-\end{align*}
+\end{align}
 % 
 and the term corresponding to $\int_{-L}^{L}u_h$ can be carried out numerically. 
 
@@ -112,8 +112,7 @@ where $C$ is a positive constant not depending on $h$.
 %
 \end{theorem}
 
-As expected, the rates of convergence shown in Figure \ref{error} are of order (in $h$) of 1/2. Indeed, since it is well-known that the notion of trace is not defined for the spaces $H^s(-L,L)$ with $s\leq 1/2$ (see \cite{lions1968problemes,tartar2007introduction}), a behavior as in Fig. \ref{s01a} is somehow natural, so we cannot expect a point-wise convergence. 
-
+As expected, the rates of convergence shown in Figure \ref{error} are of order (in $h$) of 1/2. Indeed, since it is well-known that the notion of trace is not defined for the spaces $H^s_0(-L,L)$ with $s\leq 1/2$ (see \cite{lions1968problemes,tartar2007introduction}), a behavior as in Fig. \ref{s01a} is somehow natural, so we cannot expect a point-wise convergence. 
 %
 \begin{figure}
  \centering
@@ -154,74 +153,8 @@ As expected, the rates of convergence shown in Figure \ref{error} are of order (
 \label{error}
 \end{figure}
 
-
-
 \begin{figure}
- \centering
-  \pgfplotstableread{data_paper/result_convergence_01.org}{\datpu}
-  \pgfplotstableread{data_paper/result_convergence_03.org}{\datpt}
-   \pgfplotstableread{data_paper/result_convergence_05.org}{\datpcnum}
-  \pgfplotstableread{data_paper/result_convergence_07.org}{\datps}
-  \pgfplotstableread{data_paper/result_convergence_09.org}{\datpn}
-   \pgfplotsset{
-     legend cell align=left,
-     legend pos=outer north east,
-     legend plot pos=right,
-     legend style={cells={anchor=east},draw=none},
-     }
-
-%
-  %\subfloat[Convergence of the error]{\label{fig_case_O_subset_omega}
-  \begin{tikzpicture}%[scale=1] 
-  \label{conv}
-  \begin{loglogaxis}[xlabel=$h$, ymax=2e-1]
-  	%\addplot [color=blue, very thick] table [x=0, y=2] {\datpt};
-	\addplot [color=black, mark=o, thick] table [x=0, y=1] {\datpu};
-	\addlegendentry{$s=0.1$};
-	\addplot [color=black, mark=diamond, mark size=3 pt, thick] table [x=0, y=1] {\datpt};
-	\addlegendentry{${s}=0.3$};
-	\addplot [color=black, mark=pentagon, thick] table [x=0, y=1] {\datpcnum};
-	\addlegendentry{${s}=0.5$};
-	\addplot [color=black, mark=square, thick] table [x=0, y=1] {\datps};
-	\addlegendentry{$ s=0.7$};
-	\addplot [color=black, mark=triangle, mark size=3 pt, thick] table [x=0, y=1] {\datpn};
-	\addlegendentry{$ s=0.9$};
-%
- \draw [pente]  (axis cs: 0.0008,4e-2) -- ++ (axis cs: 1, {10^(0.5)}) -- ++ (axis cs: 10, 1) -- cycle;
- \node at (axis cs:0.0008,10e-2) [right,pente] {\small slope $0.5$};
-%
-  \end{loglogaxis}
-\end{tikzpicture}%
-\caption{Convergence of the error.}
-\label{error}
-\end{figure}
-
-
-\subsection{Control experiments}
-%
-To address the actual computation of fully-discrete controls for a given problem, we use the methodology described, for instance, in \cite{}, and apply an optimisation algorithm to the dual functional \eqref{dual_fully}. Since these functionals are quadratic and coercive, the conjugate gradient is a natural choice and the computation of the gradient amounts to solve first the homogeneous equation 
-%
-\begin{align}
-	\begin{cases}
-		\displaystyle\mathcal M_h \frac{\varphi^n-\varphi^{n+1}}{\delta t}+\mathcal A_h \varphi^n=0, & \forall n\in\inter{1,M}
-		\\
-		\varphi^{M+1}=\varphi^T. 
-	\end{cases}
-\end{align}
-%
-Then, set $v^n=\mathbf{1}_\omega\varphi^n$ and finally solve 
-%
-\begin{align}\label{frac_heat_num}
-	\begin{cases}
-		\displaystyle\mathcal M_h \frac{z^{n+1}-z^n}{\delta t}+\mathcal A_h z^{n+1}=\mathbf{1}_\omega \varphi_h^{n+1}, \quad \forall n\in \left\{1,\ldots,M-1\right\}
-		\\
-		z^0=0. 
-	\end{cases}
-\end{align}
-%
-
-\begin{figure}
- \centering
+\centering
   \pgfplotstableread{data_paper/res.org}{\datpu}
      \pgfplotsset{
  	legend cell align=left,
@@ -229,22 +162,24 @@ Then, set $v^n=\mathbf{1}_\omega\varphi^n$ and finally solve
      legend plot pos=right,
      legend style={cells={anchor=east},draw=none},
      }
-
-  %\subfloat[Convergence of the error]{\label{fig_case_O_subset_omega}
+%%
+%  %\subfloat[Convergence of the error]{\label{fig_case_O_subset_omega}
   \begin{tikzpicture}%[scale=1] 
   \label{conv}
   \begin{loglogaxis}%[xlabel=$h$, ymax=2e-1]
-  	%\addplot [color=blue, very thick] table [x=0, y=2] {\datpt};
+%  	%\addplot [color=blue, very thick] table [x=0, y=2] {\datpt};
 	\addplot [color=black, mark=o, thick] table [x=0, y=1] {\datpu};
-%
+%%
  \draw [pente]  (axis cs: 0.001,0.8) -- ++ (axis cs: 1, {5^(0.1)}) -- ++ (axis cs: 5, 1) -- cycle;
  \node at (axis cs:0.001,0.8) [right,pente] {\small slope $0.1$};
-%
+%%
   \end{loglogaxis}
 \end{tikzpicture}%
-\caption{Convergence of the error.}
-\label{error}
+%\caption{Convergence of the error.}
+%\label{error}
 \end{figure}
+
+
 
 \subsection{Numerical experiments}
 
