@@ -17,7 +17,9 @@ Here, $\ccs$ is a normalisation constant given by
 \begin{align*}
 	\ccs = \frac{s2^{2s}\Gamma\left(\frac{1+2s}{2}\right)}{\sqrt{\pi}\Gamma(1-s)},
 \end{align*}
-where $\Gamma$ is the usual Gamma function. Moreover, we have to mention that, for having a completely rigorous definition of the fractional Laplace operator, it is necessary to introduce also the class of functions $u$ for which computing $\fl{s}{u}$ makes sense. We postpone this discussion to the next section.
+where $\Gamma$ is the usual Gamma function. 
+
+We have to mention that, for having a completely rigorous definition of the fractional Laplace operator, it is necessary to introduce also the class of functions $u$ for which computing $\fl{s}{u}$ makes sense. We postpone this discussion to the next section.
 
 The analysis of non-local operators and non-local PDEs is a topic in continuous development.
 A motivation for this growing interest relies in the large number of possible applications in the modelling of several complex phenomena for which a local approach turns up to be inappropriate or limiting.
@@ -27,13 +29,11 @@ Among others, we mention applications in turbulence (\cite{bakunin2008turbulence
 
 One of the main differences between these non-local models and classical Partial Differential Equations is that the fulfilment of a non-local equation at a point involves the values of the function far away from that point.
 
-Concerning numerical approximations, we refer to the work \cite{acosta2017fractional} of Acosta and Borthagaray (see also \cite{acosta2017short}), where the authors present a FE scheme for implementing the solution of \eqref{PE} in a bounded domain $\Omega\subset\RR^2$. We also mention \cite{nochetto2015pde}, where the solution of \eqref{PE} is implemented applying the well known extension of Caffarelli and Silvestre (\cite{caffarelli2007extension}).   
+In the recent past, the fractional Laplacian has been widely analysed also from the point of view of numerical analysis. We refer, for instance, to the work \cite{acosta2017fractional} of Acosta and Borthagaray (see also \cite{acosta2017short}). There, the authors present a FE scheme for implementing the solution of \eqref{PE} in a bounded domain $\Omega\subset\RR^2$. In particular, they provide appropriate quadrature rules in order to solve numerically the variational formulation associated to the problem. Moreover, in \cite{acosta2017fractional} it is also developped an accurate analysis of the efficiency ot the FE method, employing several existing results. For the sake of completeness, we also mention \cite{nochetto2015pde}, where the solution of \eqref{PE} is implemented applying the well known extension of Caffarelli and Silvestre (\cite{caffarelli2007extension}).   
 
-Our method deals with a FE approximation in one space dimension for the fractional Poisson equation. 
+Our method deals with a FE approximation in one space dimension for the fractional Poisson equation. The main novelty of our work, with respect to \cite{acosta2017short,acosta2017fractional}, relies on the fact that, since we are dealing with the one-dimensional case, we will not need any quadrature rule and each entry of the stiffness matrix can be computed explicitly. This has the great advantage of significantly reducing the computational cost of the algorithm and, therefore, our discretization method is suitable for being included in more general applications.  
 
-We already mentioned that the same approach has been developed in \cite{acosta2017short,acosta2017fractional}. There, the authors provide appropriate quadrature rules in order to evaluate numerically the left hand side term in \eqref{WF}. The main novelty of our work relies on the fact that, since we are dealing with the one-dimensional case, the above integral can be computed explicitly, and this has the great advantage of significantly reducing the computational cost of the algorithm. 
-
-Once the algorithm for the elliptic problem is efficiently developed, an immediate application is the numerical resolution of the following control problem: given any $T>0$, find a control function $g\in L^2((-L,L)\times(0,T))$ such that the corresponding solution to the parabolic problem 
+An natural example is given by the numerical resolution of the following control problem: given any $T>0$, find a control function $g\in L^2((-L,L)\times(0,T))$ such that the corresponding solution to the parabolic problem 
 \begin{align}\label{heat_frac}
 	\left\{\begin{array}{ll}
 	z_t + \fl{s}{z} = g\mathbf{1}_{\omega}, & (x,t)\in (-L,L)\times(0,T)

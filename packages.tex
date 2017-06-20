@@ -27,10 +27,9 @@
 \usepackage{graphicx}
 \usepackage{txfonts}
 \usepackage{subfig}
-\usepackage{refcheck}
+%\usepackage{refcheck}
 \usepackage[pagewise]{lineno}\linenumbers
 \DeclareMathAlphabet{\mathbbm}{U}{bbm}{m}{n}% from bbm.sty
-
 
 \input fig4tex.tex
 
@@ -79,10 +78,15 @@
 \usepackage{tikz}
 \usepackage{pgfplots}
 \usepackage{pgfplotstable}
+\usetikzlibrary{matrix,external,fit}
+
+\pgfdeclarelayer{background}
+\pgfsetlayers{background,main}
+
 
 \input{macros_franck.tex}
 
-\title[FE approximation of the 1-d fractional Poisson equation]{Finite Elements approximation of the one-dimensional fractional Poisson equation with applications to numerical control}
+\title[FE approximation of the 1-d fractional Poisson equation]{Finite Element approximation of the one-dimensional fractional Poisson equation with applications to numerical control}
 
 \author{U.~Biccari}
 \address{Umberto Biccari, DeustoTech, University of Deusto, 48007 Bilbao, Basque Country, Spain.}
