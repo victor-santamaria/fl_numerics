@@ -92,7 +92,7 @@ The following fact are worth noticing.
 \end{align}
 	In other words, while calculating the components $a_{i,j}$ we will not consider the multiplicative constant $\ccs/2$, since it is uniform for all the elements of the matrix. 
 	
-	\item While computing the values $a_{i,j}$, we will only work on the mesh $\mathfrak{M}$, not considering the points of the set $\partial\mathfrak{M}$. In this way, we will ensure that the basis functions $\phi_i$ satisfy the zero Dirichlet boundary conditions. In other words, in our FE approximation we are considering only the functions from $\phi_1$ to $\phi_N$. By considering, instead, also the points $x_0$ and $x_{N+1}$, then we would introduce in our discretization also the basis functions $\phi_0$ and $\phi_{N+1}$, which take value $1$ at the boundary, and this would not be consistent with the continuous problem. Figure \ref{basis_int} provides a graphical explanation of this last discussion.      	
+	\item While computing the values $a_{i,j}$, we will only work on the mesh $\mathfrak{M}$, not considering the points of the set $\partial\mathfrak{M}$. In this way, we will ensure that the basis functions $\phi_i$ satisfy the zero Dirichlet boundary conditions. In other words, in our FE approximation we are considering only the functions from $\phi_1$ to $\phi_N$. Instead, if we considered the points $x_0$ and $x_{N+1}$, then we would need to introduce in our discretization also the basis functions $\phi_0$ and $\phi_{N+1}$, which take value $1$ at the boundary, and this would not be consistent with the continuous problem. Figure \ref{basis_int} provides a graphical explanation of this last discussion.      	
 \end{itemize}
 \end{remark}
 
@@ -188,7 +188,7 @@ The following fact are worth noticing.
 \caption{Basis functions $\phi_i(x)$ on the whole interval $(-L,L)$.}\label{basis_int}
 \end{figure}
 
-We now start building the stiffness matrix $\mathcal A_h$. This will be done it in three steps, since the values of the matrix can be computed differentiating among three well defined regions: the upper triangle ($j\geq i+2$), the upper diagonal ($j=i+1$) and the diagonal ($j=i$). This because, as it will be clear during our computations, in each of these regions the intersections among the support of the basis functions are different, thus generating different values of the bilinear form. In what follows, we will briefly present which will be the contributions to the matrix in each of these three steps, including the complete computations as an appendix at the end of the paper. 
+We now start building the stiffness matrix $\mathcal A_h$. This will be done it in three steps, since the values of the matrix can be computed differentiating among three well defined regions: the upper triangle ($j\geq i+2$), the upper diagonal ($j=i+1$) and the diagonal ($j=i$). In fact, as it will be clear during our computations, in each of these regions the intersections among the support of the basis functions are different, thus generating different values of the bilinear form. In what follows, we will briefly present which will be the contributions to the matrix in each of these three steps, including the complete computations as an appendix at the end of the paper. 
 %\begin{tikzpicture}
 % \matrix[matrix of math nodes,left delimiter = (,right delimiter = ),row sep=10pt,column sep = 10pt] (m)
 % {
@@ -217,7 +217,7 @@ We now start building the stiffness matrix $\mathcal A_h$. This will be done it 
 %\end{tikzpicture}
 
 \subsubsection*{Step 1: $j\geq i+2$}
-As we were mentioned in Remark \ref{rem_prel} before, in this case we have $supp(\phi_i)\cap supp(\phi_j) =\emptyset$ (see also Figure \ref{basis_upp_tri}). Hence, \eqref{stiffness_nc} is reduced to computing only the integral
+As we mentioned in Remark \ref{rem_prel}, in this case we have $supp(\phi_i)\cap supp(\phi_j) =\emptyset$ (see also Figure \ref{basis_upp_tri}). Hence, \eqref{stiffness_nc} is reduced to computing only the integral
 \begin{align}\label{elem_noint}
 	a_{i,j}=-2 \int_{x_{j-1}}^{x_{j+1}}\int_{x_{i-1}}^{x_{i+1}}\frac{\phi_i(x)\phi_j(y)}{|x-y|^{1+2s}}\,dxdy.
 \end{align}
@@ -376,7 +376,7 @@ According to \eqref{stiffness_nc}, and using the symmetry of the integral with r
 	:= & Q_1 + Q_2 + Q_3 + Q_4 + Q_5 + Q_6.
 \end{align*}
 
-These contributions will be calculated separately, employing change of variables analogous to \eqref{cv}. After several computations, we will obtain
+These contributions will be calculated separately, employing changes of variables analogous to \eqref{cv}. After several computations, we obtain
 \begin{align}\label{Aii1}
 	a_{i,i+1} = \begin{cases}
 					\displaystyle h^{1-2s}\frac{3^{3-2s}-2^{5-2s}+7}{2s(1-2s)(1-s)(3-2s)}, & \displaystyle s\neq \frac{1}{2}
@@ -462,7 +462,7 @@ As a last step, we fill the diagonal of the matrix $\mathcal A_h$. In this case 
 \caption{Basis functions $\phi_i(x)$ and $\phi_j(x)$. In this case, the two functions coincides}\label{basis_dia}
 \end{figure}
 
-Also in this case, the terms $R_i$, $i=1,\ldots,7$ will be computed separately, obtaining
+Once again, the terms $R_i$, $i=1,\ldots,7$ will be computed separately, obtaining
 \begin{align*}
 	a_{i,i} = \begin{cases}
 			\displaystyle h^{1-2s}\,\frac{2^{3-2s}-4}{s(1-2s)(1-s)(3-2s)}, & \displaystyle s\neq\frac{1}{2}
@@ -483,12 +483,9 @@ We point out the following facts:
 \end{itemize}
 \end{remark}
 
-\subsection{Parabolic problem and control problem}\label{fe_parabolic}
+\subsection{Parabolic problem}
 
-We now present the numerical implementation of the control problem for the fractional heat equation. Since we have obtained a FE approximation $\mathcal A_h$ of the operator $\fl{s}{}$, we can compute the fully-discrete approximation of \eqref{heat_frac}. 
-
-More precisely, for any given mesh $\mathfrak M$ and any integer $M>0$, we set $\delta t=T/M$ and we consider a implicit Euler method, with respect to the time variable. More precisely, we consider
-%
+We now present the numerical implementation of the control problem for the fractional heat equation. Since we have obtained a FE approximation $\mathcal A_h$ of the operator $\fl{s}{}$, we can compute the fully-discrete approximation of \eqref{heat_frac}. For this purpose, for any $h>0$, let us introduce the Euclidean spaces $E_h$, with inner product $\langle\cdot,\cdot\rangle_h$ and norm $\norm{\cdot}{h}$, and $U_h$, with inner product $[\cdot,\cdot]_h$ and norm $\inter{\cdot}_h$. In this setting, \eqref{heat_frac} can be discretized through the implicit Euler method on $M-1$ time steps as
 \begin{align}\label{frac_heat_num}
 	\begin{cases}
 		\displaystyle\mathcal M_h \frac{z^{n+1}-z^n}{\delta t}+\mathcal A_h z^{n+1}=\mathbf{1}_\omega v_h^{n+1}, \quad \forall n\in \left\{1,\ldots,M-1\right\}
@@ -496,38 +493,16 @@ More precisely, for any given mesh $\mathfrak M$ and any integer $M>0$, we set $
 		z^0=z_0, 
 	\end{cases}
 \end{align}
-%
-where $z_0\in \mathbb R^\mesh$ and $\mathcal M_h$ is the classical mass matrix with entries $m_{i,j}=\langle \phi_i,\phi_j\rangle$.
+where $z_0\in E_h$, $\mathcal M_h$ is the classical mass matrix with entries $m_{i,j}=\langle \phi_i,\phi_j\rangle$ and $\delta t=T/M$. Hence, we are reduced to solve the minimization problem
 
-Here, $v_{h,\delta t}=(v_h^n)_{1\leq n\leq M}$ is a fully-discrete control function whose cost, that is the discrete $L_{\delta t}^2(0,T;\mathbb R^\mesh)$-norm, is defined by
-%
-\begin{align*}
-\|v_{\delta t}\|_{L_{\delta t}^2(0,T;\mathbb R^\mesh)}:=\left(\sum_{i=1}^M\delta t |v^n|^2_{L^2(\Omega)}\right)^{1/2},
-\end{align*}
-%
-and where $| \cdot |_{L^2(\Omega)}$ stands for the norm associated to the $L^2$-inner product on $\mathbb{R}^\mathfrak M$
-%
-\begin{align*}
-(u,v)_{L^2(\Omega)}=h \sum_{i=1}^N u_i v_i.
-\end{align*}
-%
-
-With the above notation and according to the penalised HUM strategy, we introduce, for some penalization parameter $\varepsilon>0$, the following primal fully-discrete functional 
-%
-\begin{align*}
-F_{\varepsilon,h,\delta t}(v_{\delta t})=\sum_{n=1}^{M}\delta t |v^n|^2_{L^2(\Omega)}+\frac{1}{2\varepsilon}|z^M|^2_{L^2(\Omega)}, \quad \forall \, v_{\delta t}\in L_{\delta t}^2(0,T;\mathbb R^\mesh),
-\end{align*}
-%
-that we wish to minimize onto the whole fully-discrete control space $L_{\delta t}^2(0,T;\mathbb R^\mesh)$ and where $z^M$ is the final value of the controlled problem \eqref{frac_heat_num}. 
-
-As noted in section \rouge{numero}, we can apply Fenchel-Rockafellar theory results to obtain the corresponding dual functional, which reads as follows
-%
-\begin{align}\label{dual_fully}
-	J_{\varepsilon,h,\delta t}(\varphi^T)=\frac{1}{2}\sum_{n=1}^{M}\delta t|\mathbf 1_\omega\varphi|^2_{L^2(\Omega)}+\frac{\varepsilon}{2}|\varphi^T|^2_{L^2(\Omega)}+(\varphi^1,y_0)_{L^2(\Omega)}, \quad \forall \varphi^T\in L_{h,\delta t}^2(0,1)
+\begin{align}\label{min_adj}
+	\varphi_\varepsilon^T=\min_{\varphi^T\in L^2_{h,\delta t}(0,1)}J_\varepsilon(\varphi^T)
 \end{align}
-%
-where $\varphi=(\varphi^n)_{1\leq n\leq M+1}$ is solution to the adjoint system
-%
+where
+\begin{align*}
+	J_\varepsilon(\varphi^T)=\frac{1}{2}\iint_{\omega\times(0,T)}|\varphi|^2dxdt+\frac{\varepsilon}{2}\|\varphi^T\|^2_{L^2_{h,\delta t}(0,1)}+\int_{0}^{1}\varphi^1y_0\,dx, \quad \forall \varphi^T\in L_{h,\delta t}^2(0,1)
+\end{align*}
+and $\varphi=(\varphi^n)_{1\leq n\leq M+1}$ is solution to the adjoint system
 \begin{align}\label{frac_adj_num}
 	\begin{cases}
 		\displaystyle\mathcal M_h \frac{\varphi^n-\varphi^{n+1}}{\delta t}+\mathcal A_h \varphi^n=0, & \forall n\in\inter{1,M}
@@ -535,12 +510,10 @@ where $\varphi=(\varphi^n)_{1\leq n\leq M+1}$ is solution to the adjoint system
 		\varphi^{M+1}=\varphi^T. 
 	\end{cases}
 \end{align}
-%
-It can be readily verified that this functional has a unique minimizer without any additional assumption on the problem. Indeeed, by minimizing  \eqref{dual_fully}, and from duality theory, we obtain a control function $v_{\varepsilon,h,\delta t}=\left(\mathbf{1}_\omega\varphi_{\varepsilon,h,\delta t}^n\right)_{1\leq n\leq M}$ where $\varphi_\epsilon$ is the solution to \eqref{frac_adj_num} evaluated in the optimal datum $\varphi_\varepsilon^T$. 
 
-Thus, the optimal penalized control always exists and is unique, and deducing controllability properties for the systems amounts to study the behavior of this control with respect to the penalization parameter $\varepsilon$, in connection with the discretization parameters.  
+By solving problem \eqref{min_adj}, and from duality theory, we obtain a control function
+$v_\varepsilon=\mathbf{1}_\omega\varphi_\varepsilon$ where $\varphi_\epsilon$ is the solution to \eqref{frac_adj_num} evaluated in the optimal datum $\varphi_\varepsilon^T$. Studying the behaviour of the solution to the optimization problem with respect to $\varepsilon$, we can recover usual theoretical results for controllability of evolution equations. This will be supported by  the numerical experiments that we are going to resent in Section \ref{res_numerical}.
 
-It is well known that, in general, we cannot expect for a given bounded family of initial data that the fully-discrete controls are uniformly bounded when the discretization parameters $h$, $\delta t$ and the penalization term $\varepsilon$ tend to zero independently, see, for instance, \cite{}. 
 
-Instead, we expect to obtain uniform bounds by taking the penalization parameter $\varepsilon=\phi(h)$ that tends to 0 in connection with the mesh size not too fast (see \cite{}) and a time step $\delta t$ verifying some weak condition of the kind $\delta t\leq \zeta(h)$ where $\zeta$ tends to zero logaritmically when $h\to 0$ (see \cite{})
-%
+
+
