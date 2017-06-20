@@ -112,7 +112,7 @@ where $C$ is a positive constant not depending on $h$.
 %
 \end{theorem}
 
-As expected, the rates of convergence shown in Figure \ref{error} are of order (in $h$) of 1/2. Indeed, since the notion of trace is not defined for the spaces $H^s_0(-L,L)$ with $s\leq 1/2$ (see \rouge{poner cita}), a behavior as in Fig. \ref{s01a} is somehow natural, so we cannot expect a point-wise convergence. 
+As expected, the rates of convergence shown in Figure \ref{error} are of order (in $h$) of 1/2. Indeed, since it is well-known that the notion of trace is not defined for the spaces $H^s_0(-L,L)$ with $s\leq 1/2$ (see \cite{lions1968problemes,tartar2007introduction}), a behavior as in Fig. \ref{s01a} is somehow natural, so we cannot expect a point-wise convergence. 
 %
 \begin{figure}
  \centering
@@ -153,39 +153,66 @@ As expected, the rates of convergence shown in Figure \ref{error} are of order (
 \label{error}
 \end{figure}
 
+\begin{figure}
+ \centering
+  \pgfplotstableread{data_paper/res.org}{\datpu}
+     \pgfplotsset{
+     legend cell align=left,
+     legend pos=outer north east,
+     legend plot pos=right,
+     legend style={cells={anchor=east},draw=none},
+     }
+%
+  %\subfloat[Convergence of the error]{\label{fig_case_O_subset_omega}
+  \begin{tikzpicture}%[scale=1] 
+  \label{conv}
+  \begin{loglogaxis}%[xlabel=$h$, ymax=2e-1]
+  	%\addplot [color=blue, very thick] table [x=0, y=2] {\datpt};
+	\addplot [color=black, mark=o, thick] table [x=0, y=1] {\datpu};
+%
+ \draw [pente]  (axis cs: 0.001,0.8) -- ++ (axis cs: 1, {5^(0.1)}) -- ++ (axis cs: 5, 1) -- cycle;
+ \node at (axis cs:0.001,0.8) [right,pente] {\small slope $0.1$};
+%
+  \end{loglogaxis}
+\end{tikzpicture}%
+\caption{Convergence of the error.}
+\label{error}
+\end{figure}
+
+
 
 \subsection{Numerical experiments}
 
-\begin{figure}[ht]
-%%  Datos del experimento 
-%%  T=0.3, epsilon=0.01*h, s=0.8
- \centering
-% 
-\subfloat[The adjoint][Uncontrolled solution]{
-\begin{tikzpicture}
-\begin{axis}[surface,zmax=1.0]
-  
-\addplot3 [mesh/ordering=y varies, surf, shader=flat,draw=black,opacity=0.6] file {./data_paper/soly_s08_sc.dat};
-\node at (axis cs:0.34,0,0) [below] {$T=0.3$};
-
-\end{axis}
-\end{tikzpicture}}
+%\begin{figure}[ht]
+%%%  Datos del experimento 
+%%%  T=0.3, epsilon=0.01*h, s=0.8
+% \centering
+%% 
+%\subfloat[The adjoint][Uncontrolled solution]{
+%\begin{tikzpicture}
+%\begin{axis}[surface,zmax=1.0]
+%  
+%\addplot3 [mesh/ordering=y varies, surf, shader=flat,draw=black,opacity=0.6] file {./data_paper/soly_s08_sc.dat};
+%\node at (axis cs:0.34,0,0) [below] {$T=0.3$};
 %
-\hspace{1 cm}
-  \subfloat[The state][Controlled solution ({\tikz \fill [green] (0,0) rectangle (0.2,0.2);}=control domain)]{
-\begin{tikzpicture}
-\begin{axis}[surface, zmax=1.0]
-
-  %\controldomainT{-0.3}{0.8}{0.3};
-  \couplingdomainT{-0.3}{0.8}{0.3};
-  
-\addplot3 [mesh/ordering=y varies, surf, shader=flat,draw=black,opacity=0.6] file {./data_paper/soly_s08_cc.dat};
-\node at (axis cs:0.34,0,0) [below] {$T=0.3$};
-
-\end{axis}
-\end{tikzpicture}}%
-\caption{Time evolution of system \eqref{}.}\label{fig_heat_frac}
-\end{figure}
+%\end{axis}
+%\end{tikzpicture}}
+%%
+%\hspace{1 cm}
+%  \subfloat[The state][Controlled solution ({\tikz \fill [green] (0,0) rectangle (0.2,0.2);}=control domain)]{
+%\begin{tikzpicture}
+%\begin{axis}[surface, zmax=1.0]
+%
+%  %\controldomainT{-0.3}{0.8}{0.3};
+%  \couplingdomainT{-0.3}{0.8}{0.3};
+%  
+%\addplot3 [mesh/ordering=y varies, surf, shader=flat,draw=black,opacity=0.6] file {./data_paper/soly_s08_cc.dat};
+%\node at (axis cs:0.34,0,0) [below] {$T=0.3$};
+%
+%\end{axis}
+%\end{tikzpicture}}%
+%\caption{Time evolution of system \eqref{}.}\label{fig_heat_frac}
+%\end{figure}
 
 
 
