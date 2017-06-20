@@ -6,7 +6,7 @@ We present here the explicit computations for each element $a_{i,j}$ of the stif
 
 \subsubsection*{Step 1: $j\geq i+2$}
 We recall that, in this case, the value of $a_{i,j}$ is given by the integral
-\begin{align}\label{elem_noint}
+\begin{align}\label{elem_noint_app}
 	a_{i,j}=-2 \int_{x_{j-1}}^{x_{j+1}}\int_{x_{i-1}}^{x_{i+1}}\frac{\phi_i(x)\phi_j(y)}{|x-y|^{1+2s}}\,dxdy.
 \end{align}
 
@@ -135,10 +135,10 @@ In Figure \ref{upp_tri}, we give a scheme of the region of interaction (marked i
 \caption{Interactions between the basis function $\phi_i$ and $\phi_j$ when $j\geq i+2$.}\label{upp_tri}
 \end{figure}
 
-Now, taking into account the definition of the basis function \eqref{basis_fun}, the integral \eqref{elem_noint} becomes
-\begin{align}\label{elem_noint}
+Now, taking into account the definition of the basis function \eqref{basis_fun}, the integral \eqref{elem_noint_app} becomes
+\begin{align*}
 	a_{i,j}=-2 \int_{x_{j-1}}^{x_{j+1}}\int_{x_{i-1}}^{x_{i+1}}\frac{\left(1-\frac{|x-x_i|}{h}\right)\left(1-\frac{|y-x_j|}{h}\right)}{|x-y|^{1+2s}}\,dxdy.
-\end{align}
+\end{align*}
 
 Let us introduce the following change of variables:
 \begin{align}\label{cv_appendix}
