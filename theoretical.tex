@@ -36,7 +36,7 @@ while with $H^s(\RR)$ we indicate the classical fractional Sobolev space of orde
 
 Since the bilinear form $a$ is continuous and coercive, Lax-Milgram Theorem immediately implies existence and uniqueness of solutions to the Dirichlet problem \eqref{PE}. In more detail, if $f\in H^{-s}(-L,L)$, then \eqref{PE} admits a unique weak solution $u\in H_0^s(-L,L)$ (see, e.g., \cite[Proposition 2.1]{biccari2017local}). Here $H^{-s}(-L,L)$ stands for the dual space of $H^s_0(-L,L)$. Furthermore, in the literature it is possible to find improved regularity results for the solution to \eqref{PE}, both in H\"older and Sobolev spaces. The interested reader may refer, for instance, to \cite{acosta2017fractional,biccari2017local,leonori2015basic,ros2014dirichlet,ros2014extremal}.
 
-As we mentioned in Section \ref{intro_sec}, the main goal of the present paper is to obtain a FE discretization of the fractional Laplacian. A natural application of this approximation will then be the numerical resolution of the fractional heat equation \ref{heat_frac} and the associated control problem. In more details, given the following non-local parabolic problem 
+As we mentioned in Section \ref{intro_sec}, the main goal of the present paper is to obtain a FE discretization of the fractional Laplacian. A natural application of this approximation will then be the numerical resolution of the fractional heat equation \eqref{heat_frac} and the associated control problem. In more details, given the following non-local parabolic problem 
 \begin{align*}
 	\begin{cases}
 		z_t+\fl{s}{z} =\mathbf{1}_\omega g, & (x,t)\in (-1,1)\times (0,T), 
@@ -201,7 +201,7 @@ In this case, we have
 \end{align} 
 \end{theorem} 
 
-Therefore, by observing in our simulations the behaviour of the norm of the control and of the solution of at time $T$, we can obtain a numerical evidence of the properties of null and approximate controllability for equation \eqref{heat_frac}. 
+Therefore, by observing in our simulations the behaviour of the norm of the control, the optimal energy $\inf F_\varepsilon$, and of the solution of at time $T$, we can obtain a numerical evidence of the properties of null and approximate controllability for equation \eqref{heat_frac}. 
 
 Finally, since the fractional Laplacian $\fl{s}{}$ has the properties required for the operator $A$, the penalised HUM that we just described can be applied to the control problem \eqref{heat_frac} in the following way: find
 \begin{align*}
