@@ -167,7 +167,7 @@ Notice that \eqref{min_ve} and \eqref{min_je} are equivalent since, according to
 
 Notice also that we can express the approximate and null controllability properties of the system, for a given initial datum $y_0$, in terms of the behaviour of the penalised HUM approach described above. In particular we have 
 
-\begin{theorem}[Theorem 1.7 of \cite{boyer2013penalised}]
+\begin{theorem}[Theorem 1.7 of \cite{boyer2013penalised}]\label{theorem_hum}
 Problem \eqref{abstract_pb} is approximately controllable from the initial datum $y_0$ if and only if we have
 \begin{align}\label{approx_control_cond}
 	\mathcal{L}_T(v_\varepsilon|y_0) = y_{v_\varepsilon,y_0}(T)\rightarrow 0,\;\;\;\textrm{ as }\;\varepsilon\to 0.
@@ -184,7 +184,7 @@ In this case, we have
 \end{align} 
 \end{theorem} 
 
-Therefore, by observing in our simulations the behaviour of the norm of the control, the optimal energy $\inf F_\varepsilon$, and of the solution of at time $T$, we can obtain a numerical evidence of the properties of null and approximate controllability for equation \eqref{heat_frac}. 
+Therefore, by observing in our simulations the behaviour of the norm of the control, the optimal energy $\inf F_\varepsilon$, and the norm of the solution at time $T$, we can obtain a numerical evidence of the properties of null and approximate controllability for equation \eqref{heat_frac}. 
 
 Finally, since the fractional Laplacian $\fl{s}{}$ has the properties required for the operator $A$, the penalised HUM that we just described can be applied to the control problem \eqref{heat_frac} in the following way: find
 \begin{align*}
