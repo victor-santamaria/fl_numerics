@@ -2,13 +2,13 @@
 %
 In order to test numerically the accuracy of our method, we use the following problem 
 %
-\begin{align*}
+\begin{align}\label{PE_real}
 	\left\{\begin{array}{ll}
 		\fl{s}{u} = 1, & x\in(-L,L)
 		\\
 		u\equiv 0, & x\in\RR\setminus(-L,L).
 	\end{array}\right.
-\end{align*}
+\end{align}
 %
 In this particular case, the solution can be computed exactly and it is given in \cite{getoor1961first}. It reads as follows, 
 \begin{align}\label{real_sol}
@@ -96,25 +96,9 @@ where the right-hand side can be easily computed, since we have the closed formu
 % 
 and the term corresponding to $\int_{-L}^{L}u_h$ can be carried out numerically. 
 
-In Figure \ref{error}, we present the computational errors evaluated for different values of $s$. These results are in accordance with the following result: 
-%
-\begin{theorem}[Theorem 4.6 of \cite{acosta2017short}]
-%
-For the solution $u$ of \eqref{WF} and its FE approximation $u_h$ given by \eqref{WFD}, if $h$ is sufficiently small, the following estimates hold
-%
-\begin{align*}
-&\|u-u_h\|_{H^s_0(-L,L)}\leq C h^{1/2}|\!\ln h|\,\|f\|_{C^{1/2-s}(-L,L)}, \quad \textnormal{if}\quad s<1/2, \\
-&\|u-u_h\|_{H^s_0(-L,L)}\leq C h^{1/2} |\!\ln h|\, \|f\|_{L^\infty(-L,L)}, \quad \textnormal{if}\quad  s=1/2 \\
-&\|u-u_h\|_{H^s_0(-L,L)}\leq \tfrac{C}{2s-1} h^{1/2} \sqrt{|\!\ln h|}\, \|f\|_{C^\beta}(-L,L), \quad \textnormal{if} \quad s>1/2,
-\end{align*}
-%
-where $C$ is a positive constant not depending on $h$. 
-%
-\end{theorem}
+In Figure \ref{error}, we present the computational errors evaluated for different values of $s$ and $h$. 
 
-As expected, the rates of convergence shown in Figure \ref{error} are of order (in $h$) of 1/2. Indeed, since it is well-known that the notion of trace is not defined for the spaces $H^s_0(-L,L)$ with $s\leq 1/2$ (see \cite{lions1968problemes,tartar2007introduction}), a behavior as in Fig. \ref{s01a} is somehow natural, so we cannot expect a point-wise convergence. 
-%
-\begin{figure}
+\begin{figure}[!h]
  \centering
   \pgfplotstableread{data_paper/result_convergence_01.org}{\datpu}
   \pgfplotstableread{data_paper/result_convergence_03.org}{\datpt}
@@ -153,11 +137,29 @@ As expected, the rates of convergence shown in Figure \ref{error} are of order (
 \label{error}
 \end{figure}
 
-\begin{figure}
+The rates of convergence shown are of order (in $h$) of $1/2$. This is in accordance with the following result: 
+%
+\begin{theorem}[Theorem 4.6 of \cite{acosta2017short}]
+%
+For the solution $u$ of \eqref{WF} and its FE approximation $u_h$ given by \eqref{WFD}, if $h$ is sufficiently small, the following estimates hold
+%
+\begin{align*}
+&\|u-u_h\|_{H^s_0(-L,L)}\leq C h^{1/2}|\!\ln h|\,\|f\|_{C^{1/2-s}(-L,L)}, \quad \textnormal{if}\quad s<1/2, \\
+&\|u-u_h\|_{H^s_0(-L,L)}\leq C h^{1/2} |\!\ln h|\, \|f\|_{L^\infty(-L,L)}, \quad \textnormal{if}\quad  s=1/2 \\
+&\|u-u_h\|_{H^s_0(-L,L)}\leq \tfrac{C}{2s-1} h^{1/2} \sqrt{|\!\ln h|}\, \|f\|_{C^\beta}(-L,L), \quad \textnormal{if} \quad s>1/2,
+\end{align*}
+where $C$ is a positive constant not depending on $h$. 
+\end{theorem}
+
+Moreover, Figure \ref{error} shows that the convergence rate is maintained also for low values of $s$. This confirms that the behaviour shown in Figure \ref{s01a} is not in contrast with the known theoretical results. Indeed, since it is well-known that the notion of trace is not defined for the spaces $H^s(-L,L)$ with $s\leq 1/2$ (see \cite{lions1968problemes,tartar2007introduction}), it is somehow natural that so we cannot expect a point-wise convergence in this case.  
+
+As a further validation of this fact, in Figure \ref{linfty_error} we plot the behaviour of the $L^{\infty}$ of the difference between the real and the numerical solution to \eqref{PE_real}. Is it shown that, increasing the number of point of discretization, this norm is decreasing with a rate (in $h$) of $0.1$. This confirms, refining the mesh, also for low values of $s$ the numerical method gives an acceptable approximation of the real solution to the model problem considered.    
+
+\begin{figure}[!]
 \centering
   \pgfplotstableread{data_paper/res.org}{\datpu}
      \pgfplotsset{
- 	legend cell align=left,
+     legend cell align=left,
      legend pos=outer north east,
      legend plot pos=right,
      legend style={cells={anchor=east},draw=none},
@@ -175,8 +177,8 @@ As expected, the rates of convergence shown in Figure \ref{error} are of order (
 %%
   \end{loglogaxis}
 \end{tikzpicture}%
-\caption{Convergence of the error in the norm $L^\infty$.}
-%\label{error}
+
+\caption{Convergence of the error in the norm $L^\infty$.}\label{linfty_error}
 \end{figure}
 
 \subsection{Control experiments}
