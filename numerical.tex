@@ -179,9 +179,37 @@ As expected, the rates of convergence shown in Figure \ref{error} are of order (
 %\label{error}
 \end{figure}
 
+\subsection{Control experiments}
+%
+To address the actual computation of fully-discrete controls for a given problem, we use the methodology described, for instance, in \cite{}. We apply an optimisation algorithm to the dual functional \eqref{dual_fully}. Since these functionals are quadratic and coercive, the conjugate gradient is a natural and quite simple choice.
 
+In the same spirit as \cite{}, the computation of the gradient at each iteration amounts to solve first the homogeneous equation 
+%
+\begin{align}
+	\begin{cases}
+		\displaystyle\mathcal M_h \frac{\varphi^n-\varphi^{n+1}}{\delta t}+\mathcal A_h \varphi^n=0, & \forall n\in\inter{1,M}
+		\\
+		\varphi^{M+1}=\varphi^T. 
+	\end{cases}
+\end{align}
+%
+Then, set $v^n=\mathbf{1}_\omega\varphi^n$ and finally solve 
+%
+\begin{align}\label{frac_heat_num}
+	\begin{cases}
+		\displaystyle\mathcal M_h \frac{z^{n+1}-z^n}{\delta t}+\mathcal A_h z^{n+1}=\mathbf{1}_\omega \varphi_h^{n+1}, \quad \forall n\in \left\{1,\ldots,M-1\right\}
+		\\
+		z^0=0. 
+	\end{cases}
+\end{align}
+%
+In this way, the procedure to compute the control for a given problem basically requires to solve two parabolic equations: a homogenous backward equation associated with the final data $\varphi^T$, and a non-homogeneous forward problem with zero initial data. 
 
-\subsection{Numerical experiments}
+We present now some results obtained with the described methodology. In accordance with the discussion in Section \rouge{seccion}, we use the finite-element approximation of $\fl{s}{}$ for the space discretization and the implicit Euler scheme in the time variable. We denote by $N$ the number of points in the mesh and by $M$ the number of time intervals. As discussed in \rouge{citar}, the results in this kind of problems does not depend too much in the time step, as soon as it is chosen to ensure at least the same accuracy as the space discretization. The same remains true here, and therefore we always take $M=2000$ in order to concetrate the discussion on the dependency of the results with respecto the mesh size $h$ and the parameter $s$.
+
+As we mentioned, we choose the penalization term $\varepsilon$ as a function of $h$. A reasonable practical rule (\cite{}) is to sistematically choose $\phi(h)\sim h^{2p}$ where $p$ is the order of accuracy in space of the numerical method. Thus, according to the results in Section \rouge{section}, hereinafter we always choose $\varepsilon=\phi(h)=h$.
+
+We begin by plotting on Figure \ref{sol_surf} the time evolution of the uncontrolled solution as well as the controlled solution. Here, we choose $s=0.8$, $\omega=(-0.3,0.8)$ and $T=0.3$. The control domain is represented as highlighted zone on the plane $(t,x)$. As expected, we observe that the uncontrolled solution is damped with time, but does not reach zero at time $T$, while the controlled solution does. 
 
 %\begin{figure}[ht]
 %%%  Datos del experimento 
@@ -212,10 +240,11 @@ As expected, the rates of convergence shown in Figure \ref{error} are of order (
 %\end{axis}
 %\end{tikzpicture}}%
 %\caption{Time evolution of system \eqref{}.}\label{fig_heat_frac}
+%\label{sol_surf}
 %\end{figure}
 
-
-
+Although no results about null controllability for the fractional heat equation are known, by observing the asymptotic behavior of the numerical method, we aim to see an expected behavior. In figure \ref{figure_case1}, we present the computed values of various quantities of interest when the mesh size goes to $0$. More precisely, we observe that the control cost $\|v_{\delta t}\|_{L^2_{\delta t}(0,T;\mathbb R^\mesh)}$ and the optimal energy $\inf F_{\phi(h),h,\delta t}$ remain bounded as $h\to 0$. On the other hand, we see that $|y^M|_{L^2(\Omega)}$ behaves like $C\sqrt{\phi(h)}=Ch^{1/2}$. According to Theorem \ref{theorem_hum}, we expect that for $s=0.8$, system \eqref{heat_frac} is null controllable. In fact, the same experiment can be repeated for different values of $s>1/2$, obtaining the same conclusions. 
+%
 \begin{figure}
   \centering
 \begin{tikzpicture}
@@ -239,9 +268,14 @@ As expected, the rates of convergence shown in Figure \ref{error} are of order (
 \caption{Convergence properties of the method for controllability of the fractional heat equation. }\label{figure_case1}
 \end{figure}
 
+According to the discussion in Section \rouge{section}, one can prove that null controllability does not hold for system \eqref{heat_frac} in the case $s<1/2$. However approximate controllability can be proved by means of the unique continuation property of the operator $\fl{s}{}$. We would like to illustrate this property in figure \ref{figure_case3}. 
+
+We observe that the results are different from what we obtained in Figure \ref{figure_case1}. In fact, the cost of the control and the optimal energy increase in both cases, while the target $y^M$ tends to zero with a slower rate than $h^{1/2}$. This seems to confirm that a uniform observability estimate for \eqref{heat_frac} does not hold and that we can only expect to have approximate controllability (see Theorem \ref{theorem_hum}).
+%
  \begin{figure}
  \centering
- \begin{tikzpicture}
+ \subfloat[$s=0.4$]{
+ \begin{tikzpicture}[scale=0.9]
   \begin{loglogaxis}[erreurs, ymin=4e-2,ymax=40.4e1,title={$s=0.4$}]
  
     \pgfplotstableread[ignore chars={|},skip first n=2]{data_paper/heat_frac_s=04.org}\resultats
@@ -261,16 +295,11 @@ As expected, the rates of convergence shown in Figure \ref{error} are of order (
     \node at (axis cs:0.003,23e0) [right,pente] {\small sl. $-0.25/-0.4$};
     
   \end{loglogaxis}
-  
-\end{tikzpicture}
-\caption{Convergence properties of the method for controllability of the fractional heat equation. }\label{figure_case1}
-\end{figure}
-
- \begin{figure}
- \centering
- \begin{tikzpicture}
-  \begin{loglogaxis}[erreurs, ymin=3e-2,ymax=10e1,title={$s=0.5$}]
- 
+  \end{tikzpicture}
+  }
+ \subfloat[$s=0.5$]{
+  \begin{tikzpicture}[scale=0.9]
+  \begin{loglogaxis}[erreurs, ymin=2e-2,ymax=20.4e1,title={$s=0.5$}]
     \pgfplotstableread[ignore chars={|},skip first n=2]{data_paper/heat_frac_s=05.org}\resultats
     %% Original file  resultats_09-06-2017_11h07.org
 
@@ -288,7 +317,7 @@ As expected, the rates of convergence shown in Figure \ref{error} are of order (
     \node at (axis cs:0.003,1.35e1) [right,pente] {\small sl. $-0.18/-0.3$};
     
   \end{loglogaxis}
-  
 \end{tikzpicture}
-\caption{Convergence properties of the method for controllability of the fractional heat equation. }\label{figure_case1}
+}
+\caption{Convergence properties of the method for $s<1/2$. Same legend as in Figure \ref{figure_case1}}\label{figure_case3}
 \end{figure}
