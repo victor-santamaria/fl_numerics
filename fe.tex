@@ -1,6 +1,6 @@
 \section{Finite element approximation}\label{fe_sec}
 
-\subsection{Elliptic problem}
+\subsection{Elliptic problem}\label{fe_ell_sec}
 
 In order to solve numerically \eqref{PE}, we will develop a finite element scheme on a uniform mesh. To this purpose, let us firstly recall the variational formulation associated to our problem: find $u\in H_0^s(-L,L)$ such that
 \begin{align}\label{WF}
@@ -549,7 +549,7 @@ F_{\varepsilon,h,\delta t}(v_{\delta t})=\sum_{n=1}^{M}\delta t |v^n|^2_{L^2(\Om
 %
 that we wish to minimize onto the whole fully-discrete control space $L_{\delta t}^2(0,T;\mathbb R^\mesh)$ and where $z^M$ is the final value of the controlled problem \eqref{frac_heat_num}. 
 
-As noted in section \rouge{numero}, we can apply Fenchel-Rockafellar theory results to obtain the corresponding dual functional, which reads as follows
+As noted in Section \ref{theor_sec}, we can apply Fenchel-Rockafellar theory results to obtain the corresponding dual functional, which reads as follows
 %
 \begin{align}\label{dual_fully}
 	J_{\varepsilon,h,\delta t}(\varphi^T)=\frac{1}{2}\sum_{n=1}^{M}\delta t|\mathbf 1_\omega\varphi|^2_{L^2(\Omega)}+\frac{\varepsilon}{2}|\varphi^T|^2_{L^2(\Omega)}+(\varphi^1,y_0)_{L^2(\Omega)}, \quad \forall \varphi^T\in L_{h,\delta t}^2(0,1)
@@ -565,11 +565,15 @@ where $\varphi=(\varphi^n)_{1\leq n\leq M+1}$ is solution to the adjoint system
 	\end{cases}
 \end{align}
 %
-It can be readily verified that this functional has a unique minimizer without any additional assumption on the problem. Indeeed, by minimizing  \eqref{dual_fully}, and from duality theory, we obtain a control function $v_{\varepsilon,h,\delta t}=\left(\mathbf{1}_\omega\varphi_{\varepsilon,h,\delta t}^n\right)_{1\leq n\leq M}$ where $\varphi_\epsilon$ is the solution to \eqref{frac_adj_num} evaluated in the optimal datum $\varphi_\varepsilon^T$. 
+It can be readily verified that this functional has a unique minimizer without any additional assumption on the problem. Indeeed, by minimizing  \eqref{dual_fully}, and from duality theory, we obtain a control function 
+\begin{align*}
+	v_{\varepsilon,h,\delta t}=\left(\mathbf{1}_\omega\varphi_{\varepsilon,h,\delta t}^n\right)_{1\leq n\leq M},
+\end{align*}
+where $\varphi_\epsilon$ is the solution to \eqref{frac_adj_num} evaluated in the optimal datum $\varphi_\varepsilon^T$. 
 
 Thus, the optimal penalized control always exists and is unique, and deducing controllability properties for the systems amounts to study the behavior of this control with respect to the penalization parameter $\varepsilon$, in connection with the discretization parameters.  
 
-It is well known that, in general, we cannot expect for a given bounded family of initial data that the fully-discrete controls are uniformly bounded when the discretization parameters $h$, $\delta t$ and the penalization term $\varepsilon$ tend to zero independently, see, for instance, \cite{}. 
+It is well known that, in general, we cannot expect for a given bounded family of initial data that the fully-discrete controls are uniformly bounded when the discretization parameters $h$, $\delta t$ and the penalization term $\varepsilon$ tend to zero independently. 
 
-Instead, we expect to obtain uniform bounds by taking the penalization parameter $\varepsilon=\phi(h)$ that tends to 0 in connection with the mesh size not too fast (see \cite{}) and a time step $\delta t$ verifying some weak condition of the kind $\delta t\leq \zeta(h)$ where $\zeta$ tends to zero logaritmically when $h\to 0$ (see \cite{}).
+Instead, we expect to obtain uniform bounds by taking the penalization parameter $\varepsilon=\phi(h)$ that tends to 0 in connection with the mesh size not too fast (see \cite{boyer2013penalised}) and a time step $\delta t$ verifying some weak condition of the kind $\delta t\leq \zeta(h)$ where $\zeta$ tends to zero logaritmically when $h\to 0$ (see \cite{boyer2011uniform}).
 %

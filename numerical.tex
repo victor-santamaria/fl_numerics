@@ -15,13 +15,16 @@ In this particular case, the solution can be computed exactly and it is given in
 	u(x)=\frac{2^{-2s}\sqrt{\pi}}{\Gamma\left(\frac{1+2s}{2}\right)\Gamma(1+s)}\Big(L^2-x^2\Big)^s.
 \end{align}
 
-In figures \ref{smenos12} and \ref{smas12}, we show a comparison for different values of $s$ between the exact solution \eqref{real_sol} and the computed numerical approximation. Here we consider $L=1$ and $N=50$. One can notice that when $s=0.1$ (and also for other small values of s), the computed solution is to a certain extent different from the exact solution. However, one should be careful with such result and a more precise analysis of the error should be carried. 
+In Figure \ref{smas12}, we show a comparison for different values of $s$ between the exact solution \eqref{real_sol} and the computed numerical approximation. Here we consider $L=1$ and $N=50$. One can notice that when $s=0.1$ (and also for other small values of s), the computed solution is to a certain extent different from the exact solution. However, one should be careful with such result and a more precise analysis of the error should be carried. 
 %
 \begin{figure}[!h]
 	\pgfplotstableread{./figures/fl_01_50_sym.txt}{\datpu}
 	\pgfplotstableread{./figures/fl_04_50_sym.txt}{\ddatpu}
+	\pgfplotstableread{./figures/fl_05_50_sym.txt}{\Ddatpu}
+	\pgfplotstableread{./figures/fl_08_50_sym.txt}{\Dddatpu}
+
 		\subfloat[$s=0.1$]{
-		\begin{tikzpicture}[scale=0.9]
+		\begin{tikzpicture}[scale=0.8]
 		\begin{axis}[xmin=-1.1, xmax=1.1,legend style={at={(0.77,0.25)}}]
 			\addplot [color=blue, mark=none,  thick] table[x=0,y=1]{\datpu};	
 			\addplot [color=red, mark=x, only marks, thick] table[x=2,y=3]{\datpu};		
@@ -32,43 +35,31 @@ In figures \ref{smenos12} and \ref{smas12}, we show a comparison for different v
 	\label{s01a}
 	}
 		\hspace{1cm}\subfloat[$s=0.4$]{
-		\begin{tikzpicture}[scale=0.9]
+		\begin{tikzpicture}[scale=0.8]
 		\begin{axis}[xmin=-1.1, xmax=1.1,legend style={at={(0.77,0.25)}}]
 			\addplot [color=blue, mark=none, thick] table[x=0,y=1]{\ddatpu};	
 			\addplot [color=red, mark=x, only marks, thick] table[x=2,y=3]{\ddatpu};		
-			\addlegendentry{Numerical solution}
-			\addlegendentry{Real solution}
 		\end{axis}
 	\end{tikzpicture}
 	}
-	\caption{Plot for different values of $s<1/2$}
-	\label{smenos12}
-\end{figure}
-
-\begin{figure}[!h]
-	\pgfplotstableread{./figures/fl_05_50_sym.txt}{\datpu}
-	\pgfplotstableread{./figures/fl_08_50_sym.txt}{\ddatpu}
+\\
 		\subfloat[$s=0.5$]{
-		\begin{tikzpicture}[scale=0.9]
+		\begin{tikzpicture}[scale=0.8]
 		\begin{axis}[xmin=-1.1, xmax=1.1,legend style={at={(0.77,0.25)}}]
-			\addplot [color=blue, mark=none, thick] table[x=0,y=1]{\datpu};	
-			\addplot [color=red, mark=x, only marks, thick] table[x=2,y=3]{\datpu};		
-			\addlegendentry{Numerical solution}
-			\addlegendentry{Real solution}
+			\addplot [color=blue, mark=none, thick] table[x=0,y=1]{\Ddatpu};	
+			\addplot [color=red, mark=x, only marks, thick] table[x=2,y=3]{\Ddatpu};		
 		\end{axis}
 	\end{tikzpicture}
 	}
 		\hspace{1cm}\subfloat[$s=0.8$]{
-		\begin{tikzpicture}[scale=0.9]
+		\begin{tikzpicture}[scale=0.8]
 		\begin{axis}[xmin=-1.1, xmax=1.1,legend style={at={(0.77,0.25)}}]
-			\addplot [color=blue, mark=none, thick] table[x=0,y=1]{\ddatpu};	
-			\addplot [color=red, mark=x, only marks, thick] table[x=2,y=3]{\ddatpu};		
-			\addlegendentry{Numerical solution}
-			\addlegendentry{Real solution}
+			\addplot [color=blue, mark=none, thick] table[x=0,y=1]{\Dddatpu};	
+			\addplot [color=red, mark=x, only marks, thick] table[x=2,y=3]{\Dddatpu};		
 		\end{axis}
 	\end{tikzpicture}
 	}
-	\caption{Plot for different values of $s\geq 1/2$}
+	\caption{Plot for different values of $s$.}
 	\label{smas12}
 \end{figure}
 
@@ -153,9 +144,9 @@ where $C$ is a positive constant not depending on $h$.
 
 Moreover, Figure \ref{error} shows that the convergence rate is maintained also for low values of $s$. This confirms that the behaviour shown in Figure \ref{s01a} is not in contrast with the known theoretical results. Indeed, since it is well-known that the notion of trace is not defined for the spaces $H^s(-L,L)$ with $s\leq 1/2$ (see \cite{lions1968problemes,tartar2007introduction}), it is somehow natural that so we cannot expect a point-wise convergence in this case.  
 
-As a further validation of this fact, in Figure \ref{linfty_error} we plot the behaviour of the $L^{\infty}$ of the difference between the real and the numerical solution to \eqref{PE_real}. Is it shown that, increasing the number of point of discretization, this norm is decreasing with a rate (in $h$) of $0.1$. This confirms, refining the mesh, also for low values of $s$ the numerical method gives an acceptable approximation of the real solution to the model problem considered.    
+As a further validation of this fact, in Figure \ref{linfty_error} we plot the behaviour of the $L^{\infty}$ of the difference between the real and the numerical solution to \eqref{PE_real}. Is it shown that, increasing the number of point of discretization, this norm is decreasing with a rate (in $h$) of $0.1$. This confirms, refining the mesh, also for low values of $s$ the numerical method gives an acceptable approximation of the real solution to the model problem considered.   
 
-\begin{figure}[!]
+\begin{figure}[!h]
 \centering
   \pgfplotstableread{data_paper/res.org}{\datpu}
      \pgfplotsset{
@@ -183,9 +174,9 @@ As a further validation of this fact, in Figure \ref{linfty_error} we plot the b
 
 \subsection{Control experiments}
 %
-To address the actual computation of fully-discrete controls for a given problem, we use the methodology described, for instance, in \cite{}. We apply an optimisation algorithm to the dual functional \eqref{dual_fully}. Since these functionals are quadratic and coercive, the conjugate gradient is a natural and quite simple choice.
+To address the actual computation of fully-discrete controls for a given problem, we use the methodology described, for instance, in \cite{glowinski2008exact}. We apply an optimisation algorithm to the dual functional \eqref{dual_fully}. Since these functionals are quadratic and coercive, the conjugate gradient is a natural and quite simple choice.
 
-In the same spirit as \cite{}, the computation of the gradient at each iteration amounts to solve first the homogeneous equation 
+In the same spirit as \cite{boyer2013penalised}, the computation of the gradient at each iteration amounts to solve first the homogeneous equation 
 %
 \begin{align}
 	\begin{cases}
@@ -207,9 +198,9 @@ Then, set $v^n=\mathbf{1}_\omega\varphi^n$ and finally solve
 %
 In this way, the procedure to compute the control for a given problem basically requires to solve two parabolic equations: a homogenous backward equation associated with the final data $\varphi^T$, and a non-homogeneous forward problem with zero initial data. 
 
-We present now some results obtained with the described methodology. In accordance with the discussion in Section \rouge{seccion}, we use the finite-element approximation of $\fl{s}{}$ for the space discretization and the implicit Euler scheme in the time variable. We denote by $N$ the number of points in the mesh and by $M$ the number of time intervals. As discussed in \rouge{citar}, the results in this kind of problems does not depend too much in the time step, as soon as it is chosen to ensure at least the same accuracy as the space discretization. The same remains true here, and therefore we always take $M=2000$ in order to concetrate the discussion on the dependency of the results with respecto the mesh size $h$ and the parameter $s$.
+We present now some results obtained with the described methodology. In accordance with the discussion in Section \ref{fe_ell_sec}, we use the finite-element approximation of $\fl{s}{}$ for the space discretization and the implicit Euler scheme in the time variable. We denote by $N$ the number of points in the mesh and by $M$ the number of time intervals. As discussed in \cite{boyer2013penalised}, the results in this kind of problems does not depend too much in the time step, as soon as it is chosen to ensure at least the same accuracy as the space discretization. The same remains true here, and therefore we always take $M=2000$ in order to concentrate the discussion on the dependency of the results with respect to the mesh size $h$ and the parameter $s$.
 
-As we mentioned, we choose the penalization term $\varepsilon$ as a function of $h$. A reasonable practical rule (\cite{}) is to sistematically choose $\phi(h)\sim h^{2p}$ where $p$ is the order of accuracy in space of the numerical method. Thus, according to the results in Section \rouge{section}, hereinafter we always choose $\varepsilon=\phi(h)=h$.
+As we mentioned, we choose the penalization term $\varepsilon$ as a function of $h$. A reasonable practical rule (\cite{boyer2013penalised}) is to systematically choose $\phi(h)\sim h^{2p}$ where $p$ is the order of accuracy in space of the numerical method. Thus, according to the results presented above, hereinafter we always choose $\varepsilon=\phi(h)=h$.
 
 We begin by plotting on Figure \ref{sol_surf} the time evolution of the uncontrolled solution as well as the controlled solution. Here, we choose $s=0.8$, $\omega=(-0.3,0.8)$ and $T=0.3$. The control domain is represented as highlighted zone on the plane $(t,x)$. As expected, we observe that the uncontrolled solution is damped with time, but does not reach zero at time $T$, while the controlled solution does. 
 
@@ -270,7 +261,7 @@ Although no results about null controllability for the fractional heat equation 
 \caption{Convergence properties of the method for controllability of the fractional heat equation. }\label{figure_case1}
 \end{figure}
 
-According to the discussion in Section \rouge{section}, one can prove that null controllability does not hold for system \eqref{heat_frac} in the case $s<1/2$. However approximate controllability can be proved by means of the unique continuation property of the operator $\fl{s}{}$. We would like to illustrate this property in figure \ref{figure_case3}. 
+According to the discussion in Section \ref{theor_sec}, one can prove that null controllability does not hold for system \eqref{heat_frac} in the case $s<1/2$. However approximate controllability can be proved by means of the unique continuation property of the operator $\fl{s}{}$. We would like to illustrate this property in figure \ref{figure_case3}. 
 
 We observe that the results are different from what we obtained in Figure \ref{figure_case1}. In fact, the cost of the control and the optimal energy increase in both cases, while the target $y^M$ tends to zero with a slower rate than $h^{1/2}$. This seems to confirm that a uniform observability estimate for \eqref{heat_frac} does not hold and that we can only expect to have approximate controllability (see Theorem \ref{theorem_hum}).
 %
