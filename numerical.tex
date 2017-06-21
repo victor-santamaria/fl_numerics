@@ -170,12 +170,12 @@ As expected, the rates of convergence shown in Figure \ref{error} are of order (
 %  	%\addplot [color=blue, very thick] table [x=0, y=2] {\datpt};
 	\addplot [color=black, mark=o, thick] table [x=0, y=1] {\datpu};
 %%
- \draw [pente]  (axis cs: 0.001,0.8) -- ++ (axis cs: 1, {5^(0.1)}) -- ++ (axis cs: 5, 1) -- cycle;
- \node at (axis cs:0.001,0.8) [right,pente] {\small slope $0.1$};
+ \draw [pente]  (axis cs: 0.0004,0.8) -- ++ (axis cs: 1, {10^(0.1)}) -- ++ (axis cs: 10, 1) -- cycle;
+ \node at (axis cs:0.0004,0.98) [right,pente] {\small slope $0.1$};
 %%
   \end{loglogaxis}
 \end{tikzpicture}%
-%\caption{Convergence of the error.}
+\caption{Convergence of the error in the norm $L^\infty$.}
 %\label{error}
 \end{figure}
 
