@@ -512,9 +512,12 @@ We point out the following facts:
 \end{itemize}
 \end{remark}
 
-\subsection{Parabolic problem}
+\subsection{Parabolic problem and control problem}\label{fe_parabolic}
 
-We now present the numerical implementation of the control problem for the fractional heat equation. Since we have obtained a FE approximation $\mathcal A_h$ of the operator $\fl{s}{}$, we can compute the fully-discrete approximation of \eqref{heat_frac}. For this purpose, for any $h>0$, let us introduce the Euclidean spaces $E_h$, with inner product $\langle\cdot,\cdot\rangle_h$ and norm $\norm{\cdot}{h}$, and $U_h$, with inner product $[\cdot,\cdot]_h$ and norm $\inter{\cdot}_h$. In this setting, \eqref{heat_frac} can be discretized through the implicit Euler method on $M-1$ time steps as
+We now present the numerical implementation of the control problem for the fractional heat equation. Since we have obtained a FE approximation $\mathcal A_h$ of the operator $\fl{s}{}$, we can compute the fully-discrete approximation of \eqref{heat_frac}. 
+
+More precisely, for any given mesh $\mathfrak M$ and any integer $M>0$, we set $\delta t=T/M$ and we consider a implicit Euler method, with respect to the time variable. More precisely, we consider
+%
 \begin{align}\label{frac_heat_num}
 	\begin{cases}
 		\displaystyle\mathcal M_h \frac{z^{n+1}-z^n}{\delta t}+\mathcal A_h z^{n+1}=\mathbf{1}_\omega v_h^{n+1}, \quad \forall n\in \left\{1,\ldots,M-1\right\}
@@ -522,16 +525,38 @@ We now present the numerical implementation of the control problem for the fract
 		z^0=z_0, 
 	\end{cases}
 \end{align}
-where $z_0\in E_h$, $\mathcal M_h$ is the classical mass matrix with entries $m_{i,j}=\langle \phi_i,\phi_j\rangle$ and $\delta t=T/M$. Hence, we are reduced to solve the minimization problem
+%
+where $z_0\in \mathbb R^\mesh$ and $\mathcal M_h$ is the classical mass matrix with entries $m_{i,j}=\langle \phi_i,\phi_j\rangle$.
 
-\begin{align}\label{min_adj}
-	\varphi_\varepsilon^T=\min_{\varphi^T\in L^2_{h,\delta t}(0,1)}J_\varepsilon(\varphi^T)
-\end{align}
-where
+Here, $v_{h,\delta t}=(v_h^n)_{1\leq n\leq M}$ is a fully-discrete control function whose cost, that is the discrete $L_{\delta t}^2(0,T;\mathbb R^\mesh)$-norm, is defined by
+%
 \begin{align*}
-	J_\varepsilon(\varphi^T)=\frac{1}{2}\iint_{\omega\times(0,T)}|\varphi|^2dxdt+\frac{\varepsilon}{2}\|\varphi^T\|^2_{L^2_{h,\delta t}(0,1)}+\int_{0}^{1}\varphi^1y_0\,dx, \quad \forall \varphi^T\in L_{h,\delta t}^2(0,1)
+\|v_{\delta t}\|_{L_{\delta t}^2(0,T;\mathbb R^\mesh)}:=\left(\sum_{i=1}^M\delta t |v^n|^2_{L^2(\Omega)}\right)^{1/2},
 \end{align*}
-and $\varphi=(\varphi^n)_{1\leq n\leq M+1}$ is solution to the adjoint system
+%
+and where $| \cdot |_{L^2(\Omega)}$ stands for the norm associated to the $L^2$-inner product on $\mathbb{R}^\mathfrak M$
+%
+\begin{align*}
+(u,v)_{L^2(\Omega)}=h \sum_{i=1}^N u_i v_i.
+\end{align*}
+%
+
+With the above notation and according to the penalised HUM strategy, we introduce, for some penalization parameter $\varepsilon>0$, the following primal fully-discrete functional 
+%
+\begin{align*}
+F_{\varepsilon,h,\delta t}(v_{\delta t})=\sum_{n=1}^{M}\delta t |v^n|^2_{L^2(\Omega)}+\frac{1}{2\varepsilon}|z^M|^2_{L^2(\Omega)}, \quad \forall \, v_{\delta t}\in L_{\delta t}^2(0,T;\mathbb R^\mesh),
+\end{align*}
+%
+that we wish to minimize onto the whole fully-discrete control space $L_{\delta t}^2(0,T;\mathbb R^\mesh)$ and where $z^M$ is the final value of the controlled problem \eqref{frac_heat_num}. 
+
+As noted in section \rouge{numero}, we can apply Fenchel-Rockafellar theory results to obtain the corresponding dual functional, which reads as follows
+%
+\begin{align}\label{dual_fully}
+	J_{\varepsilon,h,\delta t}(\varphi^T)=\frac{1}{2}\sum_{n=1}^{M}\delta t|\mathbf 1_\omega\varphi|^2_{L^2(\Omega)}+\frac{\varepsilon}{2}|\varphi^T|^2_{L^2(\Omega)}+(\varphi^1,y_0)_{L^2(\Omega)}, \quad \forall \varphi^T\in L_{h,\delta t}^2(0,1)
+\end{align}
+%
+where $\varphi=(\varphi^n)_{1\leq n\leq M+1}$ is solution to the adjoint system
+%
 \begin{align}\label{frac_adj_num}
 	\begin{cases}
 		\displaystyle\mathcal M_h \frac{\varphi^n-\varphi^{n+1}}{\delta t}+\mathcal A_h \varphi^n=0, & \forall n\in\inter{1,M}
@@ -539,10 +564,12 @@ and $\varphi=(\varphi^n)_{1\leq n\leq M+1}$ is solution to the adjoint system
 		\varphi^{M+1}=\varphi^T. 
 	\end{cases}
 \end{align}
+%
+It can be readily verified that this functional has a unique minimizer without any additional assumption on the problem. Indeeed, by minimizing  \eqref{dual_fully}, and from duality theory, we obtain a control function $v_{\varepsilon,h,\delta t}=\left(\mathbf{1}_\omega\varphi_{\varepsilon,h,\delta t}^n\right)_{1\leq n\leq M}$ where $\varphi_\epsilon$ is the solution to \eqref{frac_adj_num} evaluated in the optimal datum $\varphi_\varepsilon^T$. 
 
-By solving problem \eqref{min_adj}, and from duality theory, we obtain a control function
-$v_\varepsilon=\mathbf{1}_\omega\varphi_\varepsilon$ where $\varphi_\epsilon$ is the solution to \eqref{frac_adj_num} evaluated in the optimal datum $\varphi_\varepsilon^T$. Studying the behaviour of the solution to the optimization problem with respect to $\varepsilon$, we can recover usual theoretical results for controllability of evolution equations. This will be supported by  the numerical experiments that we are going to resent in Section \ref{res_numerical}.
+Thus, the optimal penalized control always exists and is unique, and deducing controllability properties for the systems amounts to study the behavior of this control with respect to the penalization parameter $\varepsilon$, in connection with the discretization parameters.  
 
+It is well known that, in general, we cannot expect for a given bounded family of initial data that the fully-discrete controls are uniformly bounded when the discretization parameters $h$, $\delta t$ and the penalization term $\varepsilon$ tend to zero independently, see, for instance, \cite{}. 
 
-
-
+Instead, we expect to obtain uniform bounds by taking the penalization parameter $\varepsilon=\phi(h)$ that tends to 0 in connection with the mesh size not too fast (see \cite{}) and a time step $\delta t$ verifying some weak condition of the kind $\delta t\leq \zeta(h)$ where $\zeta$ tends to zero logaritmically when $h\to 0$ (see \cite{}).
+%
