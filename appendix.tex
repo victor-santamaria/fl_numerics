@@ -10,9 +10,9 @@ We recall that, in this case, the value of $a_{i,j}$ is given by the integral
 	a_{i,j}=-2 \int_{x_{j-1}}^{x_{j+1}}\int_{x_{i-1}}^{x_{i+1}}\frac{\phi_i(x)\phi_j(y)}{|x-y|^{1+2s}}\,dxdy.
 \end{align}
 
-In Figure \ref{upp_tri}, we give a scheme of the region of interaction (marked in grey) between the basis functions in this case. 
+In Fig. \ref{upp_tri}, we give a scheme of the region of interaction (marked in grey) between the basis functions in this case. 
 \begin{figure}[h]
-\figinit{0.8pt}
+\figinit{0.7pt}
 % Axes
 \figpt 0:(-90,-10)
 \figpt 1:(-100,0) \figpt 2:(220,0)
@@ -150,7 +150,7 @@ Then, rewriting (with some abuse of notations since there is no possibility of c
 	a_{i,j}=-2h^{1-2s} \int_{-1}^1\int_{-1}^1\frac{(1-|x\,|\,)(1-|y\,|\,)}{|x-y+i-j\,|^{1+2s}}\,dxdy.
 \end{align}
 
-The integral \eqref{elem_noint_cv} can be computed explicitly in the following way: first of all, for simplifying the notation, let us define $k=j-i$. We have 
+The integral \eqref{elem_noint_cv} can be computed explicitly in the following way. First of all, for simplifying the notation, let us define $k=j-i$. We have 
 \begin{align*}
 	a_{i,j} = &\, -2h^{1-2s} \int_{-1}^1\int_{-1}^1\frac{(1-|x\,|\,)(1-|y\,|\,)}{|x-y+i-j\,|^{1+2s}}\,dxdy =-2h^{1-2s} \int_{-1}^1\int_{-1}^1\frac{(1-|x\,|\,)(1-|y\,|\,)}{|x-y-k\,|^{1+2s}}\,dxdy
 	\\
@@ -161,7 +161,7 @@ The integral \eqref{elem_noint_cv} can be computed explicitly in the following w
 	= &\, - 2h^{1-2s}(B_1 + B_2 + B_3 + B_4).
 \end{align*}
 
-These terms $B_1$, $B_2$, $B_3$ and $B_4$ can be computed by several integration by parts. In more details, we have
+These terms $B_i$, $i=1,2,3,4$, can be computed integrating by parts several times. In more detail, we have
 \begin{align*}
 	& B_1 = \frac{1}{4s(1-2s)}\left[2k^{1-2s}-\frac{(k+1)^{2-2s}-(k-1)^{2-2s}}{1-s}-\frac{2k^{3-2s}-(k+1)^{3-2s}-(k-1)^{3-2s}}{(1-s)(3-2s)}\right]
 	\\
@@ -177,7 +177,7 @@ Therefore, we obtain
 	a_{i,j} = - h^{1-2s}\,\frac{4(k+1)^{3-2s} + 4(k-1)^{3-2s}-6k^{3-2s}-(k+2)^{3-2s}-(k-2)^{3-2s}}{2s(1-2s)(1-s)(3-2s)}.
 \end{align*} 
 
-We notice that, when $s=1/2$, both the numerator and the denominator of the expression above are zero. Hence, in this particular case, it would not be possible to introduce the value that we just encountered in our code. Nevertheless, this difficulty can be overcame noting that we can easily compute
+We notice that, when $s=1/2$, both the numerator and the denominator of the expression above are zero. Hence, in this particular case, it would not be possible to introduce the value that we just encountered in our code. Nevertheless, this difficulty can be overcome noting that we can easily compute
 \begin{align*}
 	\lim_{s\to\frac{1}{2}} &- h^{1-2s}\,\frac{4(k+1)^{3-2s} + 4(k-1)^{3-2s}-6k^{3-2s}-(k+2)^{3-2s}-(k-2)^{3-2s}}{2s(1-2s)(1-s)(3-2s)}
 	\\
@@ -194,7 +194,7 @@ the corresponding value $a_{i,j}=a_{i,i+2}$ if given by
 
 
 \subsubsection*{Step 2: $j= i+1$}
-This is the most cumbersome case, since it is the one with the most interactions between the basis functions (see Figure \ref{basis_upp_dia}). According to \eqref{stiffness_nc}, and using the symmetry of the integral with respect to the bisector $y=x$, we have 
+This is the most cumbersome case, since it is the one with the most interactions between the basis functions (see Fig. \ref{basis_upp_dia}). According to \eqref{stiffness_nc}, and using the symmetry of the integral with respect to the bisector $y=x$, we have 
 	\begin{align*}
 	a_{i,i+1}= & \int_{\RR}\int_{\RR}\frac{(\phi_i(x)-\phi_i(y))(\phi_{i+1}(x)-\phi_{i+1}(y))}{|x-y|^{1+2s}}\,dxdy
 	\\
@@ -205,9 +205,9 @@ This is the most cumbersome case, since it is the one with the most interactions
 	:= & Q_1 + Q_2 + Q_3 + Q_4 + Q_5 + Q_6.
 \end{align*}
 
-In Figure \ref{upp_dia}, we give a scheme of the regions of interactions between the basis functions $\phi_i$ and $\phi_{i+1}$ enlightening the domain of integration of the $Q_i$. The regions in grey are the ones that produce a contribution to $a_{i,i+1}$, while on the regions in white the integrals will be zero.
+In Fig. \ref{upp_dia}, we give a scheme of the regions of interactions between the basis functions $\phi_i$ and $\phi_{i+1}$ enlightening the domain of integration of the $Q_i$. The regions in grey are the ones that produce a contribution to $a_{i,i+1}$, while on the regions in white the integrals will be zero.
 \begin{figure}[h]
-\figinit{0.8pt}
+\figinit{0.7pt}
 % Axes
 \figpt 0:(-50,70)
 \figpt 1:(-100,80) \figpt 2:(220,80)
@@ -350,7 +350,7 @@ The two integrals above can be computed explicitly. Indeed, employing the change
 \begin{align}\label{cv2}
 	\frac{x_{i+1}-x}{h}=\hat{x},
 \end{align}
-and then renaming again $\hat{x}=x$, $R_2^1$ becomes
+and then renaming $\hat{x}=x$, $R_2^1$ becomes
 \begin{align*}
 	Q_2^1=\frac{h^{1-2s}}{s}\int_0^1 x^{1-2s}(1-x)\,dx = \frac{h^{1-2s}}{s(2-2s)(3-2s)}.
 \end{align*}
@@ -392,7 +392,7 @@ In this case, we are in the intersection of the supports of $\phi_i$ and $\phi_{
 	Q_4 &= \int_{x_i}^{x_{i+1}}\int_{x_i}^{x_{i+1}} \frac{(\phi_i(x)-\phi_i(y))(\phi_{i+1}(x)-\phi_{i+1}(y))}{|x-y|^{1+2s}}\,dxdy. 
 \end{align*}
 
-Moreover, we notice that, this time, it is possible that $x=y$, meaning that $Q_4$ could be a singular integral. To deal with this difficulty, we will exploit the explicit definition of the basis function. We have (see also Figure \ref{basis2})
+Moreover, we notice that, this time, it is possible that $x=y$, meaning that $Q_4$ could be a singular integral. To deal with this difficulty, we will exploit the explicit definition of the basis function. We have (see also Fig. \ref{basis2})
 \begin{align*}
 	\phi_i(x) = 1-\frac{x-x_i}{h}, \;\;\; x\in (x_i,x_{i+1}),
 	\\
@@ -458,7 +458,7 @@ Here the procedure is analogous to the one for $Q_2$ before. Using again Fubini'
 	\\
 	&= \frac{1}{s}\int_{x_i}^{x_{i+1}}\frac{\phi_i(y)\phi_{i+1}(y)}{(y-x_i)^{2s}}\,dy - 2\int_{x_i}^{x_{i+1}}\int_{x_{i-1}}^{x_i} \frac{\phi_i(x)\phi_{i+1}(y)}{|x-y|^{1+2s}}\,dxdy. 
 \end{align*}
-Applying again \ref{cv3}, it is now easy to check that $Q_5=Q_2$.
+Applying again \eqref{cv3}, it is now easy to check that $Q_5=Q_2$.
 
 \subsubsection*{Computation of $Q_6$}
 In analogy with what we did for $Q_1$, we can show that also $Q_6=0$.
@@ -485,9 +485,9 @@ As a last step, we fill the diagonal of the matrix $\mathcal A_h$. In this case 
 	& +  \int_{-\infty}^{x_{i-1}}\int_{-\infty}^{x_{i-1}} \ldots\,dxdy := R_1 + R_2 + R_3 + R_4 + R_5 + R_6 + R_7.
 \end{align*}
 
-In Figure \ref{upp_dia}, we give a scheme of the regions of interactions between the basis functions $\phi_i(x)$ and $\phi_i(y)$ enlightening the domain of integration of the $R_i$. The regions in grey are the ones that produce a contribution to $a_{i,i}$, while on the regions white the integrals will be zero.
+In Fig. \ref{upp_dia}, we give a scheme of the regions of interactions between the basis functions $\phi_i(x)$ and $\phi_i(y)$ enlightening the domain of integration of the $R_i$. The regions in grey are the ones that produce a contribution to $a_{i,i}$, while on the regions in white the integrals will be zero.
 \begin{figure}
-\figinit{0.8pt}
+\figinit{0.7pt}
 % Axes
 \figpt 0:(-50,70)
 \figpt 1:(-100,80) \figpt 2:(220,80)
@@ -580,7 +580,7 @@ In Figure \ref{upp_dia}, we give a scheme of the regions of interactions between
 \centerline{\box\figBoxA}
 \caption{Interactions between the basis function $\phi_i(x)$ and $\phi_i(y)$.}\label{dia}
 \end{figure}
-Le us now compute the terms $R_i$, $i=1,\ldots,7$, separately. First of all, according to Figure \ref{dia} we have that $R_1=R_3=R_6=R_7=0.$ This is due to the fact that the corresponding regions are all away from the support of the basis functions. 
+Le us now compute the terms $R_i$, $i=1,\ldots,7$, separately. First of all, according to Fig. \ref{dia} we have that $R_1=R_3=R_6=R_7=0.$ This is due to the fact that the corresponding regions are all away from the support of the basis functions. 
 \subsubsection*{Computation of $R_2$}
 Since $\phi_i(y) = 0$ on the domain of integrations we have
 \begin{align*}
@@ -627,11 +627,11 @@ In this case, we simply have
 \begin{align*}
 	R_4^2 &= \int_{x_{i-1}}^{x_i}\int_{x_i}^{x_{i+1}} \frac{(\phi_i(x)-\phi_i(y))^2}{|x-y|^{1+2s}}\,dxdy.
 \end{align*}
-Employing \eqref{cv} we have
+Employing \eqref{cv} we obtain
 \begin{align*}
 	R_4^2 = h^{1-2s}\int_{-1}^0\int_0^1 \frac{(x+y)^2}{(x-y)^{1+2s}}\,dxdy = h^{1-2s}\frac{2s^2-5s+4-2^{2-2s}}{s(1-2s)(1-s)(3-2s)}, 
 \end{align*}
-if $s\neq 1/2$. If $s=1/2$, instead, we have
+if $s\neq 1/2$. If $s=1/2$, instead, we get
 \begin{align*}
 	R_4^2 = \int_{-1}^0\int_0^1 \frac{(x+y)^2}{(x-y)^2}\,dxdy = 3-4\ln 2.
 \end{align*}

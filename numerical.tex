@@ -15,7 +15,7 @@ In this particular case, the solution can be computed exactly and it is given in
 	u(x)=\frac{2^{-2s}\sqrt{\pi}}{\Gamma\left(\frac{1+2s}{2}\right)\Gamma(1+s)}\Big(L^2-x^2\Big)^s.
 \end{align}
 
-In Figure \ref{smas12}, we show a comparison for different values of $s$ between the exact solution \eqref{real_sol} and the computed numerical approximation. Here we consider $L=1$ and $N=50$. One can notice that when $s=0.1$ (and also for other small values of s), the computed solution is to a certain extent different from the exact solution. However, one should be careful with such result and a more precise analysis of the error should be carried. 
+In Fig.  \ref{smas12}, we show a comparison for different values of $s$ between the exact solution \eqref{real_sol} and the computed numerical approximation. Here we consider $L=1$ and $N=50$. One can notice that when $s=0.1$ (and also for other small values of s), the computed solution is to a certain extent different from the exact solution. However, one should be careful with such result and a more precise analysis of the error should be carried. 
 %
 \begin{figure}[!h]
 	\pgfplotstableread{./figures/fl_01_50_sym.txt}{\datpu}
@@ -87,7 +87,7 @@ where the right-hand side can be easily computed, since we have the closed formu
 % 
 and the term corresponding to $\int_{-L}^{L}u_h$ can be carried out numerically. 
 
-In Figure \ref{error}, we present the computational errors evaluated for different values of $s$ and $h$. 
+In Fig.  \ref{error}, we present the computational errors evaluated for different values of $s$ and $h$. 
 
 \begin{figure}[!h]
  \centering
@@ -137,14 +137,14 @@ For the solution $u$ of \eqref{WF} and its FE approximation $u_h$ given by \eqre
 \begin{align*}
 &\|u-u_h\|_{H^s_0(-L,L)}\leq C h^{1/2}|\!\ln h|\,\|f\|_{C^{1/2-s}(-L,L)}, \quad \textnormal{if}\quad s<1/2, \\
 &\|u-u_h\|_{H^s_0(-L,L)}\leq C h^{1/2} |\!\ln h|\, \|f\|_{L^\infty(-L,L)}, \quad \textnormal{if}\quad  s=1/2 \\
-&\|u-u_h\|_{H^s_0(-L,L)}\leq \tfrac{C}{2s-1} h^{1/2} \sqrt{|\!\ln h|}\, \|f\|_{C^\beta}(-L,L), \quad \textnormal{if} \quad s>1/2,
+&\|u-u_h\|_{H^s_0(-L,L)}\leq \tfrac{C}{2s-1} h^{1/2} \sqrt{|\!\ln h|}\, \|f\|_{C^\beta(-L,L)}, \quad \textnormal{if} \quad s>1/2,
 \end{align*}
 where $C$ is a positive constant not depending on $h$. 
 \end{theorem}
 
-Moreover, Figure \ref{error} shows that the convergence rate is maintained also for low values of $s$. This confirms that the behaviour shown in Figure \ref{s01a} is not in contrast with the known theoretical results. Indeed, since it is well-known that the notion of trace is not defined for the spaces $H^s(-L,L)$ with $s\leq 1/2$ (see \cite{lions1968problemes,tartar2007introduction}), it is somehow natural that so we cannot expect a point-wise convergence in this case.  
+Moreover, Fig.  \ref{error} shows that the convergence rate is maintained also for small values of $s$. This confirms that the behavior shown in Fig.  \ref{s01a} is not in contrast with the known theoretical results. Indeed, since it is well-known that the notion of trace is not defined for the spaces $H^s(-L,L)$ with $s\leq 1/2$ (see \cite{lions1968problemes,tartar2007introduction}), it is somehow natural that we cannot expect a point-wise convergence in this case.  
 
-As a further validation of this fact, in Figure \ref{linfty_error} we plot the behaviour of the $L^{\infty}$ of the difference between the real and the numerical solution to \eqref{PE_real}. Is it shown that, increasing the number of point of discretization, this norm is decreasing with a rate (in $h$) of $0.1$. This confirms, refining the mesh, also for low values of $s$ the numerical method gives an acceptable approximation of the real solution to the model problem considered.   
+As a further validation of this fact, in Fig.  \ref{linfty_error} we plot the behavior of the $L^{\infty}$-norm of the difference between the real and the numerical solution to \eqref{PE_real}. It is shown that, increasing the number of point of discretization, this norm is decreasing with a rate (in $h$) of $0.1$. This confirms that, refining the mesh, also for small values of $s$ the numerical method gives an acceptable approximation of the real solution to the model problem considered.   
 
 \begin{figure}[!h]
 \centering
@@ -172,71 +172,76 @@ As a further validation of this fact, in Figure \ref{linfty_error} we plot the b
 \caption{Convergence of the error in the norm $L^\infty$.}\label{linfty_error}
 \end{figure}
 
-\subsection{Control experiments}
-%
-To address the actual computation of fully-discrete controls for a given problem, we use the methodology described, for instance, in \cite{glowinski2008exact}. We apply an optimisation algorithm to the dual functional \eqref{dual_fully}. Since these functionals are quadratic and coercive, the conjugate gradient is a natural and quite simple choice.
+\subsection{Control experiments}\label{control_exp}
+
+To address the actual computation of fully-discrete controls for a given problem, we use the methodology described, for instance, in \cite{glowinski2008exact}. We apply an optimization algorithm to the dual functional \eqref{dual_fully}. Since these functionals are quadratic and coercive, the conjugate gradient is a natural and quite simple choice.
 
 In the same spirit as \cite{boyer2013penalised}, the computation of the gradient at each iteration amounts to solve first the homogeneous equation 
-%
-\begin{align}
+
+\begin{align*}
 	\begin{cases}
 		\displaystyle\mathcal M_h \frac{\varphi^n-\varphi^{n+1}}{\delta t}+\mathcal A_h \varphi^n=0, & \forall n\in\inter{1,M}
 		\\
 		\varphi^{M+1}=\varphi^T. 
 	\end{cases}
-\end{align}
-%
+\end{align*}
+
 Then, set $v^n=\mathbf{1}_\omega\varphi^n$ and finally solve 
-%
-\begin{align}\label{frac_heat_num}
+
+\begin{align*}
 	\begin{cases}
 		\displaystyle\mathcal M_h \frac{z^{n+1}-z^n}{\delta t}+\mathcal A_h z^{n+1}=\mathbf{1}_\omega \varphi_h^{n+1}, \quad \forall n\in \left\{1,\ldots,M-1\right\}
 		\\
 		z^0=0. 
 	\end{cases}
-\end{align}
-%
+\end{align*}
+
 In this way, the procedure to compute the control for a given problem basically requires to solve two parabolic equations: a homogenous backward equation associated with the final data $\varphi^T$, and a non-homogeneous forward problem with zero initial data. 
 
 We present now some results obtained with the described methodology. In accordance with the discussion in Section \ref{fe_ell_sec}, we use the finite-element approximation of $\fl{s}{}$ for the space discretization and the implicit Euler scheme in the time variable. We denote by $N$ the number of points in the mesh and by $M$ the number of time intervals. As discussed in \cite{boyer2013penalised}, the results in this kind of problems does not depend too much in the time step, as soon as it is chosen to ensure at least the same accuracy as the space discretization. The same remains true here, and therefore we always take $M=2000$ in order to concentrate the discussion on the dependency of the results with respect to the mesh size $h$ and the parameter $s$.
 
-As we mentioned, we choose the penalization term $\varepsilon$ as a function of $h$. A reasonable practical rule (\cite{boyer2013penalised}) is to systematically choose $\phi(h)\sim h^{2p}$ where $p$ is the order of accuracy in space of the numerical method. Thus, according to the results presented above, hereinafter we always choose $\varepsilon=\phi(h)=h$.
+As we mentioned, we choose the penalization term $\varepsilon$ as a function of $h$. A reasonable practical rule (\cite{boyer2013penalised}) is to systematically choose $\phi(h)\sim h^{2p}$ where $p$ is the order of accuracy in space of the numerical method employed for the discretization of the spatial operator involved (in this case the fractional Laplacian \eqref{fl}). We recall that for the elliptic problem that we are considering, this order of convergence is $1/2$. Thus, hereinafter we always assume $\varepsilon=\phi(h)=h$.
 
-We begin by plotting on Figure \ref{sol_surf} the time evolution of the uncontrolled solution as well as the controlled solution. Here, we choose $s=0.8$, $\omega=(-0.3,0.8)$ and $T=0.3$. The control domain is represented as highlighted zone on the plane $(t,x)$. As expected, we observe that the uncontrolled solution is damped with time, but does not reach zero at time $T$, while the controlled solution does. 
+We begin by plotting on Fig.  \ref{sol_surf} the time evolution of the uncontrolled solution as well as the controlled solution. Here, we set $s=0.8$, $\omega=(-0.3,0.8)$ and $T=0.3$. The control domain is represented as highlighted zone on the plane $(t,x)$. As expected, we observe that the uncontrolled solution is damped with time, but does not reach zero at time $T$, while the controlled solution does. 
 
-%\begin{figure}[ht]
-%%%  Datos del experimento 
-%%%  T=0.3, epsilon=0.01*h, s=0.8
-% \centering
-%% 
-%\subfloat[The adjoint][Uncontrolled solution]{
-%\begin{tikzpicture}
-%\begin{axis}[surface,zmax=1.0]
-%  
-%\addplot3 [mesh/ordering=y varies, surf, shader=flat,draw=black,opacity=0.6] file {./data_paper/soly_s08_sc.dat};
-%\node at (axis cs:0.34,0,0) [below] {$T=0.3$};
-%
-%\end{axis}
-%\end{tikzpicture}}
-%%
-%\hspace{1 cm}
-%  \subfloat[The state][Controlled solution ({\tikz \fill [green] (0,0) rectangle (0.2,0.2);}=control domain)]{
-%\begin{tikzpicture}
-%\begin{axis}[surface, zmax=1.0]
-%
-%  %\controldomainT{-0.3}{0.8}{0.3};
-%  \couplingdomainT{-0.3}{0.8}{0.3};
-%  
-%\addplot3 [mesh/ordering=y varies, surf, shader=flat,draw=black,opacity=0.6] file {./data_paper/soly_s08_cc.dat};
-%\node at (axis cs:0.34,0,0) [below] {$T=0.3$};
-%
-%\end{axis}
-%\end{tikzpicture}}%
-%\caption{Time evolution of system \eqref{}.}\label{fig_heat_frac}
-%\label{sol_surf}
-%\end{figure}
+\begin{figure}[ht]
+%%  Datos del experimento 
+%%  T=0.3, epsilon=0.01*h, s=0.8
+ \centering
+% 
+\subfloat[The adjoint][Uncontrolled solution]{
+\begin{tikzpicture}
+\begin{axis}[surface,zmax=1.0]
+  
+\addplot3 [mesh/ordering=y varies, surf, shader=flat,draw=black,opacity=0.6] file {./data_paper/soly_s08_sc.dat};
+\node at (axis cs:0.34,0,0) [below] {$T=0.3$};
 
-Although no results about null controllability for the fractional heat equation are known, by observing the asymptotic behavior of the numerical method, we aim to see an expected behavior. In figure \ref{figure_case1}, we present the computed values of various quantities of interest when the mesh size goes to $0$. More precisely, we observe that the control cost $\|v_{\delta t}\|_{L^2_{\delta t}(0,T;\mathbb R^\mesh)}$ and the optimal energy $\inf F_{\phi(h),h,\delta t}$ remain bounded as $h\to 0$. On the other hand, we see that $|y^M|_{L^2(\Omega)}$ behaves like $C\sqrt{\phi(h)}=Ch^{1/2}$. According to Theorem \ref{theorem_hum}, we expect that for $s=0.8$, system \eqref{heat_frac} is null controllable. In fact, the same experiment can be repeated for different values of $s>1/2$, obtaining the same conclusions. 
+\end{axis}
+\end{tikzpicture}}
+%
+\hspace{1 cm}
+  \subfloat[The state][Controlled solution ({\tikz \fill [green] (0,0) rectangle (0.2,0.2);}=control domain)]{
+\begin{tikzpicture}
+\begin{axis}[surface, zmax=1.0]
+
+  %\controldomainT{-0.3}{0.8}{0.3};
+  \couplingdomainT{-0.3}{0.8}{0.3};
+  
+\addplot3 [mesh/ordering=y varies, surf, shader=flat,draw=black,opacity=0.6] file {./data_paper/soly_s08_cc.dat};
+\node at (axis cs:0.34,0,0) [below] {$T=0.3$};
+
+\end{axis}
+\end{tikzpicture}}%
+\caption{Time evolution of system \eqref{frac_heat_num}.}\label{fig_heat_frac}
+\label{sol_surf}
+\end{figure}
+
+Although no results about null controllability for the fractional heat equation are known, by observing the convergence of the numerical method, we aim to see an expected behavior. In figure \ref{figure_case1}, we present the computed values of various quantities of interest when the mesh size goes to zero. More precisely, we observe that the control cost $\|v_{\delta t}\|_{L^2_{\delta t}(0,T;\mathbb R^\mesh)}$ and the optimal energy $\inf F_{\phi(h),h,\delta t}$ remain bounded as $h\to 0$. On the other hand, we see that 
+\begin{align}\label{control_norm_behavior}
+	|y^M|_{L^2(\RR^\mesh)}\,\sim\,C\sqrt{\phi(h)}=Ch^{1/2}. 
+\end{align}
+
+We know that, for $s=0.8$, system \eqref{heat_frac} is null controllable. This is now confirmed by \eqref{control_norm_behavior}, according to Theorem \ref{theorem_hum}.  In fact, the same experiment can be repeated for different values of $s>1/2$, obtaining the same conclusions. 
 %
 \begin{figure}
   \centering
@@ -261,9 +266,9 @@ Although no results about null controllability for the fractional heat equation 
 \caption{Convergence properties of the method for controllability of the fractional heat equation. }\label{figure_case1}
 \end{figure}
 
-According to the discussion in Section \ref{theor_sec}, one can prove that null controllability does not hold for system \eqref{heat_frac} in the case $s<1/2$. However approximate controllability can be proved by means of the unique continuation property of the operator $\fl{s}{}$. We would like to illustrate this property in figure \ref{figure_case3}. 
+According to the discussion in Section \ref{theor_sec}, one can prove that null controllability does not hold for system \eqref{heat_frac} in the case $s\leq 1/2$. However approximate controllability can be proved by means of the unique continuation property of the operator $\fl{s}{}$. We would like to illustrate this property in Fig. \ref{figure_case3}. 
 
-We observe that the results are different from what we obtained in Figure \ref{figure_case1}. In fact, the cost of the control and the optimal energy increase in both cases, while the target $y^M$ tends to zero with a slower rate than $h^{1/2}$. This seems to confirm that a uniform observability estimate for \eqref{heat_frac} does not hold and that we can only expect to have approximate controllability (see Theorem \ref{theorem_hum}).
+We observe that the results are different from what we obtained in Fig.  \ref{figure_case1}. In fact, the cost of the control and the optimal energy increase in both cases, while the target $y^M$ tends to zero with a slower rate than $h^{1/2}$. This seems to confirm that a uniform observability estimate for \eqref{heat_frac} does not hold and that we can only expect to have approximate controllability (see Theorem \ref{theorem_hum}).
 %
  \begin{figure}
  \centering
@@ -312,5 +317,5 @@ We observe that the results are different from what we obtained in Figure \ref{f
   \end{loglogaxis}
 \end{tikzpicture}
 }
-\caption{Convergence properties of the method for $s<1/2$. Same legend as in Figure \ref{figure_case1}}\label{figure_case3}
+\caption{Convergence properties of the method for $s<1/2$. Same legend as in Fig.  \ref{figure_case1}}\label{figure_case3}
 \end{figure}

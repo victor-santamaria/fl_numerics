@@ -30,7 +30,7 @@ and \eqref{WFD} is reduced to solve the linear system $\mathcal A_h u=F$, where 
 \end{align}
 while the vector $F\in\RR^N$ is given by $F=(F_1,\ldots,F_N)$ with
 \begin{align*}
-	F_i = \int_{-L}^L f\phi_i\,dx,\;\;\; i=1,\ldots,N.
+	F_i = \langle f,\phi_i\rangle = \int_{-L}^L f\phi_i\,dx,\;\;\; i=1,\ldots,N.
 \end{align*}
 
 Moreover, the basis $\big\{\phi_i\big\}_{i=1}^N$ that we will employ is the classical one in which each $\phi_i$ is the tent function with $supp(\phi_i)=(x_{i-1},x_{i+1})$ and verifying $\phi_i(x_j)=\delta_{i,j}$. In particular, for $x\in\{x_{i-1},x_i,x_{i+1}\}$ the $i^{th}$ function of the basis is explicitly defined as (see Fig. \ref{basis}) 
@@ -92,7 +92,7 @@ The following fact are worth noticing.
 \end{align}
 	In other words, while calculating the components $a_{i,j}$ we will not consider the multiplicative constant $\ccs/2$, since it is uniform for all the elements of the matrix. 
 	
-	\item While computing the values $a_{i,j}$, we will only work on the mesh $\mathfrak{M}$, not considering the points of the set $\partial\mathfrak{M}$. In this way, we will ensure that the basis functions $\phi_i$ satisfy the zero Dirichlet boundary conditions. In other words, in our FE approximation we are considering only the functions from $\phi_1$ to $\phi_N$. Instead, if we considered the points $x_0$ and $x_{N+1}$, then we would need to introduce in our discretization also the basis functions $\phi_0$ and $\phi_{N+1}$, which take value $1$ at the boundary, and this would not be consistent with the continuous problem. Fig. \ref{basis_int} provides a graphical explanation of this last discussion.      	
+	\item While computing the values $a_{i,j}$, we will only work on the mesh $\mathfrak{M}$, not considering the points of the set $\partial\mathfrak{M}$. In this way, we will ensure that the basis functions $\phi_i$ satisfy the zero Dirichlet boundary conditions. In other words, in our FE approximation we are considering only the functions from $\phi_1$ to $\phi_N$. Instead, if we considered the points $x_0$ and $x_{N+1}$, then we would need to introduce in our discretization also the basis functions $\phi_0$ and $\phi_{N+1}$, which take value one at the boundary, and this would not be consistent with the continuous problem. Fig. \ref{basis_int} provides a graphical explanation of this last discussion.      	
 \end{enumerate}
 \end{remark}
 
@@ -190,9 +190,31 @@ The following fact are worth noticing.
 
 We now start building the stiffness matrix $\mathcal A_h$. This will be done it in three steps, since the values of the matrix can be computed differentiating among three well defined regions: the upper triangle, corresponding to $j\geq i+2$, the upper diagonal corresponding to $j=i+1$ and the diagonal, corresponding to $j=i$ (see Fig. \ref{matrix_fig}). In fact, as it will be clear during our computations, in each of these regions the intersections among the support of the basis functions are different, thus generating different values of the bilinear form. In what follows, we will briefly present which will be the contributions to the matrix in each of these three steps, including the complete computations as an appendix at the end of the paper. 
 
+\begin{figure}[!h]
+%%
+%%para version springer
+%%
+\centering
+\begin{tikzpicture}
+ \matrix[matrix of math nodes,left delimiter = (,right delimiter = ),row sep=10pt,column sep = 10pt] (m)
+ {
+ a_{1,1}  & a_{1,2} & a_{1,3} & \ldots\ldots & \ldots\ldots & a_{1,N}\\
+   &a_{2,2} & a_{2,3} & a_{2,4} & \ldots\ldots &a_{2,N}\\
+   & & \ddots & \ddots & \ddots &\vdots\\
+   & & & \ddots & \ddots &a_{N-2,N}\\	   
+   & & & & \hspace{-0.25cm}a_{N-1,N-1} &a_{N-1,N}\\
+   & & & & & a_{N,N}\\
+ };
+\draw[color=red] (m-1-3.north west) -- (m-1-6.north east) -- +(0.14,0) -- (m-4-6.south east) -- (m-4-6.south west) -- (m-1-3.west) -- (m-1-3.north west);
+\draw[color=blue] (m-1-2.north west) -- +(0.6,0) -- +(4.6,-3.65) -- (m-5-6.north east) -- (m-5-6.south east) -- (m-5-6.south west) -- (m-1-2.south) -- (m-1-2.south west) -- (m-1-2.north west); 
+\draw[color=black] (m-1-1.north west) -- (m-1-1.north east) -- +(0.2,0) -- +(0.2,-0.75) -- +(0.9,-0.75) -- +(4.95,-4.35) -- +(5.7,-4.35) -- +(5.7,-4.8) -- +(4.25,-4.8) -- (m-1-1.south west) -- (m-1-1.north west); 
+\end{tikzpicture}
+\caption{Structure of the stiffness matrix $\mathcal{A}_h$.}\label{matrix_fig}
+\end{figure}
+
 %\begin{figure}[!h]
 %%%
-%%%para version springer
+%%%para version arxiv
 %%%
 %\centering
 %\begin{tikzpicture}
@@ -206,33 +228,11 @@ We now start building the stiffness matrix $\mathcal A_h$. This will be done it 
 %   & & & & & a_{N,N}\\
 % };
 %\draw[color=red] (m-1-3.north west) -- (m-1-6.north east) -- +(0.14,0) -- (m-4-6.south east) -- (m-4-6.south west) -- (m-1-3.west) -- (m-1-3.north west);
-%\draw[color=blue] (m-1-2.north west) -- +(0.6,0) -- +(4.6,-3.65) -- (m-5-6.north east) -- (m-5-6.south east) -- (m-5-6.south west) -- (m-1-2.south) -- (m-1-2.south west) -- (m-1-2.north west); 
-%\draw[color=black] (m-1-1.north west) -- (m-1-1.north east) -- +(0.2,0) -- +(0.2,-0.75) -- +(0.9,-0.75) -- +(4.95,-4.35) -- +(5.7,-4.35) -- +(5.7,-4.8) -- +(4.25,-4.8) -- (m-1-1.south west) -- (m-1-1.north west); 
+%\draw[color=blue] (m-1-2.north west) -- +(0.6,0) -- +(5.37,-3.96) -- (m-5-6.north east) -- (m-5-6.south east) -- (m-5-6.south west) -- (m-1-2.south) -- (m-1-2.south west) -- (m-1-2.north west); 
+%\draw[color=black] (m-1-1.north west) -- (m-1-1.north east) -- +(0.2,0) -- +(0.2,-0.75) -- +(0.9,-0.75) -- +(5.75,-4.8) -- +(6.55,-4.8) -- +(6.55,-5.3) -- +(4.65,-5.3) -- (m-1-1.south west) -- (m-1-1.north west); 
 %\end{tikzpicture}
 %\caption{Structure of the stiffness matrix $\mathcal{A}_h$.}\label{matrix_fig}
 %\end{figure}
-
-\begin{figure}[!h]
-%%%
-%%%para version arxiv
-%%%
-\centering
-\begin{tikzpicture}
- \matrix[matrix of math nodes,left delimiter = (,right delimiter = ),row sep=10pt,column sep = 10pt] (m)
- {
- a_{1,1}  & a_{1,2} & a_{1,3} & \ldots\ldots & \ldots\ldots & a_{1,N}\\
-   &a_{2,2} & a_{2,3} & a_{2,4} & \ldots\ldots &a_{2,N}\\
-   & & \ddots & \ddots & \ddots &\vdots\\
-   & & & \ddots & \ddots &a_{N-2,N}\\	   
-   & & & & \hspace{-0.25cm}a_{N-1,N-1} &a_{N-1,N}\\
-   & & & & & a_{N,N}\\
- };
-\draw[color=red] (m-1-3.north west) -- (m-1-6.north east) -- +(0.14,0) -- (m-4-6.south east) -- (m-4-6.south west) -- (m-1-3.west) -- (m-1-3.north west);
-\draw[color=blue] (m-1-2.north west) -- +(0.6,0) -- +(5.37,-3.96) -- (m-5-6.north east) -- (m-5-6.south east) -- (m-5-6.south west) -- (m-1-2.south) -- (m-1-2.south west) -- (m-1-2.north west); 
-\draw[color=black] (m-1-1.north west) -- (m-1-1.north east) -- +(0.2,0) -- +(0.2,-0.75) -- +(0.9,-0.75) -- +(5.75,-4.8) -- +(6.55,-4.8) -- +(6.55,-5.3) -- +(4.65,-5.3) -- (m-1-1.south west) -- (m-1-1.north west); 
-\end{tikzpicture}
-\caption{Structure of the stiffness matrix $\mathcal{A}_h$.}\label{matrix_fig}
-\end{figure}
 
 \subsubsection*{Step 1: $j\geq i+2$}
 As we mentioned in Remark \ref{rem_prel}, in this case we have $supp(\phi_i)\cap supp(\phi_j) =\emptyset$ (see also Fig. \ref{basis_upp_tri}). Hence, \eqref{stiffness_nc} is reduced to computing only the integral
@@ -537,9 +537,11 @@ We point out the following facts:
 \end{enumerate}
 \end{remark}
 
-\subsection{Parabolic problem and control problem}\label{fe_parabolic}
+In Section \ref{numerical_sec} below, we will present the numerical simulations associated to  the elliptic problem \eqref{PE}, discussing in detail the convergence properties of the algorithm. 
 
-We now present the numerical implementation of the control problem for the fractional heat equation. Since we have obtained a FE approximation $\mathcal A_h$ of the operator $\fl{s}{}$, we can compute the fully-discrete approximation of \eqref{heat_frac}. 
+\subsection{Parabolic equation and control problem}\label{fe_parabolic}
+
+We now present the numerical implementation of the control problem for the fractional heat equation. Since we have obtained a FE approximation $\mathcal A_h$ of the operator $\fl{s}{}$, we can compute the fully-discrete version of \eqref{heat_frac}. 
 
 More precisely, for any given mesh $\mathfrak M$ and any integer $M>0$, we set $\delta t=T/M$ and we consider a implicit Euler method, with respect to the time variable. More precisely, we consider
 %
@@ -556,20 +558,20 @@ where $z_0\in \mathbb R^\mesh$ and $\mathcal M_h$ is the classical mass matrix w
 Here, $v_{h,\delta t}=(v_h^n)_{1\leq n\leq M}$ is a fully-discrete control function whose cost, that is the discrete $L_{\delta t}^2(0,T;\mathbb R^\mesh)$-norm, is defined by
 %
 \begin{align*}
-\|v_{\delta t}\|_{L_{\delta t}^2(0,T;\mathbb R^\mesh)}:=\left(\sum_{i=1}^M\delta t |v^n|^2_{L^2(\Omega)}\right)^{1/2},
+\|v_{\delta t}\|_{L_{\delta t}^2(0,T;\mathbb R^\mesh)}:=\left(\sum_{i=1}^M\delta t |v^n|^2_{L^2(\RR^\mesh)}\right)^{1/2},
 \end{align*}
 %
-and where $| \cdot |_{L^2(\Omega)}$ stands for the norm associated to the $L^2$-inner product on $\mathbb{R}^\mathfrak M$
+and where $| \cdot |_{L^2(\RR^\mesh)}$ stands for the norm associated to the $L^2$-inner product on $\mathbb{R}^\mathfrak M$
 %
 \begin{align*}
-(u,v)_{L^2(\Omega)}=h \sum_{i=1}^N u_i v_i.
+(u,v)_{L^2(\RR^\mesh)}=h \sum_{i=1}^N u_i v_i.
 \end{align*}
 %
 
 With the above notation and according to the penalised HUM strategy, we introduce, for some penalization parameter $\varepsilon>0$, the following primal fully-discrete functional 
 %
 \begin{align*}
-F_{\varepsilon,h,\delta t}(v_{\delta t})=\sum_{n=1}^{M}\delta t |v^n|^2_{L^2(\Omega)}+\frac{1}{2\varepsilon}|z^M|^2_{L^2(\Omega)}, \quad \forall \, v_{\delta t}\in L_{\delta t}^2(0,T;\mathbb R^\mesh),
+F_{\varepsilon,h,\delta t}(v_{\delta t})=\sum_{n=1}^{M}\delta t |v^n|^2_{L^2(\RR^\mesh)}+\frac{1}{2\varepsilon}|z^M|^2_{L^2(\RR^\mesh)}, \quad \forall \, v_{\delta t}\in L_{\delta t}^2(0,T;\mathbb R^\mesh),
 \end{align*}
 %
 that we wish to minimize onto the whole fully-discrete control space $L_{\delta t}^2(0,T;\mathbb R^\mesh)$ and where $z^M$ is the final value of the controlled problem \eqref{frac_heat_num}. 
@@ -577,7 +579,7 @@ that we wish to minimize onto the whole fully-discrete control space $L_{\delta 
 As noted in Section \ref{theor_sec}, we can apply Fenchel-Rockafellar theory results to obtain the corresponding dual functional, which reads as follows
 %
 \begin{align}\label{dual_fully}
-	J_{\varepsilon,h,\delta t}(\varphi^T)=\frac{1}{2}\sum_{n=1}^{M}\delta t|\mathbf 1_\omega\varphi|^2_{L^2(\Omega)}+\frac{\varepsilon}{2}|\varphi^T|^2_{L^2(\Omega)}+(\varphi^1,y_0)_{L^2(\Omega)}, \quad \forall \varphi^T\in L_{h,\delta t}^2(0,1)
+	J_{\varepsilon,h,\delta t}(\varphi^T)=\frac{1}{2}\sum_{n=1}^{M}\delta t|\mathbf 1_\omega\varphi|^2_{L^2(\RR^\mesh)}+\frac{\varepsilon}{2}|\varphi^T|^2_{L^2(\RR^\mesh)}+(\varphi^1,y_0)_{L^2(\RR^\mesh)}, \quad \forall \varphi^T\in L_{h,\delta t}^2(0,1)
 \end{align}
 %
 where $\varphi=(\varphi^n)_{1\leq n\leq M+1}$ is solution to the adjoint system
@@ -589,8 +591,8 @@ where $\varphi=(\varphi^n)_{1\leq n\leq M+1}$ is solution to the adjoint system
 		\varphi^{M+1}=\varphi^T. 
 	\end{cases}
 \end{align}
-%
-It can be readily verified that this functional has a unique minimizer without any additional assumption on the problem. Indeeed, by minimizing  \eqref{dual_fully}, and from duality theory, we obtain a control function 
+
+It can be readily verified that this functional has a unique minimizer without any additional assumption on the problem. Therefore, by minimizing  \eqref{dual_fully}, and from duality theory, we obtain a control function 
 \begin{align*}
 	v_{\varepsilon,h,\delta t}=\left(\mathbf{1}_\omega\varphi_{\varepsilon,h,\delta t}^n\right)_{1\leq n\leq M},
 \end{align*}
@@ -600,5 +602,6 @@ Thus, the optimal penalized control always exists and is unique, and deducing co
 
 It is well known that, in general, we cannot expect for a given bounded family of initial data that the fully-discrete controls are uniformly bounded when the discretization parameters $h$, $\delta t$ and the penalization term $\varepsilon$ tend to zero independently. 
 
-Instead, we expect to obtain uniform bounds by taking the penalization parameter $\varepsilon=\phi(h)$ that tends to 0 in connection with the mesh size not too fast (see \cite{boyer2013penalised}) and a time step $\delta t$ verifying some weak condition of the kind $\delta t\leq \zeta(h)$ where $\zeta$ tends to zero logaritmically when $h\to 0$ (see \cite{boyer2011uniform}).
-%
+Instead, we expect to obtain uniform bounds by taking the penalization parameter $\varepsilon=\phi(h)$ that tends to zero in connection with the mesh size not too fast (see \cite{boyer2013penalised}) and a time step $\delta t$ verifying some weak condition of the kind $\delta t\leq \zeta(h)$ where $\zeta$ tends to zero logaritmically when $h\to 0$ (see \cite{boyer2011uniform}).
+
+These facts will be confirmed by the numerical simulations that we are going to present in Section \ref{control_exp} below.
