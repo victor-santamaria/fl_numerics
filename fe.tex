@@ -8,11 +8,11 @@ In order to solve numerically \eqref{PE}, we will develop a finite element schem
 \end{align}
 for all $v\in H_0^s(-L,L)$. 
 
-Now, let us now introduce a partition of the interval $(-L,L)$ as follows:
+Let us introduce a partition of the interval $(-L,L)$ as follows:
 \begin{align*}
 	-L = x_0<x_1<\ldots <x_i<x_{i+1}<\ldots<x_{N+1}=L\,,
 \end{align*}
-with $x_{i+1}=x_i+h$, $i=0,\ldots N$. We call $\mathfrak{M}$ the mesh composed by the points $\{x_i\,:\, i=1,\ldots,N\}$, while the set of the boundary points is denoted $\partial\mathfrak{M}:=\{x_0,x_{N+1}\}$. Define $K_i:=[x_i,x_{i+1}]$ and consider the discrete space 
+with $x_{i+1}=x_i+h$, $i=0,\ldots N$. We call $\mathfrak{M}$ the mesh composed by the points $\{x_i\,:\, i=1,\ldots,N\}$, while the set of the boundary points is denoted $\partial\mathfrak{M}:=\{x_0,x_{N+1}\}$. Now, define $K_i:=[x_i,x_{i+1}]$ and consider the discrete space 
 \begin{align*}
 	V_h :=\Big\{v\in H_0^s(-L,L)\,\big|\, \left. v\,\right|_{K_i}\in \mathcal{P}^1\Big\},
 \end{align*} 
@@ -28,7 +28,7 @@ and \eqref{WFD} is reduced to solve the linear system $\mathcal A_h u=F$, where 
 \begin{align}\label{stiffness}
 	a_{i,j}=\frac{\ccs}{2} \int_{\RR}\int_{\RR}\frac{(\phi_i(x)-\phi_i(y))(\phi_j(x)-\phi_j(y))}{|x-y|^{1+2s}}\,dxdy,	
 \end{align}
-while the vector $F\in\RR^N$ is given by $F=(F_1,\ldots,F_N)$ with
+while the vector $F\in\RR^\mesh$ is given by $F=(F_1,\ldots,F_N)$ with
 \begin{align*}
 	F_i = \int_{-L}^L f\phi_i\,dx,\;\;\; i=1,\ldots,N.
 \end{align*}
