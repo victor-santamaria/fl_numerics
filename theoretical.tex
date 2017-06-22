@@ -120,7 +120,7 @@ For any $\delta\geq 0$, we define the (possibly empty) closed convex set
 \begin{align*}
 	\textrm{Adm}(y_0,\delta):=\left\{v\in L^2(0,T;U)\,:\, \norm{\mathcal{L}_T(\cdot|\cdot)}{}\leq\delta\right\}.
 \end{align*}
-\begin{itemize}
+\begin{enumerate}
 	\item We say that \eqref{abstract_pb} is \textit{approximately null-controllable} at time $T$ from the initial datum $y_0$ if 
 	\begin{align*}
 		\textrm{Adm}(y_0,\delta)\neq\emptyset,\;\;\textrm{ for all } \delta>0.
@@ -132,7 +132,7 @@ For any $\delta\geq 0$, we define the (possibly empty) closed convex set
 		\textrm{Adm}(y_0,0)\neq\emptyset.
 	\end{align*}	
 	If this holds for all $y_0\in E$, we say that \eqref{abstract_pb} is null-controllable at time $T$.
-\end{itemize} 
+\end{enumerate} 
 \end{definition}
 
 In the framework of both controllability notions, if one control exists it is certainly not unique. This is the reason why for proving controllability results (but also for the actual computation of such controls), it is useful to specify one such control. For instance, the classical HUM approach consists in finding the control with the minimal $L^2(0,T;U)$-norm. Nevertheless, even though in this way we can identify a precise control, its computation can be a difficult task due to the nature of the constraints involved. As usual, duality theory can help to deal with these constraints but will lead to functionals that are either non coercive on the usual dual state space $E$ (for $\delta = 0$; in this
