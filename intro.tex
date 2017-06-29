@@ -1,19 +1,19 @@
-\section{Introduction and main results}\label{intro_sec}
+\section{Introduction}\label{intro_sec}
 
 In this work, we present a finite element (FE) scheme for the numerical approximation of the solution to the following non-local Poisson equation
 \begin{align}\label{PE}
-	\left\{\begin{array}{ll}
-		\fl{s}{u} = f, & x\in(-L,L)
+	\begin{cases}
+		\fl{s}{u} = f, \quad & x\in(-L,L)
 		\\
 		u\equiv 0, & x\in\RR\setminus(-L,L).
-	\end{array}\right.
+	\end{cases}
 \end{align}
 
 In \eqref{PE}, $f$ is a given function and, for all $s\in(0,1)$, $\fl{s}{}$ denotes the one-dimensional fractional Laplace operator, which is defined as the following singular integral
 \begin{align*}
 	\fl{s}{u}(x) = \ccs\,P.V.\,\int_{\RR}\frac{u(x)-u(y)}{|x-y|^{1+2s}}\,dy. 
 \end{align*}
-Here, $\ccs$ is a normalisation constant given by
+Here, $\ccs$ is a normalization constant given by
 \begin{align*}
 	\ccs = \frac{s2^{2s}\Gamma\left(\frac{1+2s}{2}\right)}{\sqrt{\pi}\Gamma(1-s)},
 \end{align*}
@@ -33,19 +33,19 @@ In the recent past, the fractional Laplacian has been widely analyzed also from 
 
 Our method deals with a FE approximation in one space dimension for the fractional Poisson equation. The main novelty of our work, with respect to \cite{acosta2017short,acosta2017fractional}, relies on the fact that, since we are dealing with the one-dimensional case, we will not need any quadrature rule and each entry of the stiffness matrix can be computed explicitly. This has the great advantage of significantly reducing the computational cost of the algorithm and, therefore, our discretization method is suitable for being included in more general applications.  
 
-An natural example is given by the numerical resolution of the following control problem: given any $T>0$, find a control function $g\in L^2((-L,L)\times(0,T))$ such that the corresponding solution to the parabolic problem 
+A natural example is given by the numerical resolution of the following control problem: given any $T>0$, find a control function $g\in L^2((-L,L)\times(0,T))$ such that the corresponding solution to the parabolic problem 
 \begin{align}\label{heat_frac}
-	\left\{\begin{array}{ll}
-	z_t + \fl{s}{z} = g\mathbf{1}_{\omega}, & (x,t)\in (-L,L)\times(0,T)
-	\\
-	z=0, & (x,t)\in[\,\RR\setminus (-L,L)\,]\times(0,T)
-	\\
-	z(x,0)=z_0(x), & x\in (-L,L)
-	\end{array}\right.
+	\begin{cases}
+		z_t + \fl{s}{z} = g\mathbf{1}_{\omega},\quad & (x,t)\in (-1,1)\times(0,T)
+		\\
+		z=0, & (x,t)\in[\,\RR\setminus (-1,1)\,]\times(0,T)
+		\\
+		z(x,0)=z_0(x), & x\in (-1,1)
+	\end{cases}
 \end{align} 
 satisfies $z(x,T)=0$. 
 
 The approach that we will employ for solving this control problem is based on the penalized Hilbert Uniqueness Method (\cite{boyer2013penalised}), which relies on some classical works of Glowinski and Lions (\cite{glowinski1995exact,glowinski2008exact}).   
 
-This paper is organised as follows. In Section \ref{theor_sec}, we present some existing theoretical results for the problems that we are going to analyze. In particular, we give a more accurate definition of the fractional Laplace operator and we introduce the variational formulation associated to \eqref{PE} (needed for the development of the FE scheme). Concerning the parabolic problem \eqref{heat_frac}, we recall existing controllability results, which will help us in the verification of the accuracy of the numerical method. In Section \ref{fe_sec}, we describe our FE method for the elliptic equation \eqref{PE} and we present the algorithm for the penalised HUM, employed for the numerical control of \eqref{heat_frac}. In Section \ref{res_numerical} we present and comment the results of our numerical simulations. Finally, in Appendix \ref{appendix} we include the complete details for computing the stiffness matrix associated to our FE scheme.  
+This paper is organized as follows. In Section \ref{theor_sec}, we present some existing theoretical results for the problems that we are going to analyze. In particular, we give a more accurate definition of the fractional Laplace operator and we introduce the variational formulation associated to \eqref{PE} (needed for the development of the FE scheme). Concerning the parabolic problem \eqref{heat_frac}, we present a couple of controllability results, which will help us in the verification of the accuracy of the numerical method. In Section \ref{fe_sec}, we describe our FE method for the elliptic equation \eqref{PE} and we present the algorithm for the penalized HUM, employed for the numerical control of \eqref{heat_frac}. In Section \ref{res_numerical} we present and comment the results of our numerical simulations. Finally, in Appendix \ref{appendix} we include the complete details for computing the stiffness matrix associated to our FE scheme.  
 

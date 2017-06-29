@@ -1,6 +1,7 @@
 \section{Numerical results} \label{res_numerical}
+In this Section, we present the numerical simulations corresponding to the algorithm previously described, and we provide a complete discussion of the results obtained. 
 %
-In order to test numerically the accuracy of our method, we use the following problem 
+First of all, in order to test numerically the accuracy of our method, we use the following problem 
 %
 \begin{align}\label{PE_real}
 	\left\{\begin{array}{ll}
@@ -26,6 +27,7 @@ In Fig.  \ref{smas12}, we show a comparison for different values of $s$ between 
 		\subfloat[$s=0.1$]{
 		\begin{tikzpicture}[scale=0.8]
 		\begin{axis}[xmin=-1.1, xmax=1.1,legend style={at={(0.77,0.25)}}]
+		
 			\addplot [color=blue, mark=none,  thick] table[x=0,y=1]{\datpu};	
 			\addplot [color=red, mark=x, only marks, thick] table[x=2,y=3]{\datpu};		
 			\addlegendentry{Numerical solution}
@@ -81,9 +83,9 @@ For this particular test, since $f\equiv 1$ in $(-L,L)$, the problem is therefor
 %
 where the right-hand side can be easily computed, since we have the closed formula 
 %
-\begin{align}
+\begin{align*}
 \int_{-L}^{L}u\,dx= \frac{\pi L^{2s+1}}{2^{2s}\Gamma(s+\frac{1}{2})\Gamma(s+\frac{3}{2})}
-\end{align}
+\end{align*}
 % 
 and the term corresponding to $\int_{-L}^{L}u_h$ can be carried out numerically. 
 
@@ -202,7 +204,7 @@ We present now some results obtained with the described methodology. In accordan
 
 As we mentioned, we choose the penalization term $\varepsilon$ as a function of $h$. A reasonable practical rule (\cite{boyer2013penalised}) is to systematically choose $\phi(h)\sim h^{2p}$ where $p$ is the order of accuracy in space of the numerical method employed for the discretization of the spatial operator involved (in this case the fractional Laplacian \eqref{fl}). We recall that for the elliptic problem that we are considering, this order of convergence is $1/2$. Thus, hereinafter we always assume $\varepsilon=\phi(h)=h$.
 
-We begin by plotting on Fig.  \ref{sol_surf} the time evolution of the uncontrolled solution as well as the controlled solution. Here, we set $s=0.8$, $\omega=(-0.3,0.8)$ and $T=0.3$. The control domain is represented as highlighted zone on the plane $(t,x)$. As expected, we observe that the uncontrolled solution is damped with time, but does not reach zero at time $T$, while the controlled solution does. 
+We begin by plotting on Fig.  \ref{sol_surf} the time evolution of the uncontrolled solution as well as the controlled solution. Here, we set $s=0.8$, $\omega=(-0.3,0.8)$ and $T=0.3$, and as an initial condition we take $z_0(x) = \sin(\pi x)$. The control domain is represented as highlighted zone on the plane $(t,x)$. As expected, we observe that the uncontrolled solution is damped with time, but does not reach zero at time $T$, while the controlled solution does. 
 
 \begin{figure}[ht]
 %%  Datos del experimento 
@@ -236,7 +238,7 @@ We begin by plotting on Fig.  \ref{sol_surf} the time evolution of the uncontrol
 \label{sol_surf}
 \end{figure}
 
-Although no results about null controllability for the fractional heat equation are known, by observing the convergence of the numerical method, we aim to see an expected behavior. In figure \ref{figure_case1}, we present the computed values of various quantities of interest when the mesh size goes to zero. More precisely, we observe that the control cost $\|v_{\delta t}\|_{L^2_{\delta t}(0,T;\mathbb R^\mesh)}$ and the optimal energy $\inf F_{\phi(h),h,\delta t}$ remain bounded as $h\to 0$. On the other hand, we see that 
+In figure \ref{figure_case1}, we present the computed values of various quantities of interest when the mesh size goes to zero. More precisely, we observe that the control cost $\|v_{\delta t}\|_{L^2_{\delta t}(0,T;\mathbb R^\mesh)}$ and the optimal energy $\inf F_{\phi(h),h,\delta t}$ remain bounded as $h\to 0$. On the other hand, we see that 
 \begin{align}\label{control_norm_behavior}
 	|y^M|_{L^2(\RR^\mesh)}\,\sim\,C\sqrt{\phi(h)}=Ch^{1/2}. 
 \end{align}

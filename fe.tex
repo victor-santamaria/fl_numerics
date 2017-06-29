@@ -1,7 +1,9 @@
-\section{Finite element approximation}\label{fe_sec}
+\section{Development of the numerical scheme}\label{fe_sec}
 
-\subsection{Elliptic problem}\label{fe_ell_sec}
-
+We devote this Section to the description of the numerical scheme that we are going to employ. Let us start with the elliptic case. 
+%
+\subsection{Finite element approximation of the elliptic problem}\label{fe_ell_sec}
+%
 In order to solve numerically \eqref{PE}, we will develop a finite element scheme on a uniform mesh. To this purpose, let us firstly recall the variational formulation associated to our problem: find $u\in H_0^s(-L,L)$ such that
 \begin{align}\label{WF}
 	\frac{\ccs}{2} \int_{\RR}\int_{\RR}\frac{(u(x)-u(y))(v(x)-v(y))}{|x-y|^{1+2s}}\,dxdy = \int_{-L}^L fv\,dx,	
@@ -84,7 +86,7 @@ The following fact are worth noticing.
 \begin{enumerate}
 	\item It is evident from the definition \eqref{stiffness} that $\mathcal A_h$ is symmetric. Therefore, in our algorithm we will only need to compute the values $a_{i,j}$ with $j\geq i$.
 	
-	\item Due to the non-local nature of the problem, the matrix $\mathcal A_h$ is full. However, while computing its components we will encounter many simplifications, due to the fact that $supp(\phi_i)\cap supp(\phi_j) =\emptyset$ for $j\geq i+2$.
+	\item Due to the non-local nature of the problem, the matrix $\mathcal A_h$ is full. However, while computing its components, we will encounter many simplifications, due to the fact that $supp(\phi_i)\cap supp(\phi_j) =\emptyset$ for $j\geq i+2$.
 	
 	\item With some abuse of notation, let us define 
 	\begin{align}\label{stiffness_nc}
@@ -394,16 +396,16 @@ According to \eqref{stiffness_nc}, and using the symmetry of the integral with r
 \end{align*}
 
 These contributions will be calculated separately, employing changes of variables analogous to \eqref{cv}. After several computations, we obtain
-\begin{align}\label{Aii1}
+\begin{align*}
 	a_{i,i+1} = \begin{cases}
 					\displaystyle h^{1-2s}\frac{3^{3-2s}-2^{5-2s}+7}{2s(1-2s)(1-s)(3-2s)}, & \displaystyle s\neq \frac{1}{2}
 					\\
 					9\ln 3-16\ln 2, & \displaystyle s=\frac{1}{2}.
 				\end{cases}	
-\end{align}
+\end{align*}
 
 \subsubsection*{Step 3: $j= i$}
-As a last step, we fill the diagonal of the matrix $\mathcal A_h$. In this case we have
+As a last step, we fill the diagonal of the matrix $\mathcal A_h$, which collects the values corresponding to the case $\phi_i(x)=\phi_j(x)$ (see Fig. \ref{basis_dia}). We have
 	\begin{align*}
 	a_{i,i}= & \int_{\RR}\int_{\RR}\frac{(\phi_i(x)-\phi_i(y))^2}{|x-y|^{1+2s}}\,dxdy
 	\\
@@ -539,11 +541,82 @@ We point out the following facts:
 
 In Section \ref{res_numerical} below, we will present the numerical simulations associated to  the elliptic problem \eqref{PE}, discussing in detail the convergence properties of the algorithm. 
 
-\subsection{Parabolic equation and control problem}\label{fe_parabolic}
+\subsection{Control problem for the fractional heat equation}%\label{fe_parabolic}
 
-We now present the numerical implementation of the control problem for the fractional heat equation. Since we have obtained a FE approximation $\mathcal A_h$ of the operator $\fl{s}{}$, we can compute the fully-discrete version of \eqref{heat_frac}. 
+Let us now give a brief description of the so called penalised Hilbert Uniqueness Method (HUM in what follows) that we shall employ for computing the controls for equation \eqref{heat_frac}. Here, we will mostly refer to the work of Boyer \cite{boyer2013penalised}.
 
-More precisely, for any given mesh $\mathfrak M$ and any integer $M>0$, we set $\delta t=T/M$ and we consider a implicit Euler method, with respect to the time variable. More precisely, we consider
+We start recalling the classical HUM, as it has been introduced in the pioneering works \cite{glowinski1995exact,glowinski2008exact}. Let $(E,\langle\cdot,\cdot\rangle)$ be a Hilbert space whose norm is denoted by $\norm{\cdot}{}$. Let $(A,\mathcal D(A))$ be an unbounded operator in $E$ such that $-A$ generates an analytic semi-group in $E$ that we indicate by $t\mapsto e^{-tA}$. Also, we denote $(A^*,\mathcal D(A^*))$ the adjoint of this operator and by $t\mapsto e^{-tA^*}$ the corresponding semi-group. 
+
+Let $(U,[\cdot,\cdot])$ be another Hilbert space whose norm is denoted by $\inter{\cdot}$. Let  $B$ be an unbounded operator from $U$ to $\mathcal D(A^*)'$ and let $B^*:\mathcal D(A^*)\to U$ be its adjoint. Let $T>0$ be given and, for any $y_0\in E$ and $v\in L^2(0,T;U)$, let us consider the non-homogeneous evolution problem  
+\begin{align}\label{abstract_pb}
+	\begin{cases}
+		y_t+Ay=Bv, & t\in[0,T]
+		\\
+		y(0)=y_0.
+	\end{cases}
+\end{align}
+
+The well posedness of \eqref{abstract_pb} is guaranteed by \cite[Theorem 2.37]{coron2007control}. From now on, we will refer to the solution as $t\mapsto y_{v,y_0}(t)$.
+
+Notice that we have $y_{0,y_0}(t)= e^{-tA}y_0$. Moreover, for simplicity, the solution at time $T$, which is of particular interest in what follows, will be denoted by 
+\begin{align*}
+	y_{v,y_0}(T)=\mathcal{L}_T(v|y_0).
+\end{align*} 
+The linear operator $\mathcal{L}_T(\cdot|\cdot)$ is then continuous from $L^2(0,T;U)\times E$ into $E$.
+
+In the framework of both controllability notions that we introduced in Section \ref{theor_sec}, if one control exists it is certainly not unique. For instance, the classical HUM approach consists in finding the control with the minimal $L^2(0,T;U)$-norm. Nevertheless, even though in this way we can identify a precise control, its computation can be a difficult task due to the nature of the constraints involved (see, e.g., \cite{fernandez2000cost,micu2004introduction}). 
+
+Because of what we just described, it is convenient to deal with a penalized version of the above mentioned optimization problems.
+
+In the penalized version of the HUM, we look for a control that is solution to a different optimization problem. In particular, we for any $\varepsilon>0$, we shall find
+
+\begin{align}\label{min_ve}
+	v_\varepsilon=\min_{v\in L^2(0,T;U)} F_\varepsilon (v)
+\end{align}
+where
+\begin{align*}
+	F_\varepsilon(v):=\frac{1}{2}\int_0^T\inter{v(t)}^2\,dt+\frac{1}{2\varepsilon}\norm{\mathcal L(v|y_0)}{}^2, \quad \forall v\in L^2(0,T;U).
+\end{align*}
+
+Notice that, for any $\varepsilon > 0$, the functional $F_\varepsilon$ has a unique minimiser on $L^2(0,T;U)$  that we denote by $v_\varepsilon$. This is due to the fact that $F_\varepsilon$ is strictly convex, continuous and coercive. 
+
+However, the space $L^2(0,T;U)$ in which one has to minimise $F_\varepsilon$ is a quite big one and it depends on the time $T$. This makes the minimization problem computationally expensive. On the other hand, this issue can be bypassed by considering a different optimization problem, defined on the smaller space $E$. Namely we have to find  
+
+\begin{align}\label{min_je}
+	q^T_\varepsilon=\min_{q\in E} J_\varepsilon (q^T)
+\end{align}
+where
+\begin{align}\label{penalized_fun}
+	J_\varepsilon(q^T):=\frac{1}{2}\int_0^T\inter{B^*e^{-(T-t)A^*}q^T}^2\,dt+\frac{\varepsilon}{2}\norm{q^T}{}^2 + \left\langle y_0,e^{-TA^*}q^T\right\rangle, \quad \forall q^T\in E.
+\end{align}
+
+Notice that \eqref{min_ve} and \eqref{min_je} are equivalent since, according to \cite[Proposition 1.5]{boyer2013penalised}, for any $\varepsilon > 0$, the minimisers $v_\varepsilon$ and $q_\varepsilon^T$ of the functionals $F_\varepsilon$ and $J_\varepsilon$, respectively, are related through the formula
+\begin{align*}
+	v_\varepsilon = B^*e^{-(T-t)A^*}q_\varepsilon^T, \textrm{ for a.e. } t\in(0,T).
+\end{align*} 
+
+Notice also that we can express the approximate and null controllability properties of the system, for a given initial datum $y_0$, in terms of the behaviour of the penalised HUM approach described above. In particular we have 
+
+\begin{theorem}[Theorem 1.7 of \cite{boyer2013penalised}]\label{theorem_hum}
+Problem \eqref{abstract_pb} is approximately controllable from the initial datum $y_0$ if and only if we have
+\begin{align*}
+	\mathcal{L}_T(v_\varepsilon|y_0) = y_{v_\varepsilon,y_0}(T)\rightarrow 0,\;\;\;\textrm{ as }\;\varepsilon\to 0.
+\end{align*}
+Problem \eqref{abstract_pb} is null-controllable from the initial datum $y_0$ if and only if we have
+\begin{align*}
+	M_{y_0}^2:=2\sup_{\varepsilon>0}\left( \inf_{L^2(0,T;U)}F_\varepsilon\right)<+\infty.
+\end{align*}
+In this case, we have 
+\begin{align*}
+	\inter{v_\varepsilon}_{L^2(0,T;U)}\leq M_{y_0},\nonumber
+	\\
+	\norm{\mathcal L_T(v_\varepsilon|y_0)}{}\leq M_{y_0}\sqrt{\varepsilon}.
+\end{align*} 
+\end{theorem} 
+
+Since the fractional Laplacian $\fl{s}{}$ has the properties required for the operator $A$, the penalized HUM that we just described can be applied to the control problem \eqref{heat_frac}. To this purpose, let us now present its numerical implementation. 
+
+Having obtained a FE approximation $\mathcal A_h$ of the operator $\fl{s}{}$, we can compute the fully-discrete version of \eqref{heat_frac}. For any given mesh $\mathfrak M$ and any integer $M>0$, we set $\delta t=T/M$ and we consider an implicit Euler method, with respect to the time variable. More precisely, we consider
 %
 \begin{align}\label{frac_heat_num}
 	\begin{cases}
@@ -568,7 +641,7 @@ and where $| \cdot |_{L^2(\RR^\mesh)}$ stands for the norm associated to the $L^
 \end{align*}
 %
 
-With the above notation and according to the penalised HUM strategy, we introduce, for some penalization parameter $\varepsilon>0$, the following primal fully-discrete functional 
+With the above notation and according to the penalized HUM strategy, we introduce, for some penalization parameter $\varepsilon>0$, the following primal fully-discrete functional 
 %
 \begin{align*}
 F_{\varepsilon,h,\delta t}(v_{\delta t})=\sum_{n=1}^{M}\delta t |v^n|^2_{L^2(\RR^\mesh)}+\frac{1}{2\varepsilon}|z^M|^2_{L^2(\RR^\mesh)}, \quad \forall \, v_{\delta t}\in L_{\delta t}^2(0,T;\mathbb R^\mesh),
@@ -576,7 +649,7 @@ F_{\varepsilon,h,\delta t}(v_{\delta t})=\sum_{n=1}^{M}\delta t |v^n|^2_{L^2(\RR
 %
 that we wish to minimize onto the whole fully-discrete control space $L_{\delta t}^2(0,T;\mathbb R^\mesh)$ and where $z^M$ is the final value of the controlled problem \eqref{frac_heat_num}. 
 
-As noted in Section \ref{theor_sec}, we can apply Fenchel-Rockafellar theory results to obtain the corresponding dual functional, which reads as follows
+We can apply Fenchel-Rockafellar theory results to obtain the corresponding dual functional, which reads as follows
 %
 \begin{align}\label{dual_fully}
 	J_{\varepsilon,h,\delta t}(\varphi^T)=\frac{1}{2}\sum_{n=1}^{M}\delta t|\mathbf 1_\omega\varphi|^2_{L^2(\RR^\mesh)}+\frac{\varepsilon}{2}|\varphi^T|^2_{L^2(\RR^\mesh)}+(\varphi^1,y_0)_{L^2(\RR^\mesh)}, \quad \forall \varphi^T\in L_{h,\delta t}^2(0,1)
@@ -592,16 +665,16 @@ where $\varphi=(\varphi^n)_{1\leq n\leq M+1}$ is solution to the adjoint system
 	\end{cases}
 \end{align}
 
-It can be readily verified that this functional has a unique minimizer without any additional assumption on the problem. Therefore, by minimizing  \eqref{dual_fully}, and from duality theory, we obtain a control function 
+Notice that \eqref{dual_fully} is the fully-discrete approximation of \eqref{penalized_fun}. Moreover, it can be readily verified that this functional has a unique minimizer without any additional assumption on the problem. Therefore, by minimizing  \eqref{dual_fully}, and from duality theory, we obtain a control function 
 \begin{align*}
 	v_{\varepsilon,h,\delta t}=\left(\mathbf{1}_\omega\varphi_{\varepsilon,h,\delta t}^n\right)_{1\leq n\leq M},
 \end{align*}
 where $\varphi_\epsilon$ is the solution to \eqref{frac_adj_num} evaluated in the optimal datum $\varphi_\varepsilon^T$. 
 
-Thus, the optimal penalized control always exists and is unique, and deducing controllability properties for the systems amounts to study the behavior of this control with respect to the penalization parameter $\varepsilon$, in connection with the discretization parameters.  
+Thus, the optimal penalized control always exists and is unique. Deducing controllability properties amounts to study the behavior of this control with respect to the penalization parameter $\varepsilon$, in connection with the discretization parameters.  
 
 It is well known that, in general, we cannot expect for a given bounded family of initial data that the fully-discrete controls are uniformly bounded when the discretization parameters $h$, $\delta t$ and the penalization term $\varepsilon$ tend to zero independently. 
 
 Instead, we expect to obtain uniform bounds by taking the penalization parameter $\varepsilon=\phi(h)$ that tends to zero in connection with the mesh size not too fast (see \cite{boyer2013penalised}) and a time step $\delta t$ verifying some weak condition of the kind $\delta t\leq \zeta(h)$ where $\zeta$ tends to zero logaritmically when $h\to 0$ (see \cite{boyer2011uniform}).
 
-These facts will be confirmed by the numerical simulations that we are going to present in Section \ref{control_exp} below.
+These facts will be confirmed by the numerical simulations that we are going to present in Section \ref{control_exp} below, by observing the behavior of the norm of the control, the optimal energy $\inf F_\varepsilon$, and the norm of the solution at time $T$. In this way, as predicted by Theorem \ref{theorem_hum}, we obtain a numerical evidence of the properties of null and approximate controllability for equation \eqref{heat_frac}, in accordance with the theoretical results in Section \ref{theor_sec}. 

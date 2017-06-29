@@ -21,13 +21,13 @@ provided that the limit exists.
 We notice that if $0<s<1/2$ and $u$ is smooth, for example bounded and Lipschitz continuous on $\RR$, then the integral in \eqref{fl} is in fact not really singular near $x$ (see e.g. \cite[Remark 3.1]{dihitchhiker}). Moreover, $\mathcal L_s^1(\RR)$ is the right space for which $v:= (-d_x^2)^s_{\varepsilon} u$ exists for every $\varepsilon > 0$, $v$ being also continuous at the continuity points of $u$.
 
 Let us now introduce the variational formulation associated to equation \eqref{PE}, which will be the starting point for the development of the FE approximation of the problem we are considering. That is, find $u\in H^s_0(-L,L)$ such that
-\begin{align}\label{WF}
+\begin{align*}
 	a(u,v) = \int_{-L}^L fv\,dx,	
-\end{align}
+\end{align*}
 for all $v\in H_0^s(-L,L)$, where the bilinear form $a(\cdot,\cdot):H^s_0(-L,L)\times H^s_0(-L,L)\to \RR$ is given by
-\begin{align}\label{WF_bilinear}
+\begin{align*}
 	a(u,v)=\frac{\ccs}{2} \int_{\RR}\int_{\RR}\frac{(u(x)-u(y))(v(x)-v(y))}{|x-y|^{1+2s}}\,dxdy.	
-\end{align}
+\end{align*}
 Here, $H^s_0(-L,L)$ denotes the space 
 \begin{align*}
 	H^s_0(-L,L) :=\Big\{\, u\in H^s(\RR)\,:\,u=0 \textrm{ in } \RR\setminus(-L,L)\,\Big\}, 
@@ -38,25 +38,29 @@ Since the bilinear form $a$ is continuous and coercive, Lax-Milgram Theorem imme
 
 \subsection{Parabolic problem}
 
-As we mentioned in Section \ref{intro_sec}, the main goal of the present paper is to obtain a FE discretization of the fractional Laplacian. An application for this approximation will then be the numerical resolution of the fractional heat equation \eqref{heat_frac} and the associated control problem. In more detail, given the following non-local parabolic problem 
+As we mentioned in Section \ref{intro_sec}, the main goal of the present paper is to obtain a FE discretization of the fractional Laplacian. An application for this approximation will then be the numerical resolution of the fractional heat equation \eqref{heat_frac} and the associated control problem. Before doing that, let us recall the following definitions of controllability.
+
+\begin{definition}
+System \eqref{heat_frac} is said to be \textit{null-controllable} at time $T$ if, for any $z_0\in L^2(-1,1)$, there exists $g\in L^2(\omega\times(0,T))$ such that the corresponding solution $z$ satisfies 
 \begin{align*}
-	\begin{cases}
-		z_t+\fl{s}{z} =\mathbf{1}_\omega g, & (x,t)\in (-1,1)\times (0,T), 
-		\\
-		z=0, & (x,t)\in [\,\mathbb{R} \setminus (-1,1)\,]\times (0,T), 
-		\\
-		z(x,0)=z_0(x), & x\in (-1,1),
-	\end{cases}
+	z(x,T)=0.
 \end{align*}
-where $\omega=(l_1,l_2)\subset (-1,1)$ is the support of the control and $z_0$ is a given initial datum in $L^2(-1,1)$, we want to compute numerically the control function $g$ that drives the solution $z$ to zero in time $T$. 
 
-First of all, it is worth to mention that the existence, uniqueness and regularity of the solutions to \eqref{heat_frac} has been studied by several authors. Among others, we mention the works \cite{biccari2017local,fernandez2016boundary,leonori2015basic}. Concerning instead the control problem, we recall that the approach that we will employ is based on the penalized Hilbert Uniqueness Method, which has been well presented in \cite{boyer2013penalised}. 
+\end{definition}
 
-However, before describing this method, we shall firstly remind the existing theoretical results on the controllability of the fractional heat equation \eqref{heat_frac}. This will tell us which results we should expect from our simulations, and will provide a validation of the accuracy of our numerical method.
+\begin{definition}
+System \eqref{heat_frac} is said to be \textit{approximately controllable} at time $T$ if, for any $z_0,z_T\in L^2(-1,1)$ and any $\delta>0$, there exists $g\in L^2(\omega\times(0,T))$ such that the corresponding solution $z$ satisfies \begin{align*}
+	\norm{z(x,T)-z_T}{L^2(-1,1)}<\delta.
+\end{align*}
+\end{definition}
 
-First of all, we have to mention that, to the best of our knowledge, there are few results in the literature on the null-controllability of the fractional heat equation, and none of them is for a problem involving the fractional Laplacian in its integral form \eqref{fl}. The existing results, instead, deal with the \textit{spectral} definition of the fractional Laplace operator, which is given as follows.
+Therefore, given any initial datum $z_0\in L^2(-1,1)$ we are interested in computing numerically the control function $g$ that drives the solution $z$ to zero in time $T$. Before describing the methodology that we shall adopt, we recall the existing theoretical results on the controllability of the fractional heat equation \eqref{heat_frac}. This will give us a hint about what we should expect from our simulations, and will provide a validation of the accuracy of our numerical method.
 
-Let $\{\psi_k,\lambda_k\}_{k\in\NN}\subset H_0^1(-1,1)\times\RR^+$ be the set of normalised eigenfunctions and eigenvalues of the Laplace operator in $(-1,1)$ with homogeneous Dirichlet boundary conditions, so that $\{\psi_k\}_{k\in\NN}$ is an orthonormal basis of $L^2(-1,1)$ and         
+First of all, it is worth to mention that the existence, uniqueness and regularity of the solutions to \eqref{heat_frac} has been studied by several authors. Among others, we mention the works \cite{biccari2017local,fernandez2016boundary,leonori2015basic}. 
+
+Concerning now the control problem, we have to mention that, to the best of our knowledge, there are few results in the literature on the null-controllability of the fractional heat equation, and none of them is for a problem involving the fractional Laplacian in its integral form \eqref{fl}. The existing results, instead, deal with the \textit{spectral} definition of the fractional Laplace operator, which is given as follows.
+
+Let $\{\psi_k,\lambda_k\}_{k\in\NN}\subset H_0^1(-1,1)\times\RR^+$ be the set of normalized eigenfunctions and eigenvalues of the Laplace operator in $(-1,1)$ with homogeneous Dirichlet boundary conditions, so that $\{\psi_k\}_{k\in\NN}$ is an orthonormal basis of $L^2(-1,1)$ and         
 \begin{align*}
 	\begin{cases}
 		-d_x^2\psi_k =\lambda_k\psi_k, & x\in (-1,1), 
@@ -71,138 +75,130 @@ Then, the \textit{spectral fractional Laplacian} $(-d_x^2)^s_S$ is defined by
 \end{align}
 firstly for $u\in C_0^{\infty}(-1,1)$ and then for $u\in H_0^s(-1,1)$ employing a density argument.
 
-It is important to notice that the spectral fractional Laplacian and the fractional Laplacian defined as in \eqref{fl} are two different operators. Indeed, Definition \eqref{fl_spec} depends on the choice of the domain (in this case, $(-1,1)$), while the integral definition does not. For a complete discussion on the differences of these two operators, we refer to \cite{servadei2014spectrum}.
+It is important to notice that the spectral fractional Laplacian and the fractional Laplacian defined as in \eqref{fl} are two different operators. Indeed, definition \eqref{fl_spec} depends on the choice of the domain (in this case, $(-1,1)$), while the integral definition does not. For a complete discussion on the differences of these two operators, we refer to \cite{servadei2014spectrum}.
 
-Concerning now control results, in \cite{micu2006controllability} the authors consider a fractional heat equation involving the operator $(-d_x^2)^s_S$, and it has been proved that this equation is null-controllable if and only if $s>1/2$. For $s\leq 1/2$, instead, null controllability does not hold, not even for $T$ large. This negative result is based on the equivalence (consequence of M\"untz Theorem) between the controllability property (more specifically, the possibility of proving an observability inequality), and the following condition for the eigenvalues of the operator considered
+The fractional heat equation involving the operator $(-d_x^2)^s_S$ has been analyzed in \cite{micu2006controllability}, where the authors proved its null controllability, provided that $s>1/2$. For $s\leq 1/2$, instead, null controllability does not hold, not even for $T$ large. This negative result is based on the equivalence (consequence of M\"untz Theorem, see, e.g., \cite[Page 24]{schwartz1958etude}) between the controllability property (more specifically, the possibility of proving an observability inequality), and the following condition for the eigenvalues of the operator considered
 %
 \begin{align}\label{eigen_cond}
 	\sum_{k\geq 1} \frac{1}{\lambda_k}<\infty,
 \end{align} 
 %
-which is clearly not satisfied in the case of the spectral fractional Laplacian when $s\leq 1/2$. Finally, in \cite{miller2006controllability}, the same controllability result as in \cite{micu2006controllability} is obtained in a multi-dimensional setting, by means of a  \textit{spectral observability condition} for a negative self-adjoint operator, which allows to prove the null-controllability of the semi-group that it generates.
+which is clearly not satisfied in the case of the spectral fractional Laplacian when $s\leq 1/2$, since in that case the eigenvalues are $\lambda_k = (k\pi)^{2s}$. Finally, in \cite{miller2006controllability}, the same result as in \cite{micu2006controllability} is obtained in a multi-dimensional setting, by means of a  \textit{spectral observability condition} for a negative self-adjoint operator, which allows to prove the null-controllability of the semi-group that it generates.
 
-Regarding equation \eqref{heat_frac}, instead, we are not aware of any null controllability result in the literature, neither positive nor negative. Nevertheless, at least in the one space dimension, it is possible to show that, once again, null-controllability fails as soon as $s\leq 1/2$. This is a consequence of the following approximation for the eigenvalues of the fractional Laplacian \eqref{fl} on $(-1,1)$ with homogeneous Dirichlet boundary conditions (see \cite{kulczycki2010spectral,kwasnicki2012eigenvalues}) 
-\begin{align}\label{eigen_approx}
+Even if we are not aware of any controllability result, neither positive nor negative, for the parabolic equation involving the integral fractional Laplacian, at least in the one space dimension, these properties are easily achievable. In more detail, we have the following.
+
+\begin{proposition}
+For all $z_0\in L^2(-1,1)$ the parabolic problem \eqref{heat_frac} is null-controllable with a control function $g\in L^2(\omega\times(0,T))$ if and only if $s>1/2$.  
+\end{proposition}
+
+\begin{proof}
+First of all, multiplying \eqref{heat_frac} by $\varphi$ and integrating over $(-1,1)\times (0,T)$, it is straightforward to check that $z(x,T)=0$ if and only if 
+\begin{align}\label{control_id}
+	\int_0^T\int_{-1}^1 \varphi(x,t)g(x,t)\mathbf{1}_{\omega}(x)\,dxdt = -\int_{-1}^1 u_0(x)\varphi(x,0)\,dx,
+\end{align}
+for all $\varphi^T\in L^2(-1,1)$, where $\varphi(x,t)$ is the unique solution to the adjoint system
+\begin{align}\label{heat_frac_adj}
+	\begin{cases}
+		-\varphi_t + \fl{s}{\varphi} = 0, & (x,t)\in (-1,1)\times(0,T)
+		\\
+		\varphi = 0, & (x,t)\in [\,\RR\setminus(-1,1)\,]\times(0,T)
+		\\
+		\varphi(x,T) = \varphi^T(x), & x\in (-1,1).
+	\end{cases}
+\end{align}
+
+In turn, it is classical that \eqref{control_id} is equivalent to the existence of a constant $C>0$ such that the following observability inequality holds
+\begin{align}\label{obs}
+	\norm{\varphi(x,0)}{L^2(-1,1)}^2\leq C\int_0^T\left|\,\int_{-1}^1 \varphi(x,t)g(x,t)\mathbf{1}_{\omega}(x)\,dx\,\right|^2\,dt,
+\end{align}
+
+Notice that $\varphi$ can be written in terms of the basis of eigenfunctions $\{\varrho_k\}_{k\geq 1}$. Namely,
+\begin{align}\label{adj_sol}
+	\varphi(x,t) = \sum_{k\geq 1} \varphi_ke^{-\lambda_k(T-t)}\varrho_k(x), 
+\end{align}
+where $\varphi_k = \langle \varphi^T,\varrho_k\rangle$ and, for $k\geq 1$, $\varrho(x)$ are the solutions to the following eigenvalue problem 
+\begin{align*}
+	\begin{cases}
+		\fl{s}{\varrho_k} = \lambda_k\varrho_k, & x\in (-1,1), \;\; k\in\NN
+		\\
+		\varrho_k = 0, & x\in \,\RR\setminus(-1,1).
+	\end{cases}
+\end{align*}
+
+Now, plugging \eqref{adj_sol} into \eqref{obs}, using the orthonormality of the eigenfunctions $\varrho_k$ and employing the change of variables $T-t\mapsto t$, the observability inequality becomes 
+\begin{align}\label{obs_spectr}
+	\sum_{k\geq 1} |\varphi_k|^2e^{-2\lambda_k T} \leq C\int_0^T\left|\,\sum_{k\geq 1} \varphi_kg_k(t)e^{-\lambda_k t}\right|^2\,dt, 
+\end{align}
+where $g_k = \langle g\mathbf{1}_{\omega},\varrho_k\rangle$. 
+
+By means of M\"untz Theorem, inequalities of the form \eqref{obs_spectr} are well known to be true if and only if \eqref{eigen_cond} holds. On the other hand, according to \cite{kulczycki2010spectral,kwasnicki2012eigenvalues} we have 
+\begin{align*}
 	\lambda_k = \left(\frac{k\pi}{2}-\frac{(1-s)\pi}{4}\right)^{2s}+O\left(\frac{1}{k}\right).
-\end{align} 
-
-Indeed, employing \eqref{eigen_approx}, we can easily show that, also in this case, \eqref{eigen_cond} fails as soon as $s\leq 1/2$, thus implying that the equation is not null-controllable. 
-
-Finally, we mention that, even if for $s\leq 1/2$ the null-controllability of \eqref{heat_frac} fails, the equation is approximately controllable. This is a simple adaptation of \cite[Proposition 2.4 and Theorem 2.5]{keyantuo2016interior}, and it is due to the fact that the fractional Laplacian enjoys the unique continuation property (see \cite{fall2014unique}).      
-
-\subsubsection{Control problem for the fractional heat equation}
-
-Let us now give a brief description of the so called penalised Hilbert Uniqueness Method (HUM in what follows) that we shall employ for computing the controls for equation \eqref{heat_frac}. Here, we will mostly refer to the work of Boyer \cite{boyer2013penalised}.
-
-We start recalling the classical HUM, as it has been introduced in the pioneering works \cite{glowinski1995exact,glowinski2008exact}. Let $(E,\langle\cdot,\cdot\rangle)$ be a Hilbert space whose norm is denoted by $\norm{\cdot}{}$. Let $(A,\mathcal D(A))$ be an unbounded operator in $E$ such that $-A$ generates an analytic semi-group in $E$ that we indicate by $t\mapsto e^{-tA}$. Also, we denote $(A^*,\mathcal D(A^*))$ the adjoint of this operator and by $t\mapsto e^{-tA^*}$ the corresponding semi-group. 
-
-Let $(U,[\cdot,\cdot])$ be another Hilbert space whose norm is denoted by $\inter{\cdot}$. Let  $B$ be an unbounded operator from $U$ to $\mathcal D(A^*)'$ and let $B^*:\mathcal D(A^*)\to U$ be its adjoint. Let $T>0$ be given and, for any $y_0\in E$ and $v\in L^2(0,T;U)$, let us consider the non-homogeneous evolution problem  
-\begin{align}\label{abstract_pb}
-	\begin{cases}
-		y_t+Ay=Bv, & t\in[0,T]
-		\\
-		y(0)=y_0.
-	\end{cases}
-\end{align}
-
-The well posedness of \eqref{abstract_pb} is guaranteed by \cite[Theorem 2.37]{coron2007control}. From now on, we will refer to the solution as $t\mapsto y_{v,y_0}(t)$.
-
-Notice that we have $y_{0,y_0}(t)= e^{-tA}y_0$. Moreover, for simplicity, the solution at time $T$, which is of particular interest in what follows, will be denoted by 
-\begin{align*}
-	y_{v,y_0}(T)=\mathcal{L}_T(v|y_0).
-\end{align*} 
-The linear operator $\mathcal{L}_T(\cdot|\cdot)$ is then continuous from $L^2(0,T;U)\times E$ into $E$.
-
-We have the following definition of controllability.
-
-\begin{definition}
-For any $\delta\geq 0$, we define the (possibly empty) closed convex set 
-\begin{align*}
-	\textrm{Adm}(y_0,\delta):=\left\{v\in L^2(0,T;U)\,:\, \norm{\mathcal{L}_T(\cdot|\cdot)}{}\leq\delta\right\}.
 \end{align*}
-\begin{enumerate}
-	\item We say that \eqref{abstract_pb} is \textit{approximately null-controllable} at time $T$ from the initial datum $y_0$ if 
-	\begin{align*}
-		\textrm{Adm}(y_0,\delta)\neq\emptyset,\;\;\textrm{ for all } \delta>0.
-	\end{align*}  
-	If this holds for all $y_0\in E$, we say that \eqref{abstract_pb} is approximately null-controllable at time $T$. 
-	
-	\item We say that \eqref{abstract_pb} is \textit{null-controllable} at time $T$ from the initial datum $y_0$ if 
-	\begin{align*}
-		\textrm{Adm}(y_0,0)\neq\emptyset.
-	\end{align*}	
-	If this holds for all $y_0\in E$, we say that \eqref{abstract_pb} is null-controllable at time $T$.
-\end{enumerate} 
-\end{definition}
+ 
+Therefore, we easily see that the condition \eqref{eigen_cond} is satisfied if and only if $s>1/2$. If $s\leq 1/2$, instead, the series diverges, since it behaves as an harmonic series. In conclusion, the observability inequality \eqref{obs} is proved when $s>1/2$, but it is false when $s\leq 1/2$. This concludes the proof. \qed 
+\end{proof}
 
-In the framework of both controllability notions, if one control exists it is certainly not unique. This is the reason why for proving controllability results (but also for the actual computation of such controls), it is useful to specify one such control. For instance, the classical HUM approach consists in finding the control with the minimal $L^2(0,T;U)$-norm. Nevertheless, even though in this way we can identify a precise control, its computation can be a difficult task due to the nature of the constraints involved. As usual, duality theory can help to deal with these constraints but will lead to functionals that are either non coercive on the usual dual state space $E$ (for $\delta = 0$; in this
-case considering a much larger space is required) or that are non smooth (for $\delta > 0$). Both issues can lead to important difficulties when using this approach for numerical purposes.
+Even if for $s\leq 1/2$ null controllability for \eqref{heat_frac} fails, we still have the following result of approximate controllability. 
 
-Because of what we just described, it is convenient to deal with a penalized version of the above mentioned optimization problems.
+\begin{proposition}
+Let $s\in(0,1)$. For all $z_0\in L^2(-1,1)$, there exists a control function $g\in L^2(\omega\times(0,T))$ such that the unique solution $z$ to the parabolic problem \eqref{heat_frac} is approximately controllable.
+\end{proposition}
 
-In the penalised version of the HUM, we look for a control that is solution to a different optimization problem. In particular, we for any $\varepsilon>0$, we shall find
+\begin{proof}
 
-\begin{align}\label{min_ve}
-	v_\varepsilon=\min_{v\in L^2(0,T;U)} F_\varepsilon (v)
+The result will be a consequence of the following unique continuation property for the solution to the adjoint equation \eqref{heat_frac_adj}
+
+\MyQuote{
+Given $s\in(0,1)$ and $\varphi^T_0\in L^2(-1,1)$, let $\varphi$ be the unique solution to the system \eqref{heat_frac_adj}. Let $\omega\subset (-1,1)$ be an arbitrary open set. If $\varphi = 0$ on $\omega\times(0,T)$, then $\varphi = 0$ on $(-1,1)\times(0,T)$.}
+
+Therefore, we are reduced to the proof of the property ($\mathcal P$). To this end, let us recall that $\varphi$ can be expressed in the form \eqref{adj_sol} and let us assume that 
+\begin{align}\label{uc}
+	\varphi=0 \textrm{ in } \omega\times(0,T). 
 \end{align}
-where
+
+Let $\{\psi_{k_j}\}_{1\leq k\leq m_k}$ be an orthonormal basis of $\ker(\lambda_k-\fl{s}{})$. Then, \eqref{adj_sol} can be rewritten as
 \begin{align*}
-	F_\varepsilon(v):=\frac{1}{2}\int_0^T\inter{v(t)}^2\,dt+\frac{1}{2\varepsilon}\norm{\mathcal L(v|y_0)}{}^2, \quad \forall v\in L^2(0,T;U).
+	\varphi(x,t) = \sum_{k\geq 1} \left(\sum_{j=1}^{m_k} \varphi_{k_j}\psi_{k_j}(x)\right)e^{-\lambda_k(T-t)}, \;\;\; (x,t)\in (-1,1)\times(-\infty, T). 
 \end{align*}
 
-Notice that, for any $\varepsilon > 0$, the functional $F_\varepsilon$ has a unique minimiser on $L^2(0,T;U)$  that we denote by $v_\varepsilon$. This is due to the fact that $F_\varepsilon$ is strictly convex, continuous and coercive. 
-
-However, the space $L^2(0,T;U)$ in which one has to minimise $F_\varepsilon$ is a quite big one and it depends on the time $T$. This makes the minimization problem computationally expensive. On the other hand, this issue can be bypassed by considering a different optimization problem, defined on the smaller space $E$. Namely we have to find  
-
-\begin{align}\label{min_je}
-	q^T_\varepsilon=\min_{q\in E} J_\varepsilon (q^T)
-\end{align}
-where
+Let $z\in\CC$ with $\eta:=\Re(z)>0$ and let $N\in\NN$. Since the functions $\psi_{k_j}$, $1\leq j\leq m_k$, $1\leq k\leq N$ are orthonormal, we have that
 \begin{align*}
-	J_\varepsilon(q^T):=\frac{1}{2}\int_0^T\inter{B^*e^{-(T-t)A^*}q^T}^2\,dt+\frac{\varepsilon}{2}\norm{q^T}{}^2 + \left\langle y_0,e^{-TA^*}q^T\right\rangle, \quad \forall q^T\in E.
-\end{align*}
-
-Notice that \eqref{min_ve} and \eqref{min_je} are equivalent since, according to \cite[Proposition 1.5]{boyer2013penalised}, for any $\varepsilon > 0$, the minimisers $v_\varepsilon$ and $q_\varepsilon^T$ of the functionals $F_\varepsilon$ and $J_\varepsilon$, respectively, are related through the formula
-\begin{align*}
-	v_\varepsilon = B^*e^{-(T-t)A^*}q_\varepsilon^T, \textrm{ for a.e. } t\in(0,T).
-\end{align*} 
-
-Notice also that we can express the approximate and null controllability properties of the system, for a given initial datum $y_0$, in terms of the behaviour of the penalised HUM approach described above. In particular we have 
-
-\begin{theorem}[Theorem 1.7 of \cite{boyer2013penalised}]\label{theorem_hum}
-Problem \eqref{abstract_pb} is approximately controllable from the initial datum $y_0$ if and only if we have
-\begin{align}\label{approx_control_cond}
-	\mathcal{L}_T(v_\varepsilon|y_0) = y_{v_\varepsilon,y_0}(T)\rightarrow 0,\;\;\;\textrm{ as }\;\varepsilon\to 0.
-\end{align}
-Problem \eqref{abstract_pb} is null-controllable from the initial datum $y_0$ if and only if we have
-\begin{align}\label{null_control_cond}
-	M_{y_0}^2:=2\sup_{\varepsilon>0}\left( \inf_{L^2(0,T;U)}F_\varepsilon\right)<+\infty.
-\end{align}
-In this case, we have 
-\begin{align}\label{null_control_est}
-	\inter{v_\varepsilon}_{L^2(0,T;U)}\leq M_{y_0},\nonumber
+	\norm{\sum_{k=1}^N \left(\sum_{j=1}^{m_k} \varphi_{k_j}\psi_{k_j}(x)\right)e^{z(t-T)}e^{-\lambda_k(T-t)}}{L^2(-1,1)}^2 & \leq \sum_{k=1}^N \left(\sum_{j=1}^{m_k} |\varphi_{k_j}|^2\right)e^{2\eta(t-T)}e^{-2\lambda_k(T-t)}
 	\\
-	\norm{\mathcal L_T(v_\varepsilon|y_0)}{}\leq M_{y_0}\sqrt{\varepsilon}.
+	& \leq \sum_{k\geq 1} \left(\sum_{j=1}^{m_k} |\varphi_{k_j}|^2\right)e^{2\eta(t-T)}e^{-2\lambda_k(T-t)} \leq Ce^{2\eta(t-T)}\norm{\varphi^T}{L^2(-1,1)}^2.
+\end{align*}
+
+Hence, letting 
+\begin{align*}
+w_N(x,t):= \sum_{k=1}^N \left(\sum_{j=1}^{m_k} \varphi_{k_j}\psi_{k_j}(x)\right)e^{z(t-T)}e^{-\lambda_k(T-t)},
+\end{align*}
+we have shown that $\norm{w_T(x,t)}{L^2(-1,1)}\leq Ce^{\eta(t-T)}\norm{\varphi^T}{L^2(-1,1)}$. Moreover, we have
+\begin{align*}
+	\int_{-\infty}^T e^{\eta(t-T)}\norm{\varphi^T}{L^2(-1,1)}\,dt = \frac{1}{\eta}\norm{\varphi^T}{L^2(-1,1)}\int_0^{+\infty} e^{-\tau}\,d\tau = \frac{1}{\eta}\norm{\varphi^T}{L^2(-1,1)}.
+\end{align*}
+
+Therefore, we can apply the Dominated Convergence Theorem, obtaining
+\begin{align}\label{dct_identity}
+	\lim_{N\to+\infty}\int_{-\infty}^T w_N(x,t)\,dt &= \int_{-\infty}^T\lim_{N\to+\infty} w_N(x,t)\,dt = \int_{-\infty}^T e^{z(t-T)} \sum_{k=1}^{+\infty} \left(\sum_{j=1}^{m_k} \varphi_{k_j}\psi_{k_j}(x)\right)e^{-\lambda_k(T-t)}\,dt \notag
+	\\
+	&=\sum_{k=1}^{+\infty}\sum_{j=1}^{m_k} \varphi_{k_j}\psi_{k_j}(x) \int_{-\infty}^T e^{z(t-T)}e^{-\lambda_k(T-t)}\,dt =\sum_{k=1}^{+\infty}\sum_{j=1}^{m_k} \varphi_{k_j}\psi_{k_j}(x) \int_0^{+\infty} e^{-(z+\lambda_k)\tau}\,d\tau \notag
+	\\
+	&=\sum_{k=1}^{+\infty}\sum_{j=1}^{m_k} \frac{\varphi_{k_j}}{z+\lambda_k}\psi_{k_j}(x), \;\;\; x\in (-1,1)\;\Re(z)>0.
 \end{align} 
-\end{theorem} 
 
-Therefore, by observing in our simulation results the behavior of the norm of the control, the optimal energy $\inf F_\varepsilon$, and the norm of the solution at time $T$, we can obtain a numerical evidence of the properties of null and approximate controllability for equation \eqref{heat_frac}. 
+It follows from \eqref{uc} and \eqref{dct_identity} that 
+\begin{align*}
+	\sum_{k=1}^{+\infty}\sum_{j=1}^{m_k} \frac{\varphi_{k_j}}{z+\lambda_k}\psi_{k_j}(x)=0, \;\;\; x\in\omega,\;\Re(z)>0.
+\end{align*}
 
-Finally, since the fractional Laplacian $\fl{s}{}$ has the properties required for the operator $A$, the penalized HUM that we just described can be applied to the control problem \eqref{heat_frac} in the following way: find
+This holds for every $z\in\CC\setminus\{-\lambda_k\}_{k\in\NN}$, using the analytic continuation in $z$. Hence, taking a suitable small circle around $-\lambda_{\ell}$ not including $\{-\lambda_k\}_{k\neq\ell}$ and integrating on that circle we get that
 \begin{align*}
-	\varphi^T_\varepsilon=\min_{\varphi\in L^2(-L,L)} J_\varepsilon (\varphi^T)
+	w_\ell:=\sum_{j=1}^{m_{\ell}} \varphi_{\ell_j}\psi_{\ell_j}(x)=0, \;\;\; x\in\omega.
 \end{align*}
-where 
-\begin{align*}
-	J_\varepsilon(\varphi^T):=\frac{1}{2}\int_0^T\int_{\omega}|\varphi|^2\,dxdt+\frac{\varepsilon}{2}\norm{\varphi^T}{L^2(-L,L)}^2 + \langle z_0,\varphi\rangle, \quad \forall \varphi^T\in L^2(-L,L) 
-\end{align*}
-and $\phi$ is the solution of the adjoint problem
-\begin{align*}
-	\begin{cases}
-		-\varphi_t + \fl{s}{\varphi} = 0, & (x,t)\in (-L,L)\times(0,T)
-		\\
-		\varphi = 0, & (x,t)\in [\,\RR\setminus(-L,L)\,]\times(0,T)
-		\\
-		\varphi(x,T) = \varphi^T(x), & x\in (-L,L).
-	\end{cases}
-\end{align*}
+
+According to \cite[Theorem 1.4]{fall2014unique}, $\fl{s}{}$ has the unique continuation property in the sense that if $\lambda_k$ is an eigenvalue of $\fl{s}{}$ on (-1,1) with Dirichlet boundary conditions, and $(\fl{s}{}-\lambda_k)\varrho_k = 0$ in $(-1,1)$ with $\varrho_k = 0$ in $\omega$, then $\varrho_k = 0$ in $(-1,1)$. 
+This can applied to $w_{\ell}$, in order to conclude $w_{\ell} = 0$ in $(-1,1)$ for every $\ell$. Since $\{\psi_{\ell_j}\}_{1\leq j\leq m_{\ell}}$ are linearly independent in $L^2(-1,1)$, we get $\varphi_{\ell_j} = 0$, $1\leq j\leq m_k$, $\ell\in\NN$. It follows that $\varphi^T=0$ and hence, $\varphi=0$ in $(-1,1)\times(0,T)$, meaning that $\varphi$ enjoys the property $(\mathcal{P})$. As an immediate consequence, we have that our original equation \eqref{heat_frac} is approximately controllable. This last fact being classical (see, e.g., \cite[Theorem 2.5]{keyantuo2016interior}), we will leave the details to the reader. Our proof is then concluded. \qed
+\end{proof}
+
+

@@ -141,9 +141,9 @@ Now, taking into account the definition of the basis function \eqref{basis_fun},
 \end{align*}
 
 Let us introduce the following change of variables:
-\begin{align}\label{cv_appendix}
+\begin{align*}
 	\frac{x-x_i}{h}=\hat{x},\;\;\; \frac{y-x_i}{h}=\hat{y}.
-\end{align}
+\end{align*}
 
 Then, rewriting (with some abuse of notations since there is no possibility of confusion) $\hat{x}=x$ and $\hat{y}=y$, we get 
 \begin{align}\label{elem_noint_cv}
@@ -347,9 +347,9 @@ Now, using Fubini's theorem we can exchange the order of the integrals, obtainin
 \end{align*}
 
 The two integrals above can be computed explicitly. Indeed, employing the change of variables
-\begin{align}\label{cv2}
+\begin{align*}
 	\frac{x_{i+1}-x}{h}=\hat{x},
-\end{align}
+\end{align*}
 and then renaming $\hat{x}=x$, $R_2^1$ becomes
 \begin{align*}
 	Q_2^1=\frac{h^{1-2s}}{s}\int_0^1 x^{1-2s}(1-x)\,dx = \frac{h^{1-2s}}{s(2-2s)(3-2s)}.
@@ -365,9 +365,9 @@ and we obtain
 \end{align*}
 
 Adding the two contributions, we get the following expression for the term $R_2$
-\begin{align}\label{Q2}
+\begin{align*}
 	Q_2 = h^{1-2s}\frac{2^{2-2s}+2s-3}{s(2-2s)(3-2s)}.
-\end{align}
+\end{align*}
 
 \subsubsection*{Computation of $Q_3$}
 In this case, we simply take into account the intervals in which the basis functions are supported, so that we obtain
@@ -447,9 +447,9 @@ Therefore,
 	(\phi_i(x)-\phi_i(y))(\phi_{i+1}(x)-\phi_{i+1}(y)) = \left(\frac{y-x}{h}\right)\left(\frac{x-y}{h}\right) = -\frac{|x-y|^2}{h^2},
 \end{align*}
 and the integral becomes
-\begin{align}\label{Q4}
+\begin{align*}
 	Q_4 &= -\int_{x_i}^{x_{i+1}}\int_{x_i}^{x_{i+1}} |x-y|^{1-2s}\,dxdy = -\frac{h^{1-2s}}{(1-s)(3-2s)}. 
-\end{align}
+\end{align*}
 
 \subsubsection*{Computation of $Q_5$}
 Here the procedure is analogous to the one for $Q_2$ before. Using again Fubini's theorem we have
@@ -465,13 +465,13 @@ In analogy with what we did for $Q_1$, we can show that also $Q_6=0$.
 
 \subsubsection*{Conclusion}
 The elements $a_{i,i+1}$ are now given by the sum $2Q_2+Q_3+Q_4$, according to the corresponding values that we computed. In particular, we have
-\begin{align}\label{Aii1}
+\begin{align*}
 	a_{i,i+1} = \begin{cases}
 					\displaystyle h^{1-2s}\frac{3^{3-2s}-2^{5-2s}+7}{2s(1-2s)(1-s)(3-2s)}, & \displaystyle s\neq \frac{1}{2}
 					\\
 					9\ln 3-16\ln 2, & \displaystyle s=\frac{1}{2}.
 				\end{cases}	
-\end{align}
+\end{align*}
 
 \subsubsection*{Step 3: $j= i$}
 As a last step, we fill the diagonal of the matrix $\mathcal A_h$. In this case we have
@@ -588,9 +588,9 @@ Since $\phi_i(y) = 0$ on the domain of integrations we have
 \end{align*}
 
 This integral is computed employing \eqref{cv}, and we obtain
-\begin{align}\label{R2}
+\begin{align*}
 	R_2 = \frac{h^{1-2s}}{s}\int_{-1}^1 \frac{(1-|x|\,)^2}{(1-x)^{2s}}\,dx = h^{1-2s}\frac{4s-6+2^{3-2s}}{s(1-2s)(1-s)(3-2s)}, 
-\end{align}
+\end{align*}
 if $s\neq 1/2$. If $s=1/2$, instead, we have
 \begin{align*}
 	R_2 = 2\int_{-1}^1 \frac{(1-|x|\,)^2}{1-x}\,dx = 2\ln 16-4.
@@ -641,13 +641,13 @@ Also in this case we can use the explicit expression of the basis functions and 
 	R_4^4 &= \int_{x_i}^{x_{i+1}}\int_{x_i}^{x_{i+1}} |x-y|^{1-2s}\,dxdy = \frac{h^{1-2s}}{(1-s)(3-2s)}=R_4^1. 
 \end{align*}
 Adding the values that we just computed, we therefore obtain
-\begin{align}\label{R4}
+\begin{align*}
 	R_4 = 2(R_4^1+R_4^2) = \begin{cases}
 					\displaystyle h^{1-2s}\frac{8-8s-2^{3-2s}}{2s(1-2s)(1-s)(3-2s)}, & \displaystyle s\neq \frac{1}{2}
 					\\
 					8\ln 3-8\ln 2, & \displaystyle s=\frac{1}{2}.
 				\end{cases}	
-\end{align}
+\end{align*}
 
 \subsubsection*{Computation of $R_5$}
 Since, once again, $\phi_i(y) = 0$ on the domain of integration we have
@@ -655,9 +655,9 @@ Since, once again, $\phi_i(y) = 0$ on the domain of integration we have
 	R_5 &= 2\int_{-\infty}^{x_{i-1}}\int_{x_{i-1}}^{x_{i+1}} \frac{\phi_i^2(x)}{|x-y|^{1+2s}}\,dxdy = 2\int_{x_{i-1}}^{x_{i+1}}\phi_i^2(x)\left(\int_{-\infty}^{x_{i-1}} \frac{dy}{|x-y|^{1+2s}}\right)\,dx = \frac{1}{s}\int_{x_{i-1}}^{x_{i+1}}\frac{\phi_i^2(x)}{(x-x_{i-1})^{2s}}\,dxdy.
 \end{align*}
 Employing one last time \eqref{cv}, we get
-\begin{align}\label{R5}
+\begin{align*}
 	R_5 = \frac{h^{1-2s}}{s}\int_{-1}^1 \frac{(1-|x|\,)^2}{(1+x)^{2s}}\,dx = h^{1-2s}\frac{4s-6+2^{3-2s}}{s(1-2s)(3-2s)(1-s)}=R_2,
-\end{align}
+\end{align*}
 if $s\neq 1/2$. If $s=1/2$, instead, we have
 \begin{align*}
 	R_5 = 2\int_{-1}^1 \frac{(1-|x|\,)^2}{1+x}\,dx = 8\ln 2-4.
